@@ -12,7 +12,8 @@ function togglePassword() {
     }
 }
 
-function handleLogin() {
+function handleRegister() {
+    const name = document.getElementById('nameInput').value;
     const email = document.getElementById('emailInput').value;
     const password = document.getElementById('passwordInput').value;
 }
