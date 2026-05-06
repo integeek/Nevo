@@ -13,19 +13,21 @@ function closeModal(id) {
 }
 
 function selectProfile(card, name, emoji, bg) {
-    if (card.id === 'addCard') return;
+    if (card.id === 'addCard') {
+        return;
+    }
     card.style.transform = 'scale(0.92)';
     setTimeout(() => { card.style.transform = ''; }, 180);
     setTimeout(() => openPinScreen(name, emoji, bg), 200);
 }
 
-function openPinScreen(name, emoji, bg) {
+function openPinScreen(name, img, bg) {
     pinCode = '';
     updateDots();
     document.getElementById('pinName').textContent = 'Hi, ' + name + '!';
     const av = document.getElementById('pinAvatar');
     av.style.background = bg;
-    av.textContent = emoji;
+    av.innerHTML = `<img src="${img}" alt="" style="width:60%;height:60%;object-fit:contain;">`;
     document.getElementById('pinScreen').classList.add('active');
     const card = document.getElementById('pinCard');
     card.style.animation = 'none';
@@ -97,10 +99,12 @@ function pickAvatar(el) {
     document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
     el.classList.add('selected-avatar');
     selectedAvatar = {
-        emoji: el.dataset.emoji, 
+        avatar: el.dataset.avatar,
+        img: el.querySelector('img').src,
         bg: el.style.background,
-    };
+    }; 
 }
+
 function addProfile() {
     const name = document.getElementById('profileNameInput').value.trim();
     if (!name) {
@@ -110,6 +114,16 @@ function addProfile() {
     }
     const secretPin = document.getElementById('secretPin');
     const confirmSecretPin = document.getElementById('confirmSecretPin');
+
+    if (isNaN(secretPin.value) || secretPin.value === '' ) {
+        secretPin.style.borderColor = '#e57373';
+        return;
+    }
+
+    if (isNaN(confirmSecretPin.value) || confirmSecretPin.value === '' ) {
+        confirmSecretPin.style.borderColor = '#e57373';
+        return;
+    }
 
     if (secretPin.value !== confirmSecretPin.value) {
         secretPin.style.borderColor = '#e57373';
@@ -122,24 +136,29 @@ function addProfile() {
     const card = document.createElement('div');
     card.className = 'profile-card';
     card.style.animationDelay = '0s';
-    card.onclick = function() { selectProfile(card, name, selectedAvatar.emoji, selectedAvatar.bg); };
+    card.onclick = function() { 
+        selectProfile(card, name, selectedAvatar.img, selectedAvatar.bg); 
+    };
     card.innerHTML = `
-    <div class="avatar" style="background:${selectedAvatar.bg}">${selectedAvatar.emoji}</div>
-    <div class="profile-name">${name}</div>
+        <div class="avatar" style="background:${selectedAvatar.bg}">
+            <img src="${selectedAvatar.img}" alt="">
+        </div>
+        <div class="profile-name">${name}</div>
     `;
 
     row.insertBefore(card, addCard);
+    secretPin.value = '';
+    confirmSecretPin.value = '';
     closeModal('modalOverlay');
 
     card.style.opacity = '0';
     card.style.transform = 'scale(0.8) translateY(10px)';
     requestAnimationFrame(() => {
-    card.style.transition = 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
-    card.style.opacity = '1';
-    card.style.transform = '';
+        card.style.transition = 'opacity 0.35s ease, transform 0.4s';
+        card.style.opacity = '1';
+        card.style.transform = '';
     });
 }
-
 
 
 document.getElementById('profileNameInput').addEventListener('keydown', e => {
