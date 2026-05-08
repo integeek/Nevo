@@ -4,7 +4,6 @@
     --coral: #e87c4e;
     --coral-dark: #d0623a;
     --text-muted: #7a9490;
-    --card-bg: rgba(255,255,255,.85);
 }
 
 body {
@@ -150,7 +149,7 @@ nav {
 }
 
 .stat-card {
-    background: var(--card-bg); 
+    background: rgba(255,255,255,.85); 
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(255,255,255,.9);
     border-radius: 18px; 
@@ -184,7 +183,7 @@ nav {
 }
 
 .quick-card {
-    flex: 1; background: var(--card-bg); 
+    flex: 1; background: rgba(255,255,255,.85); 
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(255,255,255,.9); 
     border-radius: 18px;
@@ -232,7 +231,7 @@ nav {
 }
 
 .section-card {
-    background: var(--card-bg); 
+    background: rgba(255,255,255,.85); 
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(255,255,255,.9); 
     border-radius: 18px;
@@ -303,7 +302,7 @@ nav {
 }
 
 .quest-card {
-    background: var(--card-bg); 
+    background: rgba(255,255,255,.85); 
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(255,255,255,.9);
     border-radius: 18px; 
@@ -431,7 +430,6 @@ nav {
     align-items: center; 
     gap: 10px;
     font-size: .82rem; 
-    /* font-weight: 700;  */
     color: black;
     cursor: pointer; 
     padding: 2px 0;
@@ -475,7 +473,7 @@ nav {
 }
 
 .badge-item {
-    background: var(--card-bg); 
+    background: rgba(255,255,255,.85); 
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(255,255,255,.9); 
     border-radius: 14px;
