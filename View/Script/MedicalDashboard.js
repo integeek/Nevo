@@ -12,9 +12,11 @@ let allPatients = [];
 
 async function loadInit() {
   try {
-    const res  = await fetch('../../Controller/MedicalDashboard/MedicalDashboard.php?action=init');
+    const res = await fetch('../../Controller/MedicalDashboard/MedicalDashboard.php?action=init');
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
 
     document.getElementById('greetingTitle').textContent    = `Welcome back, ${data.staff.fullname}`;
     document.getElementById('greetingSubtitle').textContent = `You're following ${data.patients.length} patient${data.patients.length !== 1 ? 's' : ''}`;
@@ -35,7 +37,7 @@ function renderPatients(patients) {
   }
 
   list.innerHTML = patients.map(p => {
-    const bg      = AVATAR_BG[p.avatar] || 'linear-gradient(135deg,#c084fc,#7c3aed)';
+    const bg = AVATAR_BG[p.avatar] || 'linear-gradient(135deg,#c084fc,#7c3aed)';
     const disease = p.disease ? `<span class="badge" style="background:#dbeafe;color:#1d4ed8">${p.disease}</span>` : '';
     return `
       <div class="patient-row" onclick="window.location='PatientDetail.php?child_id=${p.id}'">
@@ -57,11 +59,14 @@ function renderPatients(patients) {
 }
 
 function applySearch() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  if (!q) { renderPatients(allPatients); return; }
+  const inputSearchValue = document.getElementById('searchInput').value.toLowerCase().trim();
+  if (!inputSearchValue) { 
+    renderPatients(allPatients); 
+    return; 
+  }
   renderPatients(allPatients.filter(p =>
-    p.fullname.toLowerCase().includes(q) ||
-    (p.disease || '').toLowerCase().includes(q)
+    p.fullname.toLowerCase().includes(inputSearchValue) ||
+    (p.disease || '').toLowerCase().includes(inputSearchValue)
   ));
 }
 
