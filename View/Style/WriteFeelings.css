@@ -11,35 +11,44 @@ body {
     background: #f5f3ee;
     position: relative;
     overflow-x: hidden;
-}
-
-.top-gradient {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 220px;
-    background: linear-gradient(135deg,
-    #b8e8d8 0%,
-    #d8efc3 20%,
-    #f5f0c0 40%,
-    #fce4c8 65%,
-    #f9d0c8 85%,
-    #f0c8d8 100%
-    );
-    z-index: 0;
-    opacity: 0.85;
-}
-
-.page-wrapper {
     position: relative;
-    z-index: 1;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 170px;
+    z-index: 0;
+    background: linear-gradient(
+        135deg,
+        #c8e6c9 0%,
+        #e8f5e9 15%,
+        #fffde7 35%,
+        #fff8e1 55%,
+        #ffe0b2 75%,
+        #ffccbc 100%
+    );
+}
+
+.page-wrap {
+    position: relative; 
+    z-index: 5;
+    max-width: 520px; 
     min-height: 100vh;
-    padding-bottom: 60px;
+    margin: 0 auto;
+    padding: 56px 16px 48px;
 }
 
 .top-nav {
+    position: absolute;
+    top: 20px;
+    left: 16px;
+    z-index: 10;
     display: flex;
     align-items: center;
-    padding: 18px 24px 8px;
+    padding: 0;
 }
 
 .back-btn {

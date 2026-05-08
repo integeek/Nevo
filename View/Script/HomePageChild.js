@@ -1,9 +1,27 @@
 const TOTAL_QUESTS = 5;
+const positiveMessages = [
+    { message: "You're doing great" },
+    { message: "Small progress is still progress" },
+    { message: "Every effort counts" },
+    { message: "Keep the streak alive"},
+    { message: "You're stronger than you think" },
+    { message: "You made progress today" },
+    { message: "Don't give up now" },
+    { message: "Tiny steps, big results" },
+    { message: "You're leveling up" },
+];
 
 window.addEventListener('load', () => {
     setTimeout(() => document.getElementById('xpBar').style.width = '80%', 200);
     updateProgress();
+    setRandomPositiveMessage()
 });
+
+function setRandomPositiveMessage() {
+    const randomIndex = Math.floor(Math.random() * 9);
+    const selectedMessage = positiveMessages[randomIndex];
+    document.querySelector('.message-positive').textContent = selectedMessage.message;
+}
 
 function toggleSteps(questMainEl) {
     questMainEl.closest('.quest-card').classList.toggle('open');

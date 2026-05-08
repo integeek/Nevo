@@ -11,6 +11,7 @@ body {
     background: #fdf6ec;
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
 }
 
 nav {
@@ -46,17 +47,21 @@ nav {
 }
 
 .hero-bg {
-    position: fixed; inset: 0; z-index: 0;
-    background: linear-gradient(135deg,
-    #c8e6c9 0%,
-    #e8f5e9 15%,
-    #fffde7 35%,
-    #fff8e1 55%,
-    #ffe0b2 75%,
-    #ffccbc 100%
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 380px;
+    z-index: 0;
+    background: linear-gradient(
+        135deg,
+        #c8e6c9 0%,
+        #e8f5e9 15%,
+        #fffde7 35%,
+        #fff8e1 55%,
+        #ffe0b2 75%,
+        #ffccbc 100%
     );
-    background-color: #fdf6ec;
-    /* height: 400px; */
 }
 
 .quest-img {
@@ -68,6 +73,7 @@ nav {
     position: relative; 
     z-index: 5;
     max-width: 520px; 
+    min-height: 100vh;
     margin: 0 auto;
     padding: 56px 16px 48px;
 }
@@ -213,7 +219,7 @@ nav {
     flex-shrink: 0; 
 }
 
-.quick-title { 
+.quick-title, .title-positive { 
     font-size: .85rem; 
     font-weight: 800; 
     color: black; 
@@ -228,6 +234,26 @@ nav {
     margin-left: auto; 
     color: var(--text-muted); 
     font-size: .9rem; 
+}
+
+.positive-message {
+    background: linear-gradient(
+        135deg,
+        #c8e6c9 0%,
+        #e8f5e9 15%,
+        #fffde7 35%,
+        #fff8e1 55%,
+        #ffe0b2 75%,
+        #ffccbc 100%
+    );
+    backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(0, 0, 0, 0.3); 
+    border-radius: 6px;
+    padding: 18px 20px; 
+    box-shadow: 0 4px 16px rgba(0,0,0,.07);
+    margin-bottom: 16px; 
+    animation: fadeUp .5s .3s ease both;
+    text-align: center;
 }
 
 .section-card {
