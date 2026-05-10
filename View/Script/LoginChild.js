@@ -112,6 +112,8 @@ function addProfile() {
         setTimeout(() => document.getElementById('profileNameInput').style.borderColor = '', 800);
         return;
     }
+
+    const age = document.getElementById('age');
     const secretPin = document.getElementById('secretPin');
     const confirmSecretPin = document.getElementById('confirmSecretPin');
 
@@ -119,6 +121,12 @@ function addProfile() {
         secretPin.style.borderColor = '#e57373';
         return;
     }
+
+    if (isNaN(age.value.trim()) || age.value === '' ) {
+        age.style.borderColor = '#e57373';
+        return;
+    }
+
 
     if (isNaN(confirmSecretPin.value) || confirmSecretPin.value === '' ) {
         confirmSecretPin.style.borderColor = '#e57373';
@@ -148,6 +156,7 @@ function addProfile() {
 
     row.insertBefore(card, addCard);
     secretPin.value = '';
+    age.value = '';
     confirmSecretPin.value = '';
     closeModal('modalOverlay');
 

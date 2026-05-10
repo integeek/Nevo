@@ -66,9 +66,17 @@
             <div class="avatar-option" style="background:linear-gradient(135deg,#ffb74d,#e65100)" data-avatar="icon-penguin" onclick="pickAvatar(this)"><img src="../Assets/img/icon-penguin.svg" alt="penguin icon"></div>
         </div>
 
-        <label for="profileNameInput">Name</label>
-        <input class="modal-input" name="profileNameInput" id="profileNameInput" type="text" placeholder="Name" maxlength="12" />
-
+        <div style="display:flex; gap:12px;">
+            <div style="flex:2">
+            <label for="profileNameInput">Name</label>
+            <input class="modal-input" name="profileNameInput" id="profileNameInput" type="text" placeholder="Name" maxlength="12" />
+            </div>
+            <div style="flex:1">
+            <label for="age">Age</label>
+            <input class="modal-input" name="age" id="age" type="text" placeholder="Age" maxlength="2" />
+            </div>
+        </div>
+        
         <label for="secretPin">Secret pin</label>
         <input class="modal-input" type="password" name="secretPin" id="secretPin" placeholder="****" maxlength="4"/>
 
