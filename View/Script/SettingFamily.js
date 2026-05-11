@@ -109,7 +109,6 @@ function addProfile() {
 let currentEditCard = null;
 
 function openEdit(card) {
-    currentEditCard = card;
     const name = card.querySelector('.hero-name').textContent;
     const age  = card.querySelector('.hero-sub').textContent.replace(' y/o', '');
   
