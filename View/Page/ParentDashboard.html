@@ -128,9 +128,9 @@
             <h2>Create reward</h2>
             <div>
                 <label for="nameInput">Name</label>
-                <input class="modal-input" id="nameInput" type="text" placeholder="Name" maxlength="12" />
+                <input class="modal-input" id="nameRewardInput" type="text" placeholder="Name" maxlength="12" />
                 <label for="xpInput">Cost in Xp</label>
-                <input class="modal-input" id="xpInput" type="text" placeholder="15" maxlength="4" />
+                <input class="modal-input" id="xpRewardInput" type="text" placeholder="15" maxlength="4" />
             </div>
 
         <button class="btn-add" onclick="saveReward()">Save</button>
@@ -144,14 +144,14 @@
             <h2>Edit routine</h2>
             <div>
                 <label for="editNameInput">Name</label>
-                <input class="modal-input" id="editNameInput" type="text" placeholder="Name" maxlength="12" />
+                <input class="modal-input" id="editNameInput" type="text" placeholder="Name"/>
                 <label for="editXpInput">Xp</label>
                 <input class="modal-input" id="editXpInput" type="text" placeholder="15" maxlength="4" />
                 <label for="steps">Steps (one for line)</label>
-                <textarea class="modal-input" name="steps" id="stepsInput" rows="4" placeholder="Put the steps of the routine"></textarea>
+                <textarea class="modal-input" name="steps" id="editStepsInput" rows="4" placeholder="Put the steps of the routine"></textarea>
             </div>
 
-        <button class="btn-add" onclick="saveRoutine()">Save</button>
+        <button class="btn-add" onclick="editRoutine()">Save</button>
         <br />
         <button class="btn-cancel" onclick="closeModal('editRoutineModalOverlay')">Cancel</button>
         </div>
@@ -162,12 +162,12 @@
             <h2>Edit reward</h2>
             <div>
                 <label for="editNameInput">Name</label>
-                <input class="modal-input" id="editRewardNameInput" type="text" placeholder="Name" maxlength="12" />
+                <input class="modal-input" id="editRewardNameInput" type="text" placeholder="Name" />
                 <label for="editXpInput">Cost in Xp</label>
                 <input class="modal-input" id="editRewardXpInput" type="text" placeholder="15" maxlength="4" />
             </div>
 
-        <button class="btn-add" onclick="saveReward()">Save</button>
+        <button class="btn-add" onclick="editReward()">Save</button>
         <br />
         <button class="btn-cancel" onclick="closeModal('editRewardModalOverlay')">Cancel</button>
         </div>
