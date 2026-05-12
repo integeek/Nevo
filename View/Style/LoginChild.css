@@ -1,9 +1,3 @@
-:root {
-    --teal: #3dbfa0;
-    --teal-dark: #2a9d85;
-    --text-muted: #6b8080;
-}
-
 body {
     font-family: 'Nunito', sans-serif;
     min-height: 100vh;
