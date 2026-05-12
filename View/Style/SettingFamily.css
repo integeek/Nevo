@@ -1,10 +1,3 @@
-:root {
---teal: #3dbfa0;
---teal-dark: #2a9d85;
---text-muted: #7a9490;
---border: #e8e4de;
-}
-
 *, *::before, *::after { 
     box-sizing: border-box; 
     margin: 0; 

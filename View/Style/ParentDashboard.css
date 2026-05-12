@@ -1,14 +1,3 @@
-:root {
-    --teal: #3dbfa0;
-    --teal-dark: #2a9d85;
-    --teal-light: #e6f7f3;
-    --bg: #f0ede8;
-    --border: #e4e0da;
-    --text-muted: #7a9490;
-    --red: #e05252;
-    --orange: #fb923c;
-}
-
 *, *::before, *::after { 
     box-sizing: border-box; 
     margin: 0; 
@@ -414,7 +403,7 @@ main {
 
 .ibt.del:hover { 
     background: #fee2e2; 
-    color: var(--red); 
+    color: #e05252; 
 }
 
 .rewards-grid { 

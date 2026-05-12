@@ -6,6 +6,7 @@
     <title>Your family</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../Style/SettingFamily.css" />
+    <link rel="stylesheet" href="../Style/Variables.css">
     <script src="../Script/SettingFamily.js"></script>
   </head>
   <body>
@@ -29,12 +30,7 @@
 
         <div class="heroes-header">
           <h2 class="heroes-title" id="heroesTitle">Heroes</h2>
-          <button class="add-hero-btn" id="addHeroBtn" onclick="openModal()">
-            +
-            &nbsp;
-            &nbsp;
-            Add hero
-          </button>
+          <button class="add-hero-btn" id="addHeroBtn" onclick="openModal()">+ &nbsp; &nbsp; Add hero</button>
         </div>
 
         <div class="heroes-grid" id="heroesGrid">
@@ -49,14 +45,10 @@
               <div class="hero-sub">6 y/o</div>
               <div class="hero-stats">
                 <span class="hero-stat stat-xp">
-                  <span class="icon">
-                    <img src="../Assets/img/icon-star.svg" alt="Star icon" />
-                  </span>
-                  130 XP
+                  <span class="icon"><img src="../Assets/img/icon-star.svg" alt="Star icon" /></span>130 XP
                 </span>
                 <span class="hero-stat stat-days">
-                  <span class="icon">
-                    <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                  <span class="icon"><img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
                   </span>
                   2 days
                 </span>
@@ -81,14 +73,11 @@
               <div class="hero-sub">7 y/o</div>
               <div class="hero-stats">
                 <span class="hero-stat stat-xp">
-                  <span class="icon">
-                    <img src="../Assets/img/icon-star.svg" alt="Star icon" />
-                  </span>
+                <span class="icon"><img src="../Assets/img/icon-star.svg" alt="Star icon" /></span>
                   0 XP
                 </span>
                 <span class="hero-stat stat-days">
-                  <span class="icon">
-                    <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                  <span class="icon"><img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
                   </span>
                   0 days
                 </span>
@@ -154,18 +143,18 @@
 
         <div class="modal-overlay" id="editModalOverlay">
           <div class="modal-box">
-            <h2>Edit hero</h2>
+          <h2>Edit hero</h2>
 
-            <div>
-                <label for="editNameInput">Name</label>
-                <input class="modal-input" id="editNameInput" type="text" placeholder="Name" maxlength="12" />
-                <label for="editAgeInput">Age</label>
-                <input class="modal-input" id="editAgeInput" type="text" placeholder="Age" maxlength="2" />
-            </div>
+          <div>
+            <label for="editNameInput">Name</label>
+            <input class="modal-input" id="editNameInput" type="text" placeholder="Name" maxlength="12" />
+            <label for="editAgeInput">Age</label>
+            <input class="modal-input" id="editAgeInput" type="text" placeholder="Age" maxlength="2" />
+          </div>
 
-            <button class="btn-add" onclick="saveEdit()">Save</button>
-            <br />
-            <button class="btn-cancel" onclick="closeModal('editModalOverlay')">Cancel</button>
+          <button class="btn-add" onclick="saveEdit()">Save</button>
+          <br />
+          <button class="btn-cancel" onclick="closeModal('editModalOverlay')">Cancel</button>
           </div>
         </div>
       </div>
