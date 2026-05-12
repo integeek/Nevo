@@ -1,11 +1,3 @@
-:root {
-    --teal: #3dbfa0;
-    --teal-dark: #2a9d85;
-    --coral: #e87c4e;
-    --coral-dark: #d0623a;
-    --text-muted: #7a9490;
-}
-
 body {
     font-family: 'Nunito', sans-serif;
     background: #fdf6ec;

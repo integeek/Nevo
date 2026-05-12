@@ -31,11 +31,11 @@ function addEntry(iconName, feeling, note) {
   div.style.animationDelay = '0s';
   div.innerHTML = `
     <div class="entry-emoji">
-      <img src="../Assets/img/${iconName}.svg" alt="${feeling} icon" class="icon-feelings" />
+    <img src="../Assets/img/${iconName}.svg" alt="${feeling} icon" class="icon-feelings" />
     </div>
     <div class="entry-body">
-      <div class="entry-date">Just now</div>
-      <div class="entry-note">${note}</div>
+    <div class="entry-date">Just now</div>
+    <div class="entry-note">${note}</div>
     </div>
   `;
   list.prepend(div);
