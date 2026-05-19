@@ -1,3 +1,12 @@
+<?php 
+  session_start();
+  $errorMessage = $_SESSION["error"] ?? "";
+  unset($_SESSION["error"]);
+
+  $successMessage = $_SESSION["success"] ?? "";
+  unset($_SESSION["success"]);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,12 +33,20 @@
         <div class="forgot-card">
           <h1 class="card-title">Forgot password?</h1>
           <p class="card-subtitle">No worries, we'll send you reset instructions.</p>
-          <label>Email</label>
-          <div class="input-wrap">
-            <input type="email" class="form-input" placeholder="email@mail.com" id="emailInput" />
-          </div>
-          <button class="btn-send" onclick="handleReset()">Send reset link →</button>
-          <a href="LoginParent.html" class="back-link">← Back to login</a>
+          <form action="../../Controller/Authentication/ForgotPassword.php" method="post">
+            <label>Email</label>
+            <div class="input-wrap">
+              <input type="email" class="form-input" name="email" placeholder="email@mail.com" id="emailInput" />
+            </div>
+            <button class="btn-send" >Send reset link →</button>
+            <a href="LoginParent.php" class="back-link">← Back to login</a>
+            <div class="error" style="color: red; margin-bottom: 1rem;">
+              <?= htmlspecialchars($errorMessage) ?>
+            </div>
+            <div class="success" style="color: black; margin-bottom: 1rem; font-weight: bold;">
+              <?= htmlspecialchars($successMessage) ?>
+            </div>
+          </form>
         </div>
       </div>
     </main>
