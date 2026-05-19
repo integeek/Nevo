@@ -77,12 +77,55 @@
           <span class="section-badge" id="progressLabel">1/5</span>
         </div>
         <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
-        <div class="progress-note" id="progressNote">4 quests remaining. You got this!</div>
+        <div class="progress-note" id="progressNote">4 routines remaining. You got this!</div>
       </div>
 
-      <div class="section-heading">Today's Quests</div>
+      <div class="section-heading" style="margin-top: 8px;">Quests</div>
 
       <div class="quests-list">
+        <div class="quest-card">
+          <div class="quest-main">
+            <div class="quest-emoji" style="background:#e3f2fd;"><img src="../Assets/img/icon-calendar.svg" alt="Calendar icon"></div>
+            <div class="quest-info">
+              <div class="quest-name">Daily login</div>
+              <div class="quest-meta">
+                <span class="quest-xp">+ 10 XP</span>
+                <span class="quest-badge badge-auto">✓ Auto-completed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quest-card" data-xp="20">
+          <div class="quest-main" onclick="toggleSteps(this)">
+            <div class="quest-emoji" style="background:#fff8e1;"><img src="../Assets/img/icon-done.svg" alt="Done icon"></div>
+            <div class="quest-info">
+              <div class="quest-name">Complete 2 routines today</div>
+              <div class="quest-meta">
+                <span class="quest-xp">+ 20 XP</span>
+                <span class="quest-badge badge-daily">Daily</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quest-card" data-xp="15">
+          <div class="quest-main">
+            <div class="quest-emoji" style="background:#ede7f6;"><img src="../Assets/img/icon-write-feelings.svg" alt="Write feelings icon"></div>
+            <div class="quest-info">
+              <div class="quest-name">Write your feelings today</div>
+              <div class="quest-meta">
+                <span class="quest-xp">+ 15 XP</span>
+                <span class="quest-badge badge-daily">Daily</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading">Today's Routines</div>
+
+      <div class="quests-list" id="routines-list">
         <div class="quest-card" data-xp="30">
           <div class="quest-main" onclick="toggleSteps(this)">
             <div class="quest-emoji" style="background:#e8f5e9;"><img src="../Assets/img/icon-alarm.svg" class="quest-img" alt="Morning Routine Icon"></div>

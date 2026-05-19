@@ -523,5 +523,21 @@ nav {
     color: black; 
 }
 
+.quest-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: .68rem; font-weight: 800; padding: 2px 8px;
+    border-radius: 50px; margin-left: 4px;
+}
+
+.badge-auto { 
+  background: #e8f0fe; 
+  color: #185FA5; 
+}
+
+.badge-daily {
+  background: #fff3e0; 
+  color: #e65100; 
+}
+
 @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }

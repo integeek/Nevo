@@ -80,13 +80,16 @@ function syncQuestState(questCard) {
 }
 
 function updateProgress() {
-  const done = document.querySelectorAll('.quest-check.done').length;
-  const remaining = TOTAL_QUESTS - done;
-  const pourcentage = Math.round((done / TOTAL_QUESTS) * 100);
+  const routineSection = document.getElementById('routines-list');
+  const total = routineSection.querySelectorAll('.quest-card').length;
+  const done = routineSection.querySelectorAll('.quest-check.done').length;
+  const remaining = total - done;
+  const pourcentage = Math.round((done / total) * 100);
+
   document.getElementById('progressBar').style.width = pourcentage + '%';
-  document.getElementById('progressLabel').textContent = done + '/' + TOTAL_QUESTS;
+  document.getElementById('progressLabel').textContent = done + '/' + total;
   document.getElementById('progressNote').textContent =
     remaining === 0
-    ? 'All quests done ! Amazing work !'
-    : remaining + ' quest' + (remaining > 1 ? 's' : '') + ' remaining. You got this!';
+      ? 'All routines done! Amazing work!'
+      : remaining + ' routine' + (remaining > 1 ? 's' : '') + ' remaining. You got this!';
 }
