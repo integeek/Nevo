@@ -1,0 +1,83 @@
+<?php
+  session_start();
+  $errorMessage = $_SESSION["error"] ?? "";
+  unset($_SESSION["error"]);
+
+  $successMessage = $_SESSION["success"] ?? "";
+  unset($_SESSION["success"]);
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Feelings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../Style/WriteFeelings.css">
+    <link rel="stylesheet" href="../Style/Variables.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../Script/WriteFeelings.js" defer></script>
+  </head>
+  <body>
+    <div class="hero-bg"></div>
+
+    <div class="top-nav">
+      <button class="back-btn"><a href="HomePageChild.html">&lsaquo; Back</a></button>
+    </div>
+
+    <div class="page-wrap">
+      <div class="page-header">
+        <h1 class="page-title">How are you today ?</h1>
+        <p class="page-subtitle">Tap a face to express what you feel</p>
+      </div>
+
+      <div class="main-card mx-3 mx-sm-auto">
+        <form action="">
+            <div class="feelings-grid" id="feelingsGrid">
+              <button class="feeling-btn" style="background: #d4eddf" data-feeling="Awesome" data-emoji="icon-awesome">
+                <span><img src="../Assets/img/icon-awesome.svg" alt="Awesome icon" class="icon-feelings"/></span>
+                <span class="label">Awesome</span>
+              </button>
+              <button class="feeling-btn" style="background: #f0edcc" data-feeling="Good" data-emoji="icon-good">
+                <span><img src="../Assets/img/icon-good.svg" alt="Good icon" class="icon-feelings"/></span>
+                <span class="label">Good</span>
+              </button>
+              <button class="feeling-btn" style="background: #fde8cc" data-feeling="Lost" data-emoji="icon-lost">
+                <span><img src="../Assets/img/icon-lost.svg" alt="Lost icon" class="icon-feelings"/></span>
+                <span class="label">Lost</span>
+              </button>
+              <button class="feeling-btn" style="background: #ddd5f0" data-feeling="Sad" data-emoji="icon-sad">
+                <span><img src="../Assets/img/icon-sad.svg" alt="Sad icon" class="icon-feelings"/></span>
+                <span class="label">Sad</span>
+              </button>
+              <button class="feeling-btn" style="background: #f8d8d8" data-feeling="Hurts" data-emoji="icon-hurt">
+                <span><img src="../Assets/img/icon-hurt.svg" alt="Hurts icon" class="icon-feelings"/></span>
+                <span class="label">Hurts</span>
+              </button>
+              <button class="feeling-btn" style="background: #f2d0da" data-feeling="Angry" data-emoji="icon-angry">
+                <span><img src="../Assets/img/icon-angry.svg" alt="Angry icon" class="icon-feelings"/></span>
+                <span class="label">Angry</span>
+              </button>
+            </div>
+          <textarea class="note-area" id="noteArea" placeholder="Want to say more ? (optional)" rows="3"></textarea>
+          <button class="share-btn" id="shareBtn">Publish</button>
+          <div style="color: red; margin-bottom: 1rem;">
+            <?= htmlspecialchars($errorMessage) ?>
+          </div>
+          <div style="color: black; margin-bottom: 1rem; font-weight: bold;">
+            <?= htmlspecialchars($successMessage) ?>
+          </div>
+        </form>
+      </div>
+
+      <div class="recent-section px-3 px-sm-0">
+        <p class="recent-title">Recent feelings</p>
+
+        <div id="recentList"></div>
+        
+      </div>
+    </div>
+  </body>
+</html>
