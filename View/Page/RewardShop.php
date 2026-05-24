@@ -19,7 +19,7 @@
     <div class="hero-bg"></div>
 
     <div class="top-nav">
-      <button class="back-btn"><a href="HomePageChild.html">&lsaquo; Back</a></button>
+      <button class="back-btn"><a href="HomePageChild.php">&lsaquo; Back</a></button>
     </div>
 
     <div class="page-wrap">
