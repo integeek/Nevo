@@ -12,7 +12,7 @@
       echo json_encode(['success' => true, 'feelings' => $feelings]);
     } catch (PDOException $e) {
       http_response_code(500);
-      echo json_encode(['success' => false, 'message' => 'Erreur BDD : ' . $e->getMessage()]);
+      echo json_encode(['success' => false, 'message' => 'Error with database : ' . $e->getMessage()]);
     }
     exit;
   }
@@ -34,7 +34,7 @@
       header("Location: ../../View/Page/WriteFeelings.php");
       exit;
     } catch (PDOException $e) {
-      $_SESSION["error"] = "Error bdd";
+      $_SESSION["error"] = "Error with database";
       header("Location: ../../View/Page/WriteFeelings.php");
       exit;
     }
