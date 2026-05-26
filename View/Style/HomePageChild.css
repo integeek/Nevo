@@ -479,50 +479,6 @@ nav {
     color: var(--text-muted)
 }
 
-.badges-section { 
-    animation: fadeUp .5s .5s ease both; 
-    margin-bottom: 16px; 
-}
-
-.badges-grid { 
-    display: flex; 
-    gap: 10px; 
-    flex-wrap: wrap; 
-}
-
-.badge-item {
-    background: rgba(255,255,255,.85); 
-    backdrop-filter: blur(12px);
-    border: 1.5px solid rgba(255,255,255,.9); 
-    border-radius: 14px;
-    padding: 12px 14px; 
-    text-align: center;
-    box-shadow: 0 3px 12px rgba(0,0,0,.06);
-    min-width: 80px; 
-    flex: 1; 
-    transition: transform .2s;
-}
-
-.badge-item:hover { 
-    transform: translateY(-3px); 
-}
-
-.badge-item.locked { 
-    opacity: .45; 
-    filter: grayscale(.6); 
-}
-
-.badge-emoji { 
-    font-size: 1.5rem; 
-    margin-bottom: 6px; 
-}
-
-.badge-name { 
-    font-size: .68rem; 
-    font-weight: 800; 
-    color: black; 
-}
-
 .quest-badge {
     display: inline-flex; align-items: center; gap: 4px;
     font-size: .68rem; font-weight: 800; padding: 2px 8px;
