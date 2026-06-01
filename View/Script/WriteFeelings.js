@@ -49,6 +49,10 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
   selectedIconName = null;
 });
 
+/**
+ * Fetches recent feelings from server and renders them in recent feelings list, displaying emoji, note, and formatted date for each feeling
+ * @returns {Promise<void>}
+ */
 async function loadFeelings() {
   try {
     const response = await fetch('../../Controller/HomePageChild/Feeling.php?action=getFeelings');
@@ -82,6 +86,11 @@ async function loadFeelings() {
   }
 }
 
+/**
+ * Formats date string into "DD MMM HH:mm" format for display in recent feelings list
+ * @param {*} dateStr 
+ * @returns 
+ */
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   return date.toLocaleDateString('fr-FR', {

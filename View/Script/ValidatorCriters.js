@@ -20,6 +20,12 @@ input.addEventListener("input", function(){
     }
 });
 
+/**
+ * Validates password based on specified 4 criterias and updates checklish indicators
+ * Marks input as valid if all criterias are met, otherwise marks it as invalid
+ * @param {HTMLInputElement} password 
+ * @returns {void}
+ */
 function validation(password) {
     const val = password.value;
     const allValid = 
@@ -68,6 +74,12 @@ function validation(password) {
         input.classList.remove("success");
     }
 }
+
+/**
+ * Removes all validation classes from input and checklist indicators, resetting validation state
+ * Called when password field is emptied 
+ * @returns {void}
+ */
 function remove(){
     input.classList.remove("invalide");
     input.classList.remove("success");
