@@ -8,6 +8,13 @@
   $successMessage = $_SESSION["success"] ?? "";
   unset($_SESSION["success"]);
 
+  if (!isset($_SESSION["parent"]["id"])) {
+    $_SESSION["selectedRole"] = "child";
+    $_SESSION["error"] = "Please log in as a parent to choose a child profile";
+    header("Location: LoginParent.php");
+    exit;
+  }
+
   $avatarGradients = [
     "icon-dog" => "linear-gradient(135deg,#f4845f,#e8623a)",
     "icon-cat" => "linear-gradient(135deg,#2cbfb1,#1a9e92)",
@@ -21,11 +28,7 @@
   ];
 
   try {
-    if (isset($_SESSION["parent"]["id"])) {
-      $children = ChildModel::getChildrenByParentId((int) $_SESSION["parent"]["id"]);
-    } else {
-      $children = ChildModel::getAllChildren();
-    }
+    $children = ChildModel::getChildrenByParentId((int) $_SESSION["parent"]["id"]);
   } catch (PDOException $e) {
     $children = [];
     $errorMessage = $errorMessage ?: "Error with database";

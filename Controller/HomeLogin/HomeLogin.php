@@ -11,6 +11,12 @@
 
   if ($role === "child") {
     $_SESSION["selectedRole"] = "child";
+    if (!isset($_SESSION["parent"]["id"])) {
+      $_SESSION["error"] = "Please log in as a parent to choose a child profile";
+      header("Location: ../../View/Page/LoginParent.php");
+      exit;
+    }
+
     header("Location: ../../View/Page/LoginChild.php");
     exit;
   }
