@@ -152,11 +152,11 @@ main {
 }
 
 .child-pill:hover { 
-    border-color: var(--teal); 
+    border-color: #3dbfa0; 
 }
 
 .child-pill.active { 
-    border-color: var(--teal); 
+    border-color: #3dbfa0; 
 }
 
 .cpavatar { 

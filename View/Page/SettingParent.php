@@ -23,6 +23,7 @@
         <div class="logo-icon">✦</div>
         Miro
       </a>
+      <a href="ParentDashboard.php" class="nav-btn">← Dashboard</a>
     </nav>
 
     <main>
