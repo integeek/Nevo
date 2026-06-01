@@ -1,14 +1,14 @@
 <?php
   require_once("Bdd.php");
   Class FeelingModel {
-    public static function publishFeeling($emoji, $text) {
+    public static function publishFeeling($emoji, $text, $child_id) {
       $db = Bdd::getInstance();
       $sql = "INSERT INTO feeling (emoji, text, child_id) VALUES (:emoji, :text, :child_id)";
       $stmt = $db-> prepare($sql);
       $stmt-> execute([
         ':emoji'    => $emoji,
         ':text'     => $text,
-        ':child_id' => 1,
+        ':child_id' => $child_id,
       ]);
     }
 

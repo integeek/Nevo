@@ -28,5 +28,5 @@ function setNewPin() {
     confirmSecretPin.style.borderColor = "#e57373";
     return;
   }
-  window.location.href = "LoginChild.html";
+  window.location.href = "LoginChild.php";
 }

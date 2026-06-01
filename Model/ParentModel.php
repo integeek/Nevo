@@ -26,6 +26,16 @@
       $query -> execute();
       return $query -> fetch();
     }
+
+    public static function getUserById($id) {
+      $db = Bdd::getInstance();
+      $sql = "SELECT * FROM parent WHERE id = :id";
+      $query = $db -> prepare($sql);
+      $query->execute([
+        "id" => $id,
+      ]);
+      return $query->fetch(PDO::FETCH_ASSOC);
+    }
     
     public static function generateResetToken($email, $expiricy) {
       $db = Bdd::getInstance();

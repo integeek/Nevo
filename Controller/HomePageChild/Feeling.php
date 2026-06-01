@@ -7,7 +7,7 @@
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getFeelings') {
     try {
-      $child_id = 1;
+      $child_id = (int) ($_SESSION["child"]["id"] ?? 1);
       $feelings = FeelingModel::getFeelingsByChildId($child_id);
       echo json_encode(['success' => true, 'feelings' => $feelings]);
     } catch (PDOException $e) {
@@ -26,10 +26,10 @@
 
     $emoji = trim($_POST['emoji']);
     $note = trim($_POST['note'] ?? '');
-    // $child_id  = (int) $_SESSION['child_id'];
+    $child_id  = (int) ($_SESSION["child"]["id"] ?? 1);
 
     try {
-      FeelingModel::publishFeeling($emoji, $note);
+      FeelingModel::publishFeeling($emoji, $note, $child_id);
       $_SESSION["success"] = "Feeling published";
       header("Location: ../../View/Page/WriteFeelings.php");
       exit;

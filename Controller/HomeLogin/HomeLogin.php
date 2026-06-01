@@ -11,7 +11,7 @@
 
   if ($role === "child") {
     $_SESSION["selectedRole"] = "child";
-    header("Location: ../../View/Page/HomePageChild.php");
+    header("Location: ../../View/Page/LoginChild.php");
     exit;
   }
 

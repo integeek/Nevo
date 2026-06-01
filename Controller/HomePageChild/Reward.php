@@ -8,7 +8,7 @@
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getRewards') {
     try {
-      $child_id = 1;
+      $child_id = (int) ($_SESSION["child"]["id"] ?? 1);
       $rewards = RewardModel::getRewardsByChildId($child_id);
       echo json_encode(['success' => true, 'rewards' => $rewards]);
     } catch (PDOException $e) {
@@ -20,7 +20,7 @@
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getXp') {
     try {
-      $child_id = 1; // (int) $_SESSION['child_id'];
+      $child_id = (int) ($_SESSION["child"]["id"] ?? 1);
       $xp = ChildModel::getXpByChildId($child_id);
       echo json_encode(['success' => true, 'xp' => $xp]);
     } catch (PDOException $e) {
@@ -38,7 +38,7 @@
     }
 
     $reward_id = (int) $_POST['reward_id'];
-    $child_id  = 1; // (int) $_SESSION['child_id'];
+    $child_id  = (int) ($_SESSION["child"]["id"] ?? 1);
 
     try {
       $reward = RewardModel::getRewardById($reward_id);

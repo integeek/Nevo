@@ -1,3 +1,37 @@
+<?php
+  session_start();
+  require_once("../../Model/ChildModel.php");
+
+  $errorMessage = $_SESSION["error"] ?? "";
+  unset($_SESSION["error"]);
+
+  $successMessage = $_SESSION["success"] ?? "";
+  unset($_SESSION["success"]);
+
+  $avatarGradients = [
+    "icon-dog" => "linear-gradient(135deg,#f4845f,#e8623a)",
+    "icon-cat" => "linear-gradient(135deg,#2cbfb1,#1a9e92)",
+    "icon-tiger" => "linear-gradient(135deg,#9c6fd6,#7b4fc4)",
+    "icon-superhero" => "linear-gradient(135deg,#f4845f,#e8623a)",
+    "icon-butterfly" => "linear-gradient(135deg,#64b5f6,#1976d2)",
+    "icon-unicorn" => "linear-gradient(135deg,#81c784,#388e3c)",
+    "icon-fish" => "linear-gradient(135deg,#f06292,#c2185b)",
+    "icon-penguin" => "linear-gradient(135deg,#ffb74d,#e65100)",
+    "icon-dragon" => "linear-gradient(135deg,#7b4fc4,#512da8)"
+  ];
+
+  try {
+    if (isset($_SESSION["parent"]["id"])) {
+      $children = ChildModel::getChildrenByParentId((int) $_SESSION["parent"]["id"]);
+    } else {
+      $children = ChildModel::getAllChildren();
+    }
+  } catch (PDOException $e) {
+    $children = [];
+    $errorMessage = $errorMessage ?: "Error with database";
+  }
+?>
+
 <!doctype html>
 <html lang="fr">
   <head>
@@ -20,7 +54,7 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer
     ></script>
-    <script src="../Script/LoginChild.js"></script>
+    <script src="../Script/LoginChild.js" defer></script>
   </head>
 
   <body>
@@ -37,56 +71,21 @@
         <p class="subtitle">Tap your hero avatar to start</p>
 
         <div class="profiles-row" id="profilesRow">
-          <div
-            class="profile-card"
-            onclick="
-              selectProfile(
-                this,
-                'Lila',
-                '../Assets/img/icon-dog.svg',
-                'linear-gradient(135deg,#f4845f,#e8623a)',
-              )
-            "
-          >
-            <div class="avatar avatar-lila">
-              <img src="../Assets/img/icon-dog.svg" alt="dog icon" />
+          <?php foreach ($children as $child): ?>
+            <?php
+              $avatar = $child["avatar"] ?: "icon-superhero";
+              $bg = $avatarGradients[$avatar] ?? $avatarGradients["icon-superhero"];
+            ?>
+            <div
+              class="profile-card"
+              onclick='selectProfile(this, <?= (int) $child["id"] ?>, <?= json_encode($child["fullname"]) ?>, <?= json_encode("../Assets/img/" . $avatar . ".svg") ?>, <?= json_encode($bg) ?>)'
+            >
+              <div class="avatar" style="background: <?= htmlspecialchars($bg) ?>">
+                <img src="../Assets/img/<?= htmlspecialchars($avatar) ?>.svg" alt="<?= htmlspecialchars($child["fullname"]) ?> avatar" />
+              </div>
+              <div class="profile-name"><?= htmlspecialchars($child["fullname"]) ?></div>
             </div>
-            <div class="profile-name">Lila</div>
-          </div>
-
-          <div
-            class="profile-card"
-            onclick="
-              selectProfile(
-                this,
-                'Noah',
-                '../Assets/img/icon-cat.svg',
-                'linear-gradient(135deg,#2cbfb1,#1a9e92)',
-              )
-            "
-          >
-            <div class="avatar avatar-noah">
-              <img src="../Assets/img/icon-cat.svg" alt="cat icon" />
-            </div>
-            <div class="profile-name">Noah</div>
-          </div>
-
-          <div
-            class="profile-card"
-            onclick="
-              selectProfile(
-                this,
-                'Emma',
-                '../Assets/img/icon-tiger.svg',
-                'linear-gradient(135deg,#9c6fd6,#7b4fc4)',
-              )
-            "
-          >
-            <div class="avatar avatar-mia">
-              <img src="../Assets/img/icon-tiger.svg" alt="tiger icon" />
-            </div>
-            <div class="profile-name">Emma</div>
-          </div>
+          <?php endforeach; ?>
 
           <div class="profile-card" id="addCard" onclick="openModal()">
             <div class="avatar avatar-add">
@@ -97,14 +96,21 @@
         </div>
 
         <p class="parent-link">
-          Are you a parent? <a href="LoginParent.html">Log in here</a>
+          Are you a parent? <a href="LoginParent.php">Log in here</a>
         </p>
+        <div style="color: red; margin-bottom: 1rem;">
+          <?= htmlspecialchars($errorMessage) ?>
+        </div>
+        <div style="color: black; margin-bottom: 1rem; font-weight: bold;">
+          <?= htmlspecialchars($successMessage) ?>
+        </div>
       </div>
 
       <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-box">
+        <form class="modal-box" action="../../Controller/Authentication/ChildAuth.php?action=createProfile" method="post">
           <h2>Add a profile</h2>
           <p>Pick an avatar, a color and a secret 4-digit code</p>
+          <input type="hidden" name="avatar" id="selectedAvatarInput" value="icon-superhero" />
 
           <label for="avatarPicker">Avatar</label>
           <div class="avatar-picker" id="avatarPicker">
@@ -210,12 +216,12 @@
             maxlength="4"
           />
 
-          <button class="btn-add" onclick="addProfile()">Create profile</button>
+          <button class="btn-add" type="submit">Create profile</button>
           <br />
-          <button class="btn-cancel" onclick="closeModal('modalOverlay')">
+          <button class="btn-cancel" type="button" onclick="closeModal('modalOverlay')">
             Cancel
           </button>
-        </div>
+        </form>
       </div>
 
       <div id="pinScreen">
@@ -251,7 +257,7 @@
             </button>
           </div>
           <p class="pin-footer">
-            Forgot code? <a href="ForgotPin.html">Ask a parent</a>
+            Forgot code? <a href="ForgotPin.php" id="forgotPinLink">Ask a parent</a>
           </p>
         </div>
       </div>

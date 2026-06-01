@@ -1,9 +1,10 @@
 let selectedAvatar = {
-  emoji: "🐉",
+  avatar: "icon-superhero",
+  img: "../Assets/img/icon-superhero.svg",
   bg: "linear-gradient(135deg,#f4845f,#e8623a)",
 };
 let pinCode = "";
-const SECRET_PIN = "1234";
+let selectedChildId = null;
 
 function openModal() {
   document.getElementById("modalOverlay").classList.add("active");
@@ -15,7 +16,7 @@ function closeModal(id) {
   document.getElementById(id).classList.remove("active");
 }
 
-function selectProfile(card, name, emoji, bg) {
+function selectProfile(card, childId, name, img, bg) {
   if (card.id === "addCard") {
     return;
   }
@@ -23,16 +24,18 @@ function selectProfile(card, name, emoji, bg) {
   setTimeout(() => {
     card.style.transform = "";
   }, 180);
-  setTimeout(() => openPinScreen(name, emoji, bg), 200);
+  setTimeout(() => openPinScreen(childId, name, img, bg), 200);
 }
 
-function openPinScreen(name, img, bg) {
+function openPinScreen(childId, name, img, bg) {
+  selectedChildId = childId;
   pinCode = "";
   updateDots();
   document.getElementById("pinName").textContent = "Hi, " + name + "!";
   const av = document.getElementById("pinAvatar");
   av.style.background = bg;
   av.innerHTML = `<img src="${img}" alt="" style="width:60%;height:60%;object-fit:contain;">`;
+  document.getElementById("forgotPinLink").href = "ForgotPin.php?child_id=" + childId;
   document.getElementById("pinScreen").classList.add("active");
   const card = document.getElementById("pinCard");
   card.style.animation = "none";
@@ -65,26 +68,48 @@ function updateDots() {
   }
 }
 
-function checkPin() {
-  if (pinCode === SECRET_PIN) {
-    for (let i = 0; i < 4; i++) {
-      const dot = document.getElementById("dot" + i);
-      dot.style.background = "#2cbfb1";
+async function checkPin() {
+  const body = new URLSearchParams();
+  body.append("child_id", selectedChildId);
+  body.append("pin", pinCode);
+
+  try {
+    const res = await fetch("../../Controller/Authentication/ChildAuth.php?action=login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body,
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById("dot" + i);
+        dot.style.background = "#2cbfb1";
+      }
+      setTimeout(() => {
+        window.location.href = data.redirect;
+      }, 300);
+      return;
     }
-    setTimeout(() => {
-      closeModal("pinScreen");
-    }, 500);
-  } else {
-    for (let i = 0; i < 4; i++) {
-      document.getElementById("dot" + i).classList.add("error");
-    }
-    document.getElementById("pinCard").classList.add("shake");
-    setTimeout(() => {
-      document.getElementById("pinCard").classList.remove("shake");
-      pinCode = "";
-      updateDots();
-    }, 500);
+  } catch (err) {
+    console.error("Pin login error:", err);
   }
+
+  showPinError();
+}
+
+function showPinError() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById("dot" + i).classList.add("error");
+  }
+  document.getElementById("pinCard").classList.add("shake");
+  setTimeout(() => {
+    document.getElementById("pinCard").classList.remove("shake");
+    pinCode = "";
+    updateDots();
+  }, 500);
 }
 
 document.addEventListener("keydown", (e) => {
@@ -112,6 +137,7 @@ function pickAvatar(el) {
     img: el.querySelector("img").src,
     bg: el.style.background,
   };
+  document.getElementById("selectedAvatarInput").value = selectedAvatar.avatar;
 }
 
 function addProfile() {
@@ -150,34 +176,7 @@ function addProfile() {
     return;
   }
 
-  const row = document.getElementById("profilesRow");
-  const addCard = document.getElementById("addCard");
-  const card = document.createElement("div");
-  card.className = "profile-card";
-  card.style.animationDelay = "0s";
-  card.onclick = function () {
-    selectProfile(card, name, selectedAvatar.img, selectedAvatar.bg);
-  };
-  card.innerHTML = `
-    <div class="avatar" style="background:${selectedAvatar.bg}">
-    <img src="${selectedAvatar.img}" alt="">
-    </div>
-    <div class="profile-name">${name}</div>
-  `;
-
-  row.insertBefore(card, addCard);
-  secretPin.value = "";
-  age.value = "";
-  confirmSecretPin.value = "";
-  closeModal("modalOverlay");
-
-  card.style.opacity = "0";
-  card.style.transform = "scale(0.8) translateY(10px)";
-  requestAnimationFrame(() => {
-    card.style.transition = "opacity 0.35s ease, transform 0.4s";
-    card.style.opacity = "1";
-    card.style.transform = "";
-  });
+  document.querySelector(".modal-box").requestSubmit();
 }
 document.getElementById("profileNameInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {

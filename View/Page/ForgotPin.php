@@ -1,3 +1,14 @@
+<?php
+  session_start();
+  $errorMessage = $_SESSION["error"] ?? "";
+  unset($_SESSION["error"]);
+
+  $successMessage = $_SESSION["success"] ?? "";
+  unset($_SESSION["success"]);
+
+  $childId = (int) ($_GET["child_id"] ?? $_POST["child_id"] ?? 0);
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,7 +25,7 @@
     />
     <link rel="stylesheet" href="../Style/ForgotPin.css" />
     <link rel="stylesheet" href="../Style/Variables.css" />
-    <script src="../Script/ForgotPin.js"></script>
+    <script src="../Script/ForgotPin.js" defer></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer
@@ -30,9 +41,10 @@
 
     <main>
       <div class="page-center">
-        <div class="register-card">
-          <button class="back-btn">
-            <a href="LoginChild.html">← Change hero</a>
+        <form class="register-card" action="../../Controller/Authentication/ChildAuth.php?action=resetPin" method="post">
+          <input type="hidden" name="child_id" value="<?= $childId ?>" />
+          <button class="back-btn" type="button">
+            <a href="LoginChild.php">← Change hero</a>
           </button>
           <div class="card-header-block">
             <h1 class="card-title">No worries, hero !</h1>
@@ -44,12 +56,13 @@
 
           <label
             >Your account password
-            <a href="ForgotPassword.html">Forgot?</a></label
+            <a href="ForgotPassword.php">Forgot?</a></label
           >
           <div class="input-wrap">
             <input
               type="password"
               class="form-input"
+              name="password"
               placeholder="••••••••"
               id="passwordInput"
               required
@@ -68,6 +81,7 @@
             <input
               type="password"
               class="form-input"
+              name="secretPin"
               placeholder="••••"
               id="secretPin"
               maxlength="4"
@@ -80,6 +94,7 @@
             <input
               type="password"
               class="form-input"
+              name="confirmSecretPin"
               placeholder="••••"
               id="confirmSecretPin"
               maxlength="4"
@@ -87,13 +102,19 @@
             />
           </div>
 
-          <button class="btn-new-pin" onclick="setNewPin()">
+          <button class="btn-new-pin" type="submit">
             Set new pin <span>→</span>
           </button>
-          <button class="btn-cancel">
-            <span>←</span> <a href="LoginChild.html">Try my code again</a>
+          <button class="btn-cancel" type="button">
+            <span>←</span> <a href="LoginChild.php">Try my code again</a>
           </button>
-        </div>
+          <div style="color: red; margin-bottom: 1rem;">
+            <?= htmlspecialchars($errorMessage) ?>
+          </div>
+          <div style="color: black; margin-bottom: 1rem; font-weight: bold;">
+            <?= htmlspecialchars($successMessage) ?>
+          </div>
+        </form>
       </div>
     </main>
   </body>
