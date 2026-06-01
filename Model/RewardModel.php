@@ -42,14 +42,41 @@
       $db = Bdd::getInstance();
 
       $stmt = $db->prepare("UPDATE reward SET is_completed = true, completed_at = NOW() WHERE id = :id");
-      $stmt->execute([
-        ':id' => $reward_id
-      ]);
+      $stmt->execute([':id' => $reward_id]);
       $stmt = $db->prepare("UPDATE child SET xp = xp - :xp_cost WHERE id = :child_id");
+      $stmt->execute([':xp_cost' => $xp_cost, ':child_id' => $child_id]);
+    }
+
+    public static function createReward($name, $icon, $xp_cost, $type, $child_id, $parent_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("INSERT INTO reward (name, icon, xp_cost, type, is_completed, child_id, created_by) VALUES (:name, :icon, :xp_cost, :type, false, :child_id, :created_by) RETURNING id");
       $stmt->execute([
-        ':xp_cost' => $xp_cost,
-        ':child_id' => $child_id
+        ':name'       => $name,
+        ':icon'       => $icon,
+        ':xp_cost'    => (int) $xp_cost,
+        ':type'       => $type,
+        ':child_id'   => (int) $child_id,
+        ':created_by' => (int) $parent_id,
       ]);
+      return (int) $stmt->fetchColumn();
+    }
+
+    public static function updateReward($id, $name, $xp_cost, $type, $child_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("UPDATE reward SET name = :name, xp_cost = :xp_cost, type = :type WHERE id = :id AND child_id = :child_id");
+      $stmt->execute([
+        ':name'     => $name,
+        ':xp_cost'  => (int) $xp_cost,
+        ':type'     => $type,
+        ':id'       => (int) $id,
+        ':child_id' => (int) $child_id,
+      ]);
+    }
+
+    public static function deleteReward($id, $child_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("DELETE FROM reward WHERE id = :id AND child_id = :child_id");
+      $stmt->execute([':id' => (int) $id, ':child_id' => (int) $child_id]);
     }
   }
 ?>
