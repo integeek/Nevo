@@ -101,6 +101,8 @@ h1 span {
   box-shadow: 0 8px 32px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
   transition: transform .25s, box-shadow .25s;
   cursor: pointer;
+  display: block;
+  text-decoration: none;
 }
 
 .quest-card:hover {
@@ -176,6 +178,13 @@ h1 span {
   flex-wrap: wrap;
   justify-content: center;
   animation: fadeUp .7s .45s ease both;
+}
+
+.error-message {
+  color: #c62828;
+  font-weight: 800;
+  margin: -24px 0 28px;
+  text-align: center;
 }
 
 .feat-pill {
