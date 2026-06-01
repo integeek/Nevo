@@ -45,6 +45,27 @@ nav {
     width: 100%;
     padding: 18px 28px;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-btn {
+    background: #3dbfa0;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-decoration: none !important;
+    display: inline-block;
+    transition: opacity 0.2s;
+}
+
+.nav-btn:hover {
+    opacity: 0.85;
 }
 
 .nav-logo {
@@ -391,6 +412,123 @@ main {
     transition: color 0.2s;
 }
 
-.btn-cancel:hover, .back-btn:hover { 
-    color: black; 
+.btn-cancel:hover, .back-btn:hover {
+    color: black;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0 0;
+}
+
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.staff-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: box-shadow 0.15s;
+}
+
+.staff-card:hover {
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+}
+
+.staff-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #64b5f6, #1976d2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    color: white;
+    font-weight: 800;
+}
+
+.staff-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.staff-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: black;
+}
+
+.staff-speciality {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.staff-children {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.staff-child-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #e8f8f4;
+    color: #2a9d85;
+    border-radius: 20px;
+    padding: 2px 8px 2px 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.staff-child-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2a9d85;
+    font-size: 0.75rem;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+
+.staff-child-tag button:hover {
+    opacity: 1;
+}
+
+.child-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.child-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.child-checkbox-item input[type="checkbox"] {
+    accent-color: #3dbfa0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
