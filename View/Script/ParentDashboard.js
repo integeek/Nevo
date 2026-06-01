@@ -1,69 +1,21 @@
-let currentChild = 'lila';
+let currentChildId = null;
 let currentEditCard = null;
-const DATA = {
-  lila: {
-    name:'Mia', icon:'../Assets/img/icon-cat.svg', labelBg:'#f0eafa', labelColor:'#7c3aed',
-    stats:{ completion:'72%', week:'30<sub>/42</sub>', streak:'5 days', routines:3 },
-    routines:[
-      { icon:'../Assets/img/icon-alarm.svg', bg:'#fff8e1', name:'Morning routine', xp:30, steps: [
-        { label: 'Wake up and stretch for 5 min', done: false },
-        { label: 'Drink a glass of water', done: false },
-        { label: 'Write 3 intentions for the day', done: false }
-      ]},
-      { icon:'../Assets/img/icon-drop-water.svg', bg:'#e3f2fd', name:'Stay hydrated', xp:15, steps: [
-        { label: 'Drink 2L of water throughout the day', done: false }
-      ]},
-      { icon:'../Assets/img/icon-books.svg', bg:'#e8f5e9', name:'Reading time', xp:15, steps: [
-        { label: 'Read for 20 minutes', done: false }
-      ]},
-    ],
-    rewards:[
-      { icon:'../Assets/img/icon-book-solo.svg', name:'Extra story time', pts:'30 XP', done:true },
-      { icon:'../Assets/img/icon-movie.svg', name:'Movie night pick',  pts:'50 XP', done:false },
-    ],
-    feelings:{
-      entries:[
-        { icon:'../Assets/img/icon-awesome.svg', bg:'#dcfce7', text:'Took my medicine without crying !', time:'Today, 09:30' },
-        { icon:'../Assets/img/icon-hurt.svg', bg:'#fee2e2', text:'My tummy hurts', time:'Yesterday, 18:30' },
-        { icon:'../Assets/img/icon-awesome.svg', bg:'#dcfce7', text:'Best day ever !',  time:'Yesterday, 11:05' },
-        { icon:'../Assets/img/icon-sad.svg', bg:'#fef3c7', text:'Tired today', time:'2 days ago' },
-      ]
-    },
-    analytics:{
-      bars:[40,70,55,85,60,30,20],
-      days:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-    }
-  },
-  noah: {
-    name:'Emma', icon:'../Assets/img/icon-tiger.svg', labelBg:'#fff3e0', labelColor:'#c2410c',
-    stats:{ completion:'58%', week:'18<sub>/31</sub>', streak:'2 days', routines:2 },
-    routines:[
-      { icon:'../Assets/img/icon-sport.svg', bg:'#e0f7fa', name:'Move your body', xp:20, steps: [
-        { label: 'Go for a 20min walk', done: false },
-        { label: 'Do 10 push-ups', done: false }
-      ]},
-      { icon:'../Assets/img/icon-pills.svg', bg:'#fce4ec', name:'Take your medication', xp:25, steps: [
-        { label: 'Take morning pill', done: false }
-      ]},
-    ],
-    rewards:[
-      { icon:'../Assets/img/icon-freeze.svg', name:'Freeze one day', pts:'80 XP', done:false },
-      { icon:'../Assets/img/icon-chocolate.svg', name:'Extra desserts at diner', pts:'40 XP', done:true  },
-    ],
-    feelings:{
-      entries:[
-        { icon:'../Assets/img/icon-awesome.svg', bg:'#fef3c7', text:'I love art class !', time:'Today, 10:00' },
-        { icon:'../Assets/img/icon-lost.svg', bg:'#fee2e2', text:'I am lost',   time:'2 days ago' },
-      ]
-    },
-    analytics:{
-      bars:[60,40,30,50,45,70,10],
-      days:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-    }
-  }
+
+const AVATAR_BG = {
+  'icon-superhero': 'linear-gradient(135deg,#f4845f,#e8623a)',
+  'icon-butterfly': 'linear-gradient(135deg,#64b5f6,#1976d2)',
+  'icon-unicorn':   'linear-gradient(135deg,#81c784,#388e3c)',
+  'icon-fish':      'linear-gradient(135deg,#f06292,#c2185b)',
+  'icon-penguin':   'linear-gradient(135deg,#ffb74d,#e65100)',
+  'icon-cat':       '#ede9fe',
+  'icon-tiger':     '#fce7f3',
 };
 
-const makeIcon = (src) => `<img src="${src}" style="width:24px; height:24px; object-fit:contain;">`;
+const makeIcon = (name) => {
+  const src = name && name.startsWith('../') ? name : `../Assets/img/${name || 'icon-alarm'}.svg`;
+  return `<img src="${src}" style="width:24px;height:24px;object-fit:contain;">`;
+};
+
 function openModal(id) {
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
@@ -73,266 +25,6 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
-function saveRoutine() {
-  const name = document.getElementById('nameInput');
-  const xp = document.getElementById('xpInput');
-  const stepsInput = document.getElementById('stepsInput');
-
-  if (!name.value.trim()) {
-    name.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!stepsInput.value.trim()) {
-    stepsInput.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!xp.value.trim() || isNaN(xp.value.trim())) {
-    xp.style.borderColor = '#e57373';
-    return;
-  }
-
-  const steps = stepsInput.value.trim()
-    .split('\n')
-    .map(l => l.trim())
-    .filter(l => l.length > 0)
-    .map(l => ({ label: l, done: false }));
-
-  DATA[currentChild].routines.push({
-    icon: '../Assets/img/icon-alarm.svg',
-    bg:   '#f5f5f5',
-    name: name.value.trim(),
-    xp: xp.value.trim(),
-    steps
-  });
-
-  DATA[currentChild].stats.routines = DATA[currentChild].routines.length;
-  name.value  = '';
-  xp.value    = '';
-  stepsInput.value = '';
-  closeModal('newRoutineModalOverlay');
-  renderAll(currentChild);
-}
-
-function saveReward() {
-  const name = document.getElementById('nameRewardInput');
-  const xp = document.getElementById('xpRewardInput');
-
-  if (!name.value.trim()) {
-    name.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!xp.value.trim() || isNaN(xp.value.trim())) {
-    xp.style.borderColor = '#e57373';
-    return;
-  }
-
-  DATA[currentChild].rewards.push({
-    icon: '../Assets/img/icon-alarm.svg',
-    name: name.value.trim(),
-    pts: xp.value.trim(),
-    done: false,
-  });
-  name.value  = '';
-  xp.value    = '';
-  closeModal('newRewardModalOverlay');
-  renderAll(currentChild);
-}
-
-function openDelete(card, id) {
-  currentEditCard = card;
-  if (id === 'deleteRoutine') {
-    const name = card.querySelector('.routine-name').textContent;
-    if (confirm(`Do you really want to delete the routine ${name} ? You will no longer be able to recover the data.`)) {
-      currentEditCard.remove();
-      currentEditCard = null;
-    }
-  } else if (id === 'deleteReward') {
-    const name = card.querySelector('.reward-name').textContent;
-    if (confirm(`Do you really want to delete the reward ${name} ? You will no longer be able to recover the data.`)) {
-      currentEditCard.remove();
-      currentEditCard = null;
-    }
-  }
-}  
-
-function openEdit(card, id) {
-  currentEditCard = card;
-  if (id === 'editRoutineModalOverlay') {
-    const name = card.querySelector('.routine-name').textContent ;
-    const xp  = card.querySelector('.ri').textContent.replace('XP', '')
-    const steps = [...card.querySelectorAll('.substep span')]
-      .map(span => span.textContent)
-      .join('\n');
-
-    document.getElementById('editNameInput').value = name;
-    document.getElementById('editXpInput').value = xp;
-    document.getElementById('editStepsInput').value = steps;
-  } else if (id === 'editRewardModalOverlay') {
-    const name = card.querySelector('.reward-name').textContent ;
-    const xp  = card.querySelector('.reward-pts').textContent.replace('XP', '');
-    document.getElementById('editRewardNameInput').value = name;
-    document.getElementById('editRewardXpInput').value = xp;
-  }
-  openModal(id);
-}
-
-function editRoutine() {
-  const name = document.getElementById('editNameInput');
-  const xp = document.getElementById('editXpInput');
-  const stepsInput = document.getElementById('editStepsInput');
-
-  if (!name.value.trim()) {
-    name.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!xp.value.trim() || isNaN(xp.value.trim())) {
-    xp.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!stepsInput.value.trim()) {
-    stepsInput.style.borderColor = '#e57373';
-    return;
-  }
-
-  const index = parseInt(currentEditCard.dataset.index);
-  const steps = stepsInput.value.trim()
-    .split('\n')
-    .map(l => l.trim())
-    .filter(l => l.length > 0)
-    .map(l => ({ label: l, done: false }));
-
-  DATA[currentChild].routines[index] = {
-    ...DATA[currentChild].routines[index],
-    name:  name.value.trim(),
-    xp:    parseInt(xp.value.trim()),
-    steps
-  };
-  closeModal('editRoutineModalOverlay');
-  renderAll(currentChild);
-}
-
-function editReward() {
-  const name = document.getElementById('editRewardNameInput');
-  const xp = document.getElementById('editRewardXpInput');
-
-  if (!name.value.trim()) {
-    name.style.borderColor = '#e57373';
-    return;
-  }
-
-  if (!xp.value.trim() || isNaN(xp.value.trim())) {
-    xp.style.borderColor = '#e57373';
-    return;
-  }
-  const index = parseInt(currentEditCard.dataset.index);
-
-  DATA[currentChild].rewards[index] = {
-    ...DATA[currentChild].rewards[index],
-    name: name.value.trim(),
-    pts: xp.value.trim(),
-  };
-  closeModal('editRewardModalOverlay');
-  renderAll(currentChild);
-}
-
-function toggleSteps(btn) {
-  const item = btn.closest('.routine-item');
-  const substeps = item.querySelector('.routine-substeps');
-  substeps.classList.toggle('open');
-  btn.classList.toggle('open');
-}
-
-function renderAll(key) {
-  const d = DATA[key];
-  document.getElementById('sCompletion').textContent = d.stats.completion;
-  document.getElementById('sWeek').innerHTML = d.stats.week;
-  document.getElementById('sStreak').textContent = d.stats.streak;
-  document.getElementById('sRoutines').textContent = d.stats.routines;
-
-  const lbl = document.getElementById('setupLabel');
-  lbl.innerHTML = `<span>${makeIcon(d.icon)}</span>&nbsp;${d.name}'s setup`;
-  lbl.style.background = d.labelBg;
-  lbl.style.color = d.labelColor;
-
-  document.getElementById('routinesList').innerHTML = d.routines.map((r, i) => `
-    <div class="routine-item" data-index="${i}">
-      <div class="routine-icon" style="background:${r.bg}">${makeIcon(r.icon)}</div>
-      <div class="routine-body">
-        <div class="routine-name">${r.name}</div>
-        <div class="routine-meta">
-          <span class="ri">${r.xp} XP</span>
-          <span>${r.steps.length} step${r.steps.length > 1 ? 's' : ''}</span>
-        </div>
-      </div>
-      <div class="routine-actions">
-        <button class="ibt chevron" onclick="toggleSteps(this)">›</button>
-        <button class="ibt del" onclick="openEdit(this.closest('.routine-item'), 'editRoutineModalOverlay')">
-          <img src="../Assets/img/icon-edit.svg" alt="Edit icon" />
-        </button>
-        <button class="ibt del" onclick="openDelete(this.closest('.routine-item'), 'deleteRoutine')">
-          <img src="../Assets/img/icon-delete.svg" alt="Delete icon" />
-        </button>
-      </div>
-
-      <div class="routine-substeps">
-        ${r.steps.map((s, j) => `
-          <label class="substep">
-            <input type="checkbox"${s.done ? 'checked' : ''}  disabled/>
-            <span>${s.label}</span>
-          </label>
-        `).join('')}
-      </div>
-
-    </div>
-  `).join('');
-
-  document.getElementById('rewardsList').innerHTML = d.rewards.map((r, i) => `
-    <div class="reward-card" data-index="${i}">
-      <div class="reward-icon">${makeIcon(r.icon)}</div>
-      <div class="reward-info">
-        <div class="reward-name">${r.name}</div>
-        <div class="reward-pts">${r.pts}</div>
-        <div class="reward-status"><span class="spill ${r.done?'sdone':'stodo'}">${r.done?'✓ Done':'To do'}</span></div>
-      </div>
-        <div class="rew-actions">
-        <button class="rew-edit" onclick="openEdit(this.closest('.reward-card'), 'editRewardModalOverlay')"><img src="../Assets/img/icon-edit.svg" alt="Edit icon"/></button>
-        <button class="rew-delete" onclick="openDelete(this.closest('.reward-card'), 'deleteReward')"><img src="../Assets/img/icon-delete.svg" alt="Delete icon"/></button>
-      </div>
-    </div>
-  `).join('');
-
-  document.getElementById('feelingsList').innerHTML = `
-    ${d.feelings.entries.map(e=>`
-      <div class="feeling-row">
-        <div class="fmoji">${makeIcon(e.icon)}</div>
-        <div class="fbody">
-          <div class="ftext">${e.text}</div>
-          ${e.time?`<div class="ftime">${e.time}</div>`:''}
-        </div>
-      </div>
-    `).join('')}
-  `;
-
-  document.getElementById('barChart').innerHTML = d.analytics.bars.map((h,i)=>`
-    <div class="bar-col">
-      <div class="bar" style="height:${h}%"></div>
-      <div class="bday">${d.analytics.days[i]}</div>
-    </div>
-  `).join('');
-}
-
-function switchChild(key, el) {
-  currentChild = key;
-  document.querySelectorAll('.child-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  renderAll(key);
-}
-
 function switchTab(btn, tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -340,14 +32,383 @@ function switchTab(btn, tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-const name = document.getElementById('nameInput');
-const xp = document.getElementById('xpInput');
-const stepsInput = document.getElementById('stepsInput');
-const nameReward = document.getElementById('nameRewardInput');
-const xpReward = document.getElementById('xpRewardInput');
-[name, xp, stepsInput, nameReward, xpReward].forEach(field => {
-  field.addEventListener('input', () => {
-    field.style.borderColor = '';
+function toggleSteps(btn) {
+  const item = btn.closest('.routine-item');
+  item.querySelector('.routine-substeps').classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+
+async function loadInit() {
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/ParentDashboard.php?action=init');
+    const data = await res.json();
+    if (!data.success) return;
+    renderChildPills(data.children);
+    if (data.children.length > 0) {
+      switchChild(data.children[0].id);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderChildPills(children) {
+  const bar = document.getElementById('childPillsBar');
+  bar.innerHTML = children.map((child, i) => {
+    const bg = AVATAR_BG[child.avatar] || '#ede9fe';
+    return `
+      <div class="child-pill${i === 0 ? ' active' : ''}" data-child-id="${child.id}" onclick="switchChildByPill(${child.id}, this)">
+        <div class="cpavatar" style="background:${bg}">
+          <img src="../Assets/img/${child.avatar || 'icon-superhero'}.svg" alt="">
+        </div>
+        <div>
+          <div class="cpname">${child.fullname}</div>
+          <div class="cpage">${child.age} y/o</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function switchChildByPill(childId, el) {
+  document.querySelectorAll('.child-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  switchChild(childId);
+}
+
+async function switchChild(childId) {
+  currentChildId = childId;
+  await Promise.all([
+    loadStats(childId),
+    loadRoutines(childId),
+    loadRewards(childId),
+    loadFeelings(childId),
+  ]);
+}
+
+// ── Stats ────────────────────────────────────────────────────────────────────
+
+async function loadStats(childId) {
+  try {
+    const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) return;
+    document.getElementById('sCompletion').textContent = data.completion;
+    document.getElementById('sWeek').innerHTML         = data.week;
+    document.getElementById('sStreak').textContent     = data.streak;
+    document.getElementById('sRoutines').textContent   = data.routines;
+
+    const lbl = document.getElementById('setupLabel');
+    lbl.innerHTML = `<span>${makeIcon(data.child_avatar)}</span>&nbsp;${data.child_name}'s setup`;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ── Routines ─────────────────────────────────────────────────────────────────
+
+async function loadRoutines(childId) {
+  try {
+    const res  = await fetch(`../../Controller/ParentDashboard/Routine.php?action=getRoutines&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) return;
+    renderRoutines(data.routines);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderRoutines(routines) {
+  document.getElementById('routinesList').innerHTML = routines.map(r => `
+    <div class="routine-item" data-id="${r.id}">
+      <div class="routine-icon" style="background:#fff8e1">${makeIcon(r.icon || 'icon-alarm')}</div>
+      <div class="routine-body">
+        <div class="routine-name">${r.name}</div>
+        <div class="routine-meta">
+          <span class="ri">${r.xp_value} XP</span>
+          <span>${(r.steps || []).length} step${(r.steps || []).length !== 1 ? 's' : ''}</span>
+        </div>
+      </div>
+      <div class="routine-actions">
+        <button class="ibt chevron" onclick="toggleSteps(this)">›</button>
+        <button class="ibt del" onclick="openEdit(this.closest('.routine-item'), 'editRoutineModalOverlay')">
+          <img src="../Assets/img/icon-edit.svg" alt="Edit" />
+        </button>
+        <button class="ibt del" onclick="confirmDeleteRoutine(this.closest('.routine-item'))">
+          <img src="../Assets/img/icon-delete.svg" alt="Delete" />
+        </button>
+      </div>
+      <div class="routine-substeps">
+        ${(r.steps || []).map(s => `
+          <label class="substep">
+            <input type="checkbox"${s.is_completed ? ' checked' : ''} disabled/>
+            <span>${s.name}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function saveRoutine() {
+  const name       = document.getElementById('nameInput');
+  const xp         = document.getElementById('xpInput');
+  const stepsInput = document.getElementById('stepsInput');
+
+  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+  if (!stepsInput.value.trim())                   { stepsInput.style.borderColor = '#e57373'; return; }
+
+  const body = new FormData();
+  body.append('action',   'addRoutine');
+  body.append('name',     name.value.trim());
+  body.append('xp_value', xp.value.trim());
+  body.append('steps',    stepsInput.value.trim());
+  body.append('child_id', currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      name.value = ''; xp.value = ''; stepsInput.value = '';
+      closeModal('newRoutineModalOverlay');
+      await loadRoutines(currentChildId);
+      await loadStats(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function openEdit(card, modalId) {
+  currentEditCard = card;
+  if (modalId === 'editRoutineModalOverlay') {
+    document.getElementById('editNameInput').value  = card.querySelector('.routine-name').textContent;
+    document.getElementById('editXpInput').value    = card.querySelector('.ri').textContent.replace(' XP', '');
+    const steps = [...card.querySelectorAll('.substep span')].map(s => s.textContent).join('\n');
+    document.getElementById('editStepsInput').value = steps;
+  } else if (modalId === 'editRewardModalOverlay') {
+    document.getElementById('editRewardNameInput').value = card.querySelector('.reward-name').textContent;
+    document.getElementById('editRewardXpInput').value   = card.querySelector('.reward-pts').textContent.replace(' XP', '');
+    const cardType = card.dataset.type || 'out_app';
+    document.getElementById('editRewardType').value = cardType;
+    document.querySelectorAll('#editRewardModalOverlay .type-btn').forEach(b => b.classList.toggle('active', b.dataset.value === cardType));
+  }
+  openModal(modalId);
+}
+
+async function editRoutine() {
+  const name       = document.getElementById('editNameInput');
+  const xp         = document.getElementById('editXpInput');
+  const stepsInput = document.getElementById('editStepsInput');
+
+  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+  if (!stepsInput.value.trim())                   { stepsInput.style.borderColor = '#e57373'; return; }
+
+  const body = new FormData();
+  body.append('action',     'editRoutine');
+  body.append('routine_id', currentEditCard.dataset.id);
+  body.append('name',       name.value.trim());
+  body.append('xp_value',   xp.value.trim());
+  body.append('steps',      stepsInput.value.trim());
+  body.append('child_id',   currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('editRoutineModalOverlay');
+      await loadRoutines(currentChildId);
+      await loadStats(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function confirmDeleteRoutine(card) {
+  const name = card.querySelector('.routine-name').textContent;
+  if (!confirm(`Do you really want to delete the routine "${name}" ? You will no longer be able to recover the data.`)) return;
+
+  const body = new FormData();
+  body.append('action',     'deleteRoutine');
+  body.append('routine_id', card.dataset.id);
+  body.append('child_id',   currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      await loadRoutines(currentChildId);
+      await loadStats(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ── Rewards ──────────────────────────────────────────────────────────────────
+
+async function loadRewards(childId) {
+  try {
+    const res  = await fetch(`../../Controller/ParentDashboard/Reward.php?action=getRewards&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) return;
+    renderRewards(data.rewards);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderRewards(rewards) {
+  document.getElementById('rewardsList').innerHTML = rewards.map(r => `
+    <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}">
+      <div class="reward-icon">${makeIcon(r.icon || 'icon-star')}</div>
+      <div class="reward-info">
+        <div class="reward-name">${r.name}</div>
+        <div class="reward-pts">${r.xp_cost} XP</div>
+        <div class="reward-status">
+          <span class="spill ${r.is_completed ? 'sdone' : 'stodo'}">${r.is_completed ? '✓ Done' : 'To do'}</span>
+        </div>
+      </div>
+      <div class="rew-actions">
+        <button class="rew-edit" onclick="openEdit(this.closest('.reward-card'), 'editRewardModalOverlay')">
+          <img src="../Assets/img/icon-edit.svg" alt="Edit"/>
+        </button>
+        <button class="rew-delete" onclick="confirmDeleteReward(this.closest('.reward-card'))">
+          <img src="../Assets/img/icon-delete.svg" alt="Delete"/>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectRewardType(btn, hiddenId) {
+  btn.closest('.type-toggle').querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(hiddenId).value = btn.dataset.value;
+}
+
+async function saveReward() {
+  const name = document.getElementById('nameRewardInput');
+  const xp   = document.getElementById('xpRewardInput');
+  const type = document.getElementById('rewardType').value;
+
+  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+
+  const body = new FormData();
+  body.append('action',   'addReward');
+  body.append('name',     name.value.trim());
+  body.append('xp_cost',  xp.value.trim());
+  body.append('type',     type);
+  body.append('child_id', currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      name.value = ''; xp.value = '';
+      document.getElementById('rewardType').value = 'out_app';
+      document.querySelectorAll('#newRewardModalOverlay .type-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+      closeModal('newRewardModalOverlay');
+      await loadRewards(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function editReward() {
+  const name = document.getElementById('editRewardNameInput');
+  const xp   = document.getElementById('editRewardXpInput');
+  const type = document.getElementById('editRewardType').value;
+
+  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+
+  const body = new FormData();
+  body.append('action',    'editReward');
+  body.append('reward_id', currentEditCard.dataset.id);
+  body.append('name',      name.value.trim());
+  body.append('xp_cost',   xp.value.trim());
+  body.append('type',      type);
+  body.append('child_id',  currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('editRewardModalOverlay');
+      await loadRewards(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function confirmDeleteReward(card) {
+  const name = card.querySelector('.reward-name').textContent;
+  if (!confirm(`Do you really want to delete the reward "${name}" ? You will no longer be able to recover the data.`)) return;
+
+  const body = new FormData();
+  body.append('action',    'deleteReward');
+  body.append('reward_id', card.dataset.id);
+  body.append('child_id',  currentChildId);
+
+  try {
+    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      await loadRewards(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ── Feelings ─────────────────────────────────────────────────────────────────
+
+async function loadFeelings(childId) {
+  try {
+    const res  = await fetch(`../../Controller/HomePageChild/Feeling.php?action=getFeelings&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) return;
+    renderFeelings(data.feelings);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderFeelings(feelings) {
+  if (feelings.length === 0) {
+    document.getElementById('feelingsList').innerHTML = '<p style="color:#aaa;text-align:center;padding:24px;">No feelings recorded yet.</p>';
+    return;
+  }
+  document.getElementById('feelingsList').innerHTML = feelings.map(f => `
+    <div class="feeling-row">
+      <div class="fmoji" style="font-size:1.5rem">${f.emoji}</div>
+      <div class="fbody">
+        <div class="ftext">${f.text || ''}</div>
+        <div class="ftime">${formatDate(f.created_at)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+// ── Reset border on input ─────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modal-input').forEach(field => {
+    field.addEventListener('input', () => { field.style.borderColor = ''; });
   });
+  loadInit();
 });
-renderAll('lila');
