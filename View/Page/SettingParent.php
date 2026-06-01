@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  if (!isset($_SESSION['parent'])) {
+    header('Location: LoginParent.php');
+    exit;
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../Style/SettingParent.css" />
     <link rel="stylesheet" href="../Style/Variables.css">
+    <script src="../Script/SettingParent.js" defer></script>
   </head>
   <body>
     <div class="hero-bg"></div>
@@ -27,16 +35,16 @@
         <div class="settings-card">
           <div class="section-title">Account</div>
           <label class="settings-label">Name</label>
-          <input class="settings-input" type="text" value="Sarah Martin" />
+          <input class="settings-input" id="parentNameInput" type="text" placeholder="Your name" />
           <label class="settings-label">Email</label>
-          <input class="settings-input" type="email" value="sarah@gmail.com" disabled />
-          <button class="btn-save">Save changes</button>
+          <input class="settings-input" id="parentEmailInput" type="email" disabled />
+          <button class="btn-save" id="saveParentBtn" onclick="saveParent()">Save changes</button>
         </div>
 
         <div class="settings-card">
           <div class="section-title">Privacy & data</div>
-          <div class="action-row"><a href="SettingFamily.html">See the members of my family</a></div>
-          <div class="action-row danger">Delete my account</div>
+          <div class="action-row"><a href="SettingFamily.php">See the members of my family</a></div>
+          <div class="action-row danger" onclick="deleteAccount()">Delete my account</div>
         </div>
       </div>
     </main>
