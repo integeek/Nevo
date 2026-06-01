@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="../Style/LoginChild.css" />
+    <link rel="stylesheet" href="../Style/Variables.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+    <script src="../Script/LoginChild.js"></script>
+  </head>
+
+  <body>
+    <nav>
+      <a class="nav-logo" href="#">
+        <div class="logo-icon">✦</div>
+        Miro
+      </a>
+    </nav>
+
+    <main>
+      <div class="main-content">
+        <h1>Who's playing today ?</h1>
+        <p class="subtitle">Tap your hero avatar to start</p>
+
+        <div class="profiles-row" id="profilesRow">
+          <div
+            class="profile-card"
+            onclick="
+              selectProfile(
+                this,
+                'Lila',
+                '../Assets/img/icon-dog.svg',
+                'linear-gradient(135deg,#f4845f,#e8623a)',
+              )
+            "
+          >
+            <div class="avatar avatar-lila">
+              <img src="../Assets/img/icon-dog.svg" alt="dog icon" />
+            </div>
+            <div class="profile-name">Lila</div>
+          </div>
+
+          <div
+            class="profile-card"
+            onclick="
+              selectProfile(
+                this,
+                'Noah',
+                '../Assets/img/icon-cat.svg',
+                'linear-gradient(135deg,#2cbfb1,#1a9e92)',
+              )
+            "
+          >
+            <div class="avatar avatar-noah">
+              <img src="../Assets/img/icon-cat.svg" alt="cat icon" />
+            </div>
+            <div class="profile-name">Noah</div>
+          </div>
+
+          <div
+            class="profile-card"
+            onclick="
+              selectProfile(
+                this,
+                'Emma',
+                '../Assets/img/icon-tiger.svg',
+                'linear-gradient(135deg,#9c6fd6,#7b4fc4)',
+              )
+            "
+          >
+            <div class="avatar avatar-mia">
+              <img src="../Assets/img/icon-tiger.svg" alt="tiger icon" />
+            </div>
+            <div class="profile-name">Emma</div>
+          </div>
+
+          <div class="profile-card" id="addCard" onclick="openModal()">
+            <div class="avatar avatar-add">
+              <span class="plus-icon">+</span>
+            </div>
+            <div class="profile-name">Add</div>
+          </div>
+        </div>
+
+        <p class="parent-link">
+          Are you a parent? <a href="LoginParent.html">Log in here</a>
+        </p>
+      </div>
+
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+          <h2>Add a profile</h2>
+          <p>Pick an avatar, a color and a secret 4-digit code</p>
+
+          <label for="avatarPicker">Avatar</label>
+          <div class="avatar-picker" id="avatarPicker">
+            <div
+              class="avatar-option selected-avatar"
+              style="background: linear-gradient(135deg, #f4845f, #e8623a)"
+              data-avatar="icon-superhero"
+              onclick="pickAvatar(this)"
+            >
+              <img
+                src="../Assets/img/icon-superhero.svg"
+                alt="superhero icon"
+              />
+            </div>
+            <div
+              class="avatar-option"
+              style="background: linear-gradient(135deg, #64b5f6, #1976d2)"
+              data-avatar="icon-butterfly"
+              onclick="pickAvatar(this)"
+            >
+              <img
+                src="../Assets/img/icon-butterfly.svg"
+                alt="butterfly icon"
+              />
+            </div>
+            <div
+              class="avatar-option"
+              style="background: linear-gradient(135deg, #81c784, #388e3c)"
+              data-avatar="icon-unicorn"
+              onclick="pickAvatar(this)"
+            >
+              <img src="../Assets/img/icon-unicorn.svg" alt="unicorn icon" />
+            </div>
+            <div
+              class="avatar-option"
+              style="background: linear-gradient(135deg, #f06292, #c2185b)"
+              data-avatar="icon-fish"
+              onclick="pickAvatar(this)"
+            >
+              <img src="../Assets/img/icon-fish.svg" alt="fish icon" />
+            </div>
+            <div
+              class="avatar-option"
+              style="background: linear-gradient(135deg, #ffb74d, #e65100)"
+              data-avatar="icon-penguin"
+              onclick="pickAvatar(this)"
+            >
+              <img src="../Assets/img/icon-penguin.svg" alt="penguin icon" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px">
+            <div style="flex: 2">
+              <label for="profileNameInput">Name</label>
+              <input
+                class="modal-input"
+                name="profileNameInput"
+                id="profileNameInput"
+                type="text"
+                placeholder="Name"
+                maxlength="12"
+              />
+            </div>
+            <div style="flex: 1">
+              <label for="age">Age</label>
+              <input
+                class="modal-input"
+                name="age"
+                id="age"
+                type="text"
+                placeholder="Age"
+                maxlength="2"
+              />
+            </div>
+          </div>
+
+          <label for="secretPin">My superpower</label>
+          <input
+            class="modal-input"
+            type="text"
+            name="superpower"
+            id="superpower"
+            placeholder="My superpower"
+          />
+
+          <label for="secretPin">Secret pin</label>
+          <input
+            class="modal-input"
+            type="password"
+            name="secretPin"
+            id="secretPin"
+            placeholder="****"
+            maxlength="4"
+          />
+
+          <label for="confirmSecretPin">Confirm secret pin</label>
+          <input
+            class="modal-input"
+            type="password"
+            name="confirmSecretPin"
+            id="confirmSecretPin"
+            placeholder="****"
+            maxlength="4"
+          />
+
+          <button class="btn-add" onclick="addProfile()">Create profile</button>
+          <br />
+          <button class="btn-cancel" onclick="closeModal('modalOverlay')">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <div id="pinScreen">
+        <div class="pin-card" id="pinCard">
+          <button class="back-btn" onclick="closeModal('pinScreen')">
+            ← Change hero
+          </button>
+
+          <div class="pin-avatar" id="pinAvatar"></div>
+          <h2 id="pinName"></h2>
+          <p class="pin-subtitle">Enter your secret code</p>
+
+          <div class="pin-dots" id="pinDots">
+            <div class="pin-dot" id="dot0"></div>
+            <div class="pin-dot" id="dot1"></div>
+            <div class="pin-dot" id="dot2"></div>
+            <div class="pin-dot" id="dot3"></div>
+          </div>
+
+          <div class="keypad">
+            <button class="key" onclick="pressKey('1')">1</button>
+            <button class="key" onclick="pressKey('2')">2</button>
+            <button class="key" onclick="pressKey('3')">3</button>
+            <button class="key" onclick="pressKey('4')">4</button>
+            <button class="key" onclick="pressKey('5')">5</button>
+            <button class="key" onclick="pressKey('6')">6</button>
+            <button class="key" onclick="pressKey('7')">7</button>
+            <button class="key" onclick="pressKey('8')">8</button>
+            <button class="key" onclick="pressKey('9')">9</button>
+            <button class="key key-0" onclick="pressKey('0')">0</button>
+            <button class="key key-del" onclick="deleteKey()">
+              <img src="../Assets/img/icon-backspace.svg" alt="delete" />
+            </button>
+          </div>
+          <p class="pin-footer">
+            Forgot code? <a href="ForgotPin.html">Ask a parent</a>
+          </p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
