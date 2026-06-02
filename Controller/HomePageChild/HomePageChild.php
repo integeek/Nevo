@@ -6,7 +6,7 @@
   header('Content-Type: application/json');
 
   $action = $_GET['action'] ?? $_POST['action'] ?? '';
-  $child_id = 1;
+  $child_id = (int) ($_SESSION["child"]["id"] ?? 1);
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'init') {
     try {

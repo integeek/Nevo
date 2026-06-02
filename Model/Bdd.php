@@ -1,20 +1,6 @@
 <?php
-try {
-    $db = new PDO(
-        "pgsql:host=aws-0-eu-west-1.pooler.supabase.com;port=6543;dbname=postgres",
-        "postgres.mrevazltwkhjmjyhxboa",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-} catch (Exception $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
-}
-echo "Connexion réussie !";
-?>
-
-
-<?php
-class Bdd {
+class Bdd
+{
     private static $instance = null;
 
     /**
@@ -24,13 +10,13 @@ class Bdd {
     public static function getInstance() {
         if (self::$instance === null) {
             try {
-                $db = new PDO(
+                self::$instance = new PDO(
                     "pgsql:host=aws-0-eu-west-1.pooler.supabase.com;port=6543;dbname=postgres",
                     "postgres.mrevazltwkhjmjyhxboa",
-                    "",
+                    getenv("DB_PASSWORD") ?: "",
                     [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
                 );
-            }  catch (Exception $e) {
+            } catch (Exception $e) {
                 die("Erreur de connexion à la base de données : " . $e->getMessage());
             }
         }

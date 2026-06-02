@@ -43,6 +43,16 @@
       $query -> execute();
       return $query -> fetch();
     }
+
+    public static function getUserById($id) {
+      $db = Bdd::getInstance();
+      $sql = "SELECT * FROM parent WHERE id = :id";
+      $query = $db -> prepare($sql);
+      $query->execute([
+        "id" => $id,
+      ]);
+      return $query->fetch(PDO::FETCH_ASSOC);
+    }
     
     /**
      * Generates password reset token for parent with given email, saves token hash and expiration time in database, and returns generated token (or false if no parent with given email found)

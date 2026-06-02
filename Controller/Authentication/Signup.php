@@ -48,7 +48,15 @@
         "email"    => $_POST["email"],
         "fullname" => $_POST["name"]
       ];
+
+      if (($_SESSION["selectedRole"] ?? "") === "child") {
+        unset($_SESSION["selectedRole"]);
+        header("Location: ../../View/Page/LoginChild.php");
+        exit;
+      }
+
       header("Location: ../../View/Page/ParentDashboard.html");
+      exit;
 
     } else {
       $_SESSION["error"] = "The form is incomplete";
