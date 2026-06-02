@@ -20,5 +20,8 @@
   "homepage": "https://github.com/integeek/Nevo#readme",
   "devDependencies": {
     "jest": "^30.4.2"
+  },
+  "jest": {
+    "testMatch": ["**/tests/**/*.test.js"]
   }
 }
