@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initPage();
 });
 
+/**
+ * Fetches child data, quests, routines from server, then renders them on page and updates progress display
+ * @returns {Promise<void>}
+ */
 async function initPage() {
   try {
     const res  = await fetch("../../Controller/HomePageChild/HomePageChild.php?action=init");
@@ -40,6 +44,11 @@ async function initPage() {
   }
 }
 
+/**
+ * Updates hero section with child's name and XP, then updates XP bar fill based on current XP
+ * @param {Object} child 
+ * @returns {void}
+ */
 function renderChild(child) {
   document.querySelector('.hero-name').textContent = `Hey, ${child.fullname} !`;
   document.querySelector('.xp-label').textContent = `${child.xp} XP`;
@@ -49,6 +58,12 @@ function renderChild(child) {
   setTimeout(() => document.getElementById('xpBar').style.width = percent + '%', 200);
 }
 
+/**
+ * Renders quest cards in quest list based on quests data from server, displaying quest name, XP value, type (auto-completed or daily), and completion status
+ * Auto-completed quests are styled differently than daily quests
+ * @param {Array} quests
+ * @returns {void} 
+ */
 function renderQuests(quests) {
   const list = document.querySelector('.quests-list');
   list.innerHTML = '';
@@ -92,6 +107,12 @@ function renderQuests(quests) {
   });
 }
 
+/**
+ * Renders routine cards in routine list based on routines data from server, displaying routine name, XP value, completion status, and step completion progress
+ * Each routine can be expanded to show its steps, which can be toggled as completed or not completed
+ * @param {Array} routines 
+ * @returns {void}
+ */
 function renderRoutines(routines) {
   const list = document.getElementById('routines-list');
   list.innerHTML = '';
@@ -134,16 +155,32 @@ function renderRoutines(routines) {
   });
 }
 
+/**
+ * Selects random positive message from predefined list and displays it in hero section to encourage child and celebrate their progress
+ * @returns {void}
+ */
 function setRandomPositiveMessage() {
   const randomIndex = Math.floor(Math.random() * 9);
   const selectedMessage = positiveMessages[randomIndex];
   document.querySelector('.message-positive').textContent = selectedMessage.message;
 }
 
+/**
+ * Toggles visibility of sub-steps for given quest
+ * @param {HTMLElement} questMainEl 
+ * @returns {void}
+ */
 function toggleSteps(questMainEl) {
   questMainEl.closest('.quest-card').classList.toggle('open');
 }
 
+/**
+ * Marks or unmarks routine as completed by toggling "done" class on check button and quest name
+ * Sends updated completion status to server to update child's XP accordingly
+ * @param {Event} event 
+ * @param {HTMLElement} btn 
+ * @returns {Promise<void>}
+ */
 async function toggleQuest(event, btn) {
   event.stopPropagation();
   const questCard = btn.closest('.quest-card');
@@ -176,7 +213,12 @@ async function toggleQuest(event, btn) {
     });
 }
 
-
+/**
+ * Toggles completion status of sub-step
+ * Updates step counter and overall routine completion status accordingly, then sends updated step status to server to update child's XP if needed
+ * @param {HTMLElement} el 
+ * @returns {Promise<void>}
+ */
 async function toggleSubStep(el) {
   const questCard = el.closest('.quest-card');
   const stepId = el.dataset.stepId;
@@ -199,6 +241,11 @@ async function toggleSubStep(el) {
     });
 }
 
+/**
+ * Updates "X/Y steps" counter on routine card based on how many sub-steps are marked as completed
+ * @param {HTMLElement} questCard 
+ * @returns {void}
+ */
 function updateStepCounter(questCard) {
   const totalSteps = questCard.querySelectorAll('.sub-step').length;
   const doneSteps = questCard.querySelectorAll('.sub-check.done').length;
@@ -208,6 +255,11 @@ function updateStepCounter(questCard) {
   }
 }
 
+/**
+ * Checks if all sub-steps of routine are completed, and if so, marks routine as completed by toggling "done" class on check button and quest name
+ * @param {HTMLElement} questCard 
+ * @returns {void}
+ */
 function syncQuestState(questCard) {
   const total = questCard.querySelectorAll('.sub-step').length;
   const done = questCard.querySelectorAll('.sub-check.done').length;
@@ -225,6 +277,10 @@ function syncQuestState(questCard) {
   updateProgress();
 }
 
+/**
+ * Updates progress bar fill and label based on how many routines are completed out of total, and displays encouraging message in hero section based on how many routines are left to complete
+ * @returns {void}
+ */
 function updateProgress() {
   const routineSection = document.getElementById('routines-list');
   const total = routineSection.querySelectorAll('.quest-card').length;

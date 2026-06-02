@@ -3,8 +3,11 @@ class Bdd
 {
     private static $instance = null;
 
-    public static function getInstance()
-    {
+    /**
+     * Returns single shared database connection instance, creating it if it doesn't exist yet
+     * @return {PDO} activate database connection
+     */
+    public static function getInstance() {
         if (self::$instance === null) {
             try {
                 self::$instance = new PDO(
