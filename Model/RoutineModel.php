@@ -11,20 +11,69 @@
       $db = Bdd::getInstance();
 
       $stmt = $db->prepare("
-        SELECT r.*, 
-               json_agg(json_build_object(
-                 'id', rs.id,
-                 'name', rs.name,
-                 'is_completed', rs.is_completed
-               ) ORDER BY rs.id) as steps
+        SELECT r.*,
+               COALESCE(
+                 (SELECT json_agg(json_build_object('id', rs.id, 'name', rs.name, 'is_completed', rs.is_completed::int) ORDER BY rs.id)
+                  FROM routine_step rs WHERE rs.routine_id = r.id),
+                 '[]'::json
+               ) AS steps
         FROM routine r
-        LEFT JOIN routine_step rs ON rs.routine_id = r.id
-        WHERE r.child_id = :child_id AND r.is_active = true
-        GROUP BY r.id
+        WHERE r.child_id = :child_id AND r.is_active::int != 0
         ORDER BY r.created_at ASC
       ");
-      $stmt->execute([':child_id' => $child_id]);
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $stmt->execute([':child_id' => (int) $child_id]);
+      $routines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($routines as &$routine) {
+        $routine['steps'] = json_decode($routine['steps'], true) ?? [];
+      }
+      return $routines;
+    }
+
+    public static function createRoutine($name, $icon, $xp_value, $child_id, $steps) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("INSERT INTO routine (name, icon, xp_value, is_active, is_completed, created_at, child_id) VALUES (:name, :icon, :xp_value, true, false, NOW(), :child_id) RETURNING id");
+      $stmt->execute([
+        ':name'     => $name,
+        ':icon'     => $icon,
+        ':xp_value' => (int) $xp_value,
+        ':child_id' => (int) $child_id,
+      ]);
+      $routineId = (int) $stmt->fetchColumn();
+      foreach ($steps as $step) {
+        $s = $db->prepare("INSERT INTO routine_step (name, routine_id) VALUES (:name, :routine_id)");
+        $s->execute([':name' => trim($step), ':routine_id' => $routineId]);
+      }
+      return $routineId;
+    }
+
+    public static function updateRoutine($id, $name, $xp_value, $child_id, $steps) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("UPDATE routine SET name = :name, xp_value = :xp_value WHERE id = :id AND child_id = :child_id");
+      $stmt->execute([
+        ':name'     => $name,
+        ':xp_value' => (int) $xp_value,
+        ':id'       => (int) $id,
+        ':child_id' => (int) $child_id,
+      ]);
+      $stmt = $db->prepare("DELETE FROM routine_step WHERE routine_id = :routine_id");
+      $stmt->execute([':routine_id' => (int) $id]);
+      foreach ($steps as $step) {
+        $s = $db->prepare("INSERT INTO routine_step (name, routine_id) VALUES (:name, :routine_id)");
+        $s->execute([':name' => trim($step), ':routine_id' => (int) $id]);
+      }
+    }
+
+    public static function deleteRoutine($id, $child_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("DELETE FROM routine WHERE id = :id AND child_id = :child_id");
+      $stmt->execute([':id' => (int) $id, ':child_id' => (int) $child_id]);
+    }
+
+    public static function getCompletedCount($child_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("SELECT COUNT(*) as total, SUM(CASE WHEN is_completed = true THEN 1 ELSE 0 END) as completed FROM routine WHERE child_id = :child_id AND is_active = true");
+      $stmt->execute([':child_id' => (int) $child_id]);
+      return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**

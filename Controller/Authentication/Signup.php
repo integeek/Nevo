@@ -55,7 +55,7 @@
         exit;
       }
 
-      header("Location: ../../View/Page/ParentDashboard.html");
+      header("Location: ../../View/Page/ParentDashboard.php");
       exit;
 
     } else {
