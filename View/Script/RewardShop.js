@@ -1,6 +1,11 @@
 let currentXp = 0;
 const MAX_XP = 500;
 
+/**
+ * Loads rewards from server and displays them as cards (each displayed with its name, type, cost, and appropriate button state)
+ * Handles button states (unlocked, locked, completed) based on user's current XP and reward completion status
+ * @returns {Promise<void>}
+ */
 async function loadRewards() {
   try {
     const response = await fetch('../../Controller/HomePageChild/Reward.php?action=getRewards');
@@ -48,6 +53,12 @@ async function loadRewards() {
   }
 }
 
+/**
+ * Buys reward by sending its ID to server, then updates user's XP and refreshes rewards display
+ * @param {string} reward_id 
+ * @param {number} xp_cost 
+ * @returns {Promise<void>}
+ */
 async function buyReward(reward_id, xp_cost) {
   const formData = new FormData();
   formData.append('action', 'buyReward');
@@ -75,6 +86,10 @@ async function buyReward(reward_id, xp_cost) {
   }
 }
 
+/**
+ * Fetches current XP from server and updates XP display accordingly
+ * @returns {Promise<void>}
+ */
 async function loadXp() {
   try {
     const response = await fetch('../../Controller/HomePageChild/Reward.php?action=getXp');
@@ -91,6 +106,10 @@ async function loadXp() {
   }
 }
 
+/**
+ * Updates the XP display based on current XP value
+ * @returns {void}
+ */
 function updateXpDisplay() {
   const percent = Math.min((currentXp / MAX_XP) * 100, 100);
   document.getElementById('xpDisplay').innerHTML = `${currentXp} <span>XP</span>`;
