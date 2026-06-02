@@ -1,0 +1,24 @@
+{
+  "name": "nevo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/integeek/Nevo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/integeek/Nevo/issues"
+  },
+  "homepage": "https://github.com/integeek/Nevo#readme",
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}
