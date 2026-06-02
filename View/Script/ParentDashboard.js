@@ -38,13 +38,13 @@ function toggleSteps(btn) {
   btn.classList.toggle('open');
 }
 
-// ── Init ────────────────────────────────────────────────────────────────────
-
 async function loadInit() {
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/ParentDashboard.php?action=init');
+    const res = await fetch('../../Controller/ParentDashboard/ParentDashboard.php?action=init');
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderChildPills(data.children);
     if (data.children.length > 0) {
       switchChild(data.children[0].id);
@@ -88,17 +88,17 @@ async function switchChild(childId) {
   ]);
 }
 
-// ── Stats ────────────────────────────────────────────────────────────────────
-
 async function loadStats(childId) {
   try {
     const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     document.getElementById('sCompletion').textContent = data.completion;
-    document.getElementById('sWeek').innerHTML         = data.week;
-    document.getElementById('sStreak').textContent     = data.streak;
-    document.getElementById('sRoutines').textContent   = data.routines;
+    document.getElementById('sWeek').innerHTML = data.week;
+    document.getElementById('sStreak').textContent = data.streak;
+    document.getElementById('sRoutines').textContent = data.routines;
 
     const lbl = document.getElementById('setupLabel');
     lbl.innerHTML = `<span>${makeIcon(data.child_avatar)}</span>&nbsp;${data.child_name}'s setup`;
@@ -107,13 +107,13 @@ async function loadStats(childId) {
   }
 }
 
-// ── Routines ─────────────────────────────────────────────────────────────────
-
 async function loadRoutines(childId) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/Routine.php?action=getRoutines&child_id=${childId}`);
+    const res = await fetch(`../../Controller/ParentDashboard/Routine.php?action=getRoutines&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderRoutines(data.routines);
   } catch (e) {
     console.error(e);
@@ -153,23 +153,32 @@ function renderRoutines(routines) {
 }
 
 async function saveRoutine() {
-  const name       = document.getElementById('nameInput');
-  const xp         = document.getElementById('xpInput');
+  const name = document.getElementById('nameInput');
+  const xp = document.getElementById('xpInput');
   const stepsInput = document.getElementById('stepsInput');
 
-  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
-  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
-  if (!stepsInput.value.trim())                   { stepsInput.style.borderColor = '#e57373'; return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return;
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor   = '#e57373'; 
+    return; 
+  }
+  if (!stepsInput.value.trim()) { 
+    stepsInput.style.borderColor = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',   'addRoutine');
-  body.append('name',     name.value.trim());
+  body.append('action', 'addRoutine');
+  body.append('name', name.value.trim());
   body.append('xp_value', xp.value.trim());
-  body.append('steps',    stepsInput.value.trim());
+  body.append('steps', stepsInput.value.trim());
   body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       name.value = ''; xp.value = ''; stepsInput.value = '';
@@ -200,24 +209,33 @@ function openEdit(card, modalId) {
 }
 
 async function editRoutine() {
-  const name       = document.getElementById('editNameInput');
-  const xp         = document.getElementById('editXpInput');
+  const name = document.getElementById('editNameInput');
+  const xp = document.getElementById('editXpInput');
   const stepsInput = document.getElementById('editStepsInput');
 
-  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
-  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
-  if (!stepsInput.value.trim())                   { stepsInput.style.borderColor = '#e57373'; return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!stepsInput.value.trim()) { 
+    stepsInput.style.borderColor = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',     'editRoutine');
+  body.append('action', 'editRoutine');
   body.append('routine_id', currentEditCard.dataset.id);
-  body.append('name',       name.value.trim());
-  body.append('xp_value',   xp.value.trim());
-  body.append('steps',      stepsInput.value.trim());
-  body.append('child_id',   currentChildId);
+  body.append('name', name.value.trim());
+  body.append('xp_value', xp.value.trim());
+  body.append('steps', stepsInput.value.trim());
+  body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       closeModal('editRoutineModalOverlay');
@@ -231,15 +249,17 @@ async function editRoutine() {
 
 async function confirmDeleteRoutine(card) {
   const name = card.querySelector('.routine-name').textContent;
-  if (!confirm(`Do you really want to delete the routine "${name}" ? You will no longer be able to recover the data.`)) return;
+  if (!confirm(`Do you really want to delete the routine "${name}" ? You will no longer be able to recover the data.`)) {
+    return;
+  }
 
   const body = new FormData();
-  body.append('action',     'deleteRoutine');
+  body.append('action', 'deleteRoutine');
   body.append('routine_id', card.dataset.id);
-  body.append('child_id',   currentChildId);
+  body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Routine.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       await loadRoutines(currentChildId);
@@ -250,13 +270,13 @@ async function confirmDeleteRoutine(card) {
   }
 }
 
-// ── Rewards ──────────────────────────────────────────────────────────────────
-
 async function loadRewards(childId) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/Reward.php?action=getRewards&child_id=${childId}`);
+    const res = await fetch(`../../Controller/ParentDashboard/Reward.php?action=getRewards&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderRewards(data.rewards);
   } catch (e) {
     console.error(e);
@@ -294,21 +314,27 @@ function selectRewardType(btn, hiddenId) {
 
 async function saveReward() {
   const name = document.getElementById('nameRewardInput');
-  const xp   = document.getElementById('xpRewardInput');
+  const xp = document.getElementById('xpRewardInput');
   const type = document.getElementById('rewardType').value;
 
-  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
-  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor   = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',   'addReward');
-  body.append('name',     name.value.trim());
-  body.append('xp_cost',  xp.value.trim());
-  body.append('type',     type);
+  body.append('action', 'addReward');
+  body.append('name', name.value.trim());
+  body.append('xp_cost', xp.value.trim());
+  body.append('type', type);
   body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       name.value = ''; xp.value = '';
@@ -324,22 +350,28 @@ async function saveReward() {
 
 async function editReward() {
   const name = document.getElementById('editRewardNameInput');
-  const xp   = document.getElementById('editRewardXpInput');
+  const xp = document.getElementById('editRewardXpInput');
   const type = document.getElementById('editRewardType').value;
 
-  if (!name.value.trim())                         { name.style.borderColor = '#e57373'; return; }
-  if (!xp.value.trim() || isNaN(xp.value.trim())) { xp.style.borderColor   = '#e57373'; return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor   = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',    'editReward');
+  body.append('action', 'editReward');
   body.append('reward_id', currentEditCard.dataset.id);
-  body.append('name',      name.value.trim());
-  body.append('xp_cost',   xp.value.trim());
-  body.append('type',      type);
-  body.append('child_id',  currentChildId);
+  body.append('name', name.value.trim());
+  body.append('xp_cost', xp.value.trim());
+  body.append('type', type);
+  body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       closeModal('editRewardModalOverlay');
@@ -352,15 +384,17 @@ async function editReward() {
 
 async function confirmDeleteReward(card) {
   const name = card.querySelector('.reward-name').textContent;
-  if (!confirm(`Do you really want to delete the reward "${name}" ? You will no longer be able to recover the data.`)) return;
+  if (!confirm(`Do you really want to delete the reward "${name}" ? You will no longer be able to recover the data.`)) {
+    return;
+  }
 
   const body = new FormData();
-  body.append('action',    'deleteReward');
+  body.append('action', 'deleteReward');
   body.append('reward_id', card.dataset.id);
-  body.append('child_id',  currentChildId);
+  body.append('child_id', currentChildId);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/Reward.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       await loadRewards(currentChildId);
@@ -370,13 +404,13 @@ async function confirmDeleteReward(card) {
   }
 }
 
-// ── Feelings ─────────────────────────────────────────────────────────────────
-
 async function loadFeelings(childId) {
   try {
-    const res  = await fetch(`../../Controller/HomePageChild/Feeling.php?action=getFeelings&child_id=${childId}`);
+    const res = await fetch(`../../Controller/HomePageChild/Feeling.php?action=getFeelings&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderFeelings(data.feelings);
   } catch (e) {
     console.error(e);
@@ -400,11 +434,11 @@ function renderFeelings(feelings) {
 }
 
 function formatDate(dateStr) {
-  if (!dateStr) return '';
+  if (!dateStr) {
+    return '';
+  }
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
-
-// ── Reset border on input ─────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-input').forEach(field => {

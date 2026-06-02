@@ -8,18 +8,18 @@ const AVATAR_BG = {
 
 let selectedAvatar = {
   avatar: 'icon-superhero',
-  bg:     'linear-gradient(135deg,#f4845f,#e8623a)',
+  bg: 'linear-gradient(135deg,#f4845f,#e8623a)',
 };
 
 let currentEditCard = null;
 
-// ── Load & Render ─────────────────────────────────────────────────────────────
-
 async function loadChildren() {
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getChildren');
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getChildren');
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderChildren(data.children);
   } catch (e) {
     console.error(e);
@@ -28,7 +28,7 @@ async function loadChildren() {
 
 function renderChildren(children) {
   childrenCache = children;
-  const grid       = document.getElementById('heroesGrid');
+  const grid = document.getElementById('heroesGrid');
   const emptyState = document.getElementById('emptyState');
 
   grid.querySelectorAll('.hero-card').forEach(c => c.remove());
@@ -40,10 +40,10 @@ function renderChildren(children) {
   emptyState.style.display = 'none';
 
   children.forEach(child => {
-    const bg   = AVATAR_BG[child.avatar] || 'linear-gradient(135deg,#c084fc,#7c3aed)';
+    const bg = AVATAR_BG[child.avatar] || 'linear-gradient(135deg,#c084fc,#7c3aed)';
     const card = document.createElement('div');
-    card.className       = 'hero-card';
-    card.dataset.id      = child.id;
+    card.className = 'hero-card';
+    card.dataset.id = child.id;
     card.dataset.disease = child.disease || '';
     card.innerHTML  = `
       <div class="hero-avatar" style="background:${bg}">
@@ -76,8 +76,6 @@ function renderChildren(children) {
   });
 }
 
-// ── Modals ────────────────────────────────────────────────────────────────────
-
 function openModal() {
   document.getElementById('modalOverlay').classList.add('active');
   document.getElementById('profileNameInput').value = '';
@@ -97,38 +95,45 @@ function pickAvatar(el) {
   el.classList.add('selected-avatar');
   selectedAvatar = {
     avatar: el.dataset.avatar,
-    bg:     el.style.background,
+    bg: el.style.background,
   };
 }
 
-// ── Add ───────────────────────────────────────────────────────────────────────
-
 async function addProfile() {
-  const name             = document.getElementById('profileNameInput');
-  const age              = document.getElementById('age');
-  const disease          = document.getElementById('diseaseName');
-  const secretPin        = document.getElementById('secretPin');
+  const name = document.getElementById('profileNameInput');
+  const age = document.getElementById('age');
+  const disease = document.getElementById('diseaseName');
+  const secretPin = document.getElementById('secretPin');
   const confirmSecretPin = document.getElementById('confirmSecretPin');
 
-  if (!name.value.trim())                               { name.style.borderColor = '#e57373'; return; }
-  if (isNaN(age.value) || age.value === '')             { age.style.borderColor  = '#e57373'; return; }
-  if (isNaN(secretPin.value) || secretPin.value === '') { secretPin.style.borderColor = '#e57373'; return; }
-  if (secretPin.value !== confirmSecretPin.value)       {
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (isNaN(age.value) || age.value === '') { 
+    age.style.borderColor  = '#e57373'; 
+    return; 
+  }
+  if (isNaN(secretPin.value) || secretPin.value === '') { 
+    secretPin.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (secretPin.value !== confirmSecretPin.value) {
     secretPin.style.borderColor = '#e57373';
     confirmSecretPin.style.borderColor = '#e57373';
     return;
   }
 
   const body = new FormData();
-  body.append('action',   'addChild');
+  body.append('action', 'addChild');
   body.append('fullname', name.value.trim());
-  body.append('age',      age.value.trim());
-  body.append('avatar',   selectedAvatar.avatar);
-  body.append('disease',  disease.value.trim());
-  body.append('pin',      secretPin.value);
+  body.append('age', age.value.trim());
+  body.append('avatar', selectedAvatar.avatar);
+  body.append('disease', disease.value.trim());
+  body.append('pin', secretPin.value);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       name.value = ''; age.value = ''; disease.value = ''; secretPin.value = ''; confirmSecretPin.value = '';
@@ -140,40 +145,44 @@ async function addProfile() {
   }
 }
 
-// ── Edit ──────────────────────────────────────────────────────────────────────
-
 function openEdit(card) {
   currentEditCard = card;
-  document.getElementById('editNameInput').value    = card.querySelector('.hero-name').textContent;
-  document.getElementById('editAgeInput').value     = card.querySelector('.hero-sub').textContent.replace(' y/o', '');
+  document.getElementById('editNameInput').value = card.querySelector('.hero-name').textContent;
+  document.getElementById('editAgeInput').value = card.querySelector('.hero-sub').textContent.replace(' y/o', '');
   document.getElementById('editDiseaseInput').value = card.dataset.disease || '';
   openModalEdit();
 }
 
 async function saveEdit() {
-  const nameInput    = document.getElementById('editNameInput');
-  const ageInput     = document.getElementById('editAgeInput');
+  const nameInput = document.getElementById('editNameInput');
+  const ageInput = document.getElementById('editAgeInput');
   const diseaseInput = document.getElementById('editDiseaseInput');
-  const name    = nameInput.value.trim();
-  const age     = ageInput.value.trim();
+  const name = nameInput.value.trim();
+  const age = ageInput.value.trim();
   const disease = diseaseInput.value.trim();
 
-  if (!name)                    { nameInput.style.borderColor = '#e57373'; return; }
-  if (isNaN(age) || age === '') { ageInput.style.borderColor  = '#e57373'; return; }
+  if (!name) { 
+    nameInput.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (isNaN(age) || age === '') { 
+    ageInput.style.borderColor  = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',   'editChild');
+  body.append('action', 'editChild');
   body.append('child_id', currentEditCard.dataset.id);
   body.append('fullname', name);
-  body.append('age',      age);
-  body.append('disease',  disease);
+  body.append('age', age);
+  body.append('disease', disease);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       currentEditCard.querySelector('.hero-name').textContent = name;
-      currentEditCard.querySelector('.hero-sub').textContent  = `${age} y/o`;
+      currentEditCard.querySelector('.hero-sub').textContent = `${age} y/o`;
       currentEditCard.dataset.disease = disease;
       currentEditCard = null;
       closeModal('editModalOverlay');
@@ -183,18 +192,18 @@ async function saveEdit() {
   }
 }
 
-// ── Delete ────────────────────────────────────────────────────────────────────
-
 async function openDelete(card) {
   const name = card.querySelector('.hero-name').textContent;
-  if (!confirm(`Do you really want to delete the profile of ${name} ? You will no longer be able to recover the data.`)) return;
+  if (!confirm(`Do you really want to delete the profile of ${name} ? You will no longer be able to recover the data.`)) {
+    return;
+  }
 
   const body = new FormData();
-  body.append('action',   'deleteChild');
+  body.append('action', 'deleteChild');
   body.append('child_id', card.dataset.id);
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       card.remove();
@@ -207,15 +216,15 @@ async function openDelete(card) {
   }
 }
 
-// ── Medical Staff ─────────────────────────────────────────────────────────────
-
 let childrenCache = [];
 
 async function loadStaff() {
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getStaff');
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getStaff');
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderStaff(data.staff);
   } catch (e) {
     console.error(e);
@@ -225,7 +234,7 @@ async function loadStaff() {
 const staffCache = {};
 
 function renderStaff(staffList) {
-  const grid  = document.getElementById('staffGrid');
+  const grid = document.getElementById('staffGrid');
   const empty = document.getElementById('staffEmptyState');
   grid.querySelectorAll('.staff-card').forEach(c => c.remove());
 
@@ -239,8 +248,8 @@ function renderStaff(staffList) {
     staffCache[s.id] = s;
     const initials = s.fullname.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
     const card = document.createElement('div');
-    card.className    = 'staff-card';
-    card.dataset.id   = s.id;
+    card.className = 'staff-card';
+    card.dataset.id = s.id;
     const childTags = (s.children || []).map(c => `
       <span class="staff-child-tag">
         👤 ${c.fullname}
@@ -282,23 +291,28 @@ function openStaffModal() {
 }
 
 async function addStaff() {
-  const name      = document.getElementById('staffNameInput');
+  const name = document.getElementById('staffNameInput');
   const speciality = document.getElementById('staffSpecialityInput');
-  const email     = document.getElementById('staffEmailInput');
-  const checked   = [...document.querySelectorAll('#staffChildCheckboxes input:checked')].map(i => i.value);
+  const email = document.getElementById('staffEmailInput');
+  const checked = [...document.querySelectorAll('#staffChildCheckboxes input:checked')].map(i => i.value);
 
-  if (!name.value.trim()) { name.style.borderColor = '#e57373'; return; }
-  if (checked.length === 0) { return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (checked.length === 0) { 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',     'addStaff');
-  body.append('fullname',   name.value.trim());
+  body.append('action', 'addStaff');
+  body.append('fullname', name.value.trim());
   body.append('speciality', speciality.value.trim());
-  body.append('email',      email.value.trim());
+  body.append('email', email.value.trim());
   checked.forEach(id => body.append('child_ids[]', id));
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       closeModal('staffModalOverlay');
@@ -314,9 +328,11 @@ async function removeStaffLink(linkId) {
   body.append('action',  'removeStaffLink');
   body.append('link_id', linkId);
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
-    if (data.success) await loadStaff();
+    if (data.success) {
+      await loadStaff();
+    }
   } catch (e) {
     console.error(e);
   }
@@ -326,30 +342,35 @@ let currentEditStaffId = null;
 
 function openEditStaff(staffId) {
   const staff = staffCache[staffId];
-  if (!staff) return;
+  if (!staff) {
+    return;
+  }
   currentEditStaffId = staffId;
-  document.getElementById('editStaffNameInput').value       = staff.fullname;
+  document.getElementById('editStaffNameInput').value = staff.fullname;
   document.getElementById('editStaffSpecialityInput').value = staff.speciality || '';
-  document.getElementById('editStaffEmailInput').value      = staff.email || '';
+  document.getElementById('editStaffEmailInput').value = staff.email || '';
   document.getElementById('editStaffModalOverlay').classList.add('active');
 }
 
 async function saveEditStaff() {
-  const name       = document.getElementById('editStaffNameInput');
+  const name = document.getElementById('editStaffNameInput');
   const speciality = document.getElementById('editStaffSpecialityInput');
-  const email      = document.getElementById('editStaffEmailInput');
+  const email = document.getElementById('editStaffEmailInput');
 
-  if (!name.value.trim()) { name.style.borderColor = '#e57373'; return; }
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
 
   const body = new FormData();
-  body.append('action',     'editStaff');
-  body.append('staff_id',   currentEditStaffId);
-  body.append('fullname',   name.value.trim());
+  body.append('action', 'editStaff');
+  body.append('staff_id', currentEditStaffId);
+  body.append('fullname', name.value.trim());
   body.append('speciality', speciality.value.trim());
-  body.append('email',      email.value.trim());
+  body.append('email', email.value.trim());
 
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       closeModal('editStaffModalOverlay');
@@ -361,20 +382,22 @@ async function saveEditStaff() {
 }
 
 async function deleteStaff(staffId) {
-  if (!confirm('Remove this medical staff member? This will unlink them from all children.')) return;
+  if (!confirm('Remove this medical staff member? This will unlink them from all children.')) {
+    return;
+  }
   const body = new FormData();
-  body.append('action',   'deleteStaff');
+  body.append('action', 'deleteStaff');
   body.append('staff_id', staffId);
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
-    if (data.success) await loadStaff();
+    if (data.success) {
+      await loadStaff();
+    }
   } catch (e) {
     console.error(e);
   }
 }
-
-// ── Reset border on input ─────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-input').forEach(field => {
