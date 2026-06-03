@@ -5,11 +5,20 @@
 
   $action = $_GET["action"] ?? $_POST["action"] ?? "";
 
+  /**
+   * Redirects user to child login page
+   * @return void
+   */
   function redirectToChildLogin() {
     header("Location: ../../View/Page/LoginChild.php");
     exit;
   }
 
+  /**
+   * Checks if pin is valid (exactly 4 digits)
+   * @param string $pin - PIN to validate
+   * @return bool - true if valid, false otherwise
+   */
   function isValidPin($pin) {
     return preg_match("/^[0-9]{4}$/", $pin);
   }

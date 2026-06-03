@@ -3,6 +3,11 @@ require_once("Bdd.php");
 
 class MedicalStaffModel {
 
+  /**
+   * Gets all medical staff associated with a parent ID, including the children they are linked to
+   * @param {int} $parent_id - ID of parent
+   * @return {array} array of medical staff records, each with an additional 'children
+   */
   public static function getStaffByParentId($parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -24,6 +29,13 @@ class MedicalStaffModel {
     return $rows;
   }
 
+  /**
+   * Creates a new medical staff member with randomly generated password
+   * @param {string} $fullname - Full name of medical staff
+   * @param {string} $speciality - Speciality of medical staff
+   * @param {string} $email - Email of medical staff
+   * @return {int} ID of newly created medical staff
+   */
   public static function createStaff($fullname, $speciality, $email) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -40,6 +52,13 @@ class MedicalStaffModel {
     return (int) $stmt->fetchColumn();
   }
 
+  /**
+   * Links medical staff member to child under specific parent
+   * @param {int} $staff_id - ID of medical staff
+   * @param {int} $child_id - ID of child
+   * @param {int} $parent_id - ID of parent
+   * @return void
+   */
   public static function linkToChild($staff_id, $child_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -53,12 +72,27 @@ class MedicalStaffModel {
     ]);
   }
 
+  /**
+   * Unlinks medical staff member from child
+   * @param {int} $link_id - ID of link between medical staff and child
+   * @param {int} $parent_id - ID of parent (makes sure they can only remove their own links)
+   * @return void
+   */
   public static function unlinkFromChild($link_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("DELETE FROM child_medical_staff WHERE id = :id AND parent_id = :parent_id");
     $stmt->execute([':id' => (int) $link_id, ':parent_id' => (int) $parent_id]);
   }
 
+  /**
+   * Updates medical staff member's profile details - only allowed if parent is linked to them
+   * @param {int} $staff_id - ID of medical staff
+   * @param {string} $fullname - Updated full name of medical staff
+   * @param {string} $speciality - Updated speciality of medical staff
+   * @param {string} $email - Updated email of medical staff
+   * @param {int} $parent_id - ID of parent (used to make sure they can only edit their own staff)
+   * @return void
+   */
   public static function updateStaff($staff_id, $fullname, $speciality, $email, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -76,6 +110,12 @@ class MedicalStaffModel {
     ]);
   }
 
+  /**
+   * Deletes medical staff member from database, along with all their links to children under this parent
+   * @param {int} $staff_id - ID of medical staff to delete
+   * @param {int} $parent_id - ID of parent (used to restrict deletion to their own staff)
+   * @return void
+   */
   public static function deleteStaff($staff_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("DELETE FROM child_medical_staff WHERE staff_id = :staff_id AND parent_id = :parent_id");

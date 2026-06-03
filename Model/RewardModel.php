@@ -47,6 +47,16 @@
       $stmt->execute([':xp_cost' => $xp_cost, ':child_id' => $child_id]);
     }
 
+    /**
+     * Creates new reward for child in database and returns new reward's ID
+     * @param {string} $name - Name of reward
+     * @param {string} $icon - Icon for reward
+     * @param {int} $xp_cost - XP cost of reward
+     * @param {string} $type - Type of reward (in_app or real)
+     * @param {int} $child_id - ID of child for whom reward is created
+     * @param {int} $parent_id - ID of parent who created reward
+     * @return {int} ID of newly created reward
+     */
     public static function createReward($name, $icon, $xp_cost, $type, $child_id, $parent_id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("INSERT INTO reward (name, icon, xp_cost, type, is_completed, child_id, created_by) VALUES (:name, :icon, :xp_cost, :type, false, :child_id, :created_by) RETURNING id");
@@ -61,6 +71,15 @@
       return (int) $stmt->fetchColumn();
     }
 
+    /**
+     * Updates reward information (name, XP cost, type) in database
+     * @param {int} $id - ID of reward to update
+     * @param {string} $name - Updated name of reward
+     * @param {int} $xp_cost - Updated XP cost of reward
+     * @param {string} $type - Updated type of reward
+     * @param {int} $child_id - ID of child for whom reward is created
+     * @return {void}
+     */
     public static function updateReward($id, $name, $xp_cost, $type, $child_id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE reward SET name = :name, xp_cost = :xp_cost, type = :type WHERE id = :id AND child_id = :child_id");
@@ -73,6 +92,12 @@
       ]);
     }
 
+    /**
+     * Deletes reward from database
+     * @param {int} $id - ID of reward to delete
+     * @param {int} $child_id - ID of child for whom reward is created
+     * @return {void}
+     */
     public static function deleteReward($id, $child_id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM reward WHERE id = :id AND child_id = :child_id");

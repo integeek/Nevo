@@ -29,6 +29,15 @@
       return $routines;
     }
 
+    /**
+     * Creates new routine for child in database and returns new routine's ID
+     * @param {string} $name - Name of routine
+     * @param {string} $icon - Icon for routine
+     * @param {int} $xp_value - XP value of routine
+     * @param {int} $child_id - ID of child for whom routine is created
+     * @param {array} $steps - List of steps for routine
+     * @return {int} ID of newly created routine
+     */
     public static function createRoutine($name, $icon, $xp_value, $child_id, $steps) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("INSERT INTO routine (name, icon, xp_value, is_active, is_completed, created_at, child_id) VALUES (:name, :icon, :xp_value, true, false, NOW(), :child_id) RETURNING id");
@@ -46,6 +55,15 @@
       return $routineId;
     }
 
+    /**
+     * Updates routine information in database
+     * @param {int} $id - ID of routine to update
+     * @param {string} $name - Updated name of routine
+     * @param {int} $xp_value - Updated XP value of routine
+     * @param {int} $child_id - ID of child for whom routine is created
+     * @param {array} $steps - Updated list of steps for routine
+     * @return {void}
+     */
     public static function updateRoutine($id, $name, $xp_value, $child_id, $steps) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE routine SET name = :name, xp_value = :xp_value WHERE id = :id AND child_id = :child_id");
@@ -63,12 +81,23 @@
       }
     }
 
+    /**
+     * Deletes routine and all its stepsfrom database
+     * @param {int} $id - ID of routine to delete
+     * @param {int} $child_id - ID of child for whom routine is created (used to make sure routine belongs them)
+     * @return {void}
+     */
     public static function deleteRoutine($id, $child_id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM routine WHERE id = :id AND child_id = :child_id");
       $stmt->execute([':id' => (int) $id, ':child_id' => (int) $child_id]);
     }
 
+    /**
+     * Returns total number of routines and how many are completed for a child
+     * @param {int} $child_id - ID of child
+     * @return {array} associative array with total and completed counts
+     */
     public static function getCompletedCount($child_id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("SELECT COUNT(*) as total, SUM(CASE WHEN is_completed = true THEN 1 ELSE 0 END) as completed FROM routine WHERE child_id = :child_id AND is_active = true");

@@ -13,6 +13,10 @@ let selectedAvatar = {
 
 let currentEditCard = null;
 
+/**
+ * Fetches all children for curren parent and renders them as cards
+ * @returns {Promise<void>}
+ */
 async function loadChildren() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getChildren');
@@ -26,6 +30,12 @@ async function loadChildren() {
   }
 }
 
+/**
+ * Renders child profile cards in heroes grid
+ * Shows empty state message if there are no children, otherwise creates card for each child with their avatar, name, age, XP, streak, and edit/delete buttons
+ * @param {Array} children 
+ * @returns {void}
+ */
 function renderChildren(children) {
   childrenCache = children;
   const grid = document.getElementById('heroesGrid');
@@ -76,20 +86,39 @@ function renderChildren(children) {
   });
 }
 
+/**
+ * Opens add child modal and focuses on name input field
+ * Resets all input values to empty strings
+ * @returns {void}
+ */
 function openModal() {
   document.getElementById('modalOverlay').classList.add('active');
   document.getElementById('profileNameInput').value = '';
   setTimeout(() => document.getElementById('profileNameInput').focus(), 100);
 }
 
+/**
+ * Opens edit child modal
+ * @returns {void}
+ */
 function openModalEdit() {
   document.getElementById('editModalOverlay').classList.add('active');
 }
 
+/**
+ * Closes a modal by removing 'active' class from it
+ * @param {string} id 
+ * @returns {void}
+ */
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
+/**
+ * Handles avatar selection for child profile - marks clicked avatar as selected
+ * @param {HTMLElement} el 
+ * @returns {void}
+ */
 function pickAvatar(el) {
   document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
   el.classList.add('selected-avatar');
@@ -99,6 +128,10 @@ function pickAvatar(el) {
   };
 }
 
+/**
+ * Validate and submits add child form to server, then refreshes children list if addition is successful
+ * @returns {Promise<void>}
+ */
 async function addProfile() {
   const name = document.getElementById('profileNameInput');
   const age = document.getElementById('age');
@@ -145,6 +178,11 @@ async function addProfile() {
   }
 }
 
+/**
+ * Opens edit child modal and pre-fills it with child's current details (name, age, disease)
+ * @param {HTMLElement} card 
+ * @returns {void}
+ */
 function openEdit(card) {
   currentEditCard = card;
   document.getElementById('editNameInput').value = card.querySelector('.hero-name').textContent;
@@ -153,6 +191,10 @@ function openEdit(card) {
   openModalEdit();
 }
 
+/**
+ * Validates and submits edited child details to server, then updates child card in UI if update is successful
+ * @returns {Promise<void>}
+ */
 async function saveEdit() {
   const nameInput = document.getElementById('editNameInput');
   const ageInput = document.getElementById('editAgeInput');
@@ -192,6 +234,11 @@ async function saveEdit() {
   }
 }
 
+/**
+ * Shows confirmation dialog before deleting a child profile, then sends delete request to server and removes child card from UI if deletion is successful
+ * @param {HTMLElement} card 
+ * @returns {Promise<void>}
+ */
 async function openDelete(card) {
   const name = card.querySelector('.hero-name').textContent;
   if (!confirm(`Do you really want to delete the profile of ${name} ? You will no longer be able to recover the data.`)) {
@@ -218,6 +265,10 @@ async function openDelete(card) {
 
 let childrenCache = [];
 
+/**
+ * Loads staff members from server and renders them in UI
+ * @returns {Promise<void>}
+ */
 async function loadStaff() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getStaff');
@@ -233,6 +284,12 @@ async function loadStaff() {
 
 const staffCache = {};
 
+/**
+ * Renders list of staff cards in staff grid
+ * Shows empty state message if there are no staff members, otherwise creates card for each staff member with their initials as avatar, name, speciality, linked children, and edit/delete buttons
+ * @param {Array} staffList 
+ * @returns {void}
+ */
 function renderStaff(staffList) {
   const grid = document.getElementById('staffGrid');
   const empty = document.getElementById('staffEmptyState');
@@ -276,6 +333,10 @@ function renderStaff(staffList) {
   });
 }
 
+/**
+ * Opens add staff modal for adding new staff member and populates it with child checkboxes
+ * @returns {void}
+ */
 function openStaffModal() {
   const box = document.getElementById('staffChildCheckboxes');
   box.innerHTML = childrenCache.map(c => `
@@ -290,6 +351,10 @@ function openStaffModal() {
   document.getElementById('staffModalOverlay').classList.add('active');
 }
 
+/**
+ * Validates and submits add staff form to server, then refreshes staff list if addition is successful
+ * @returns {Promise<void>}
+ */
 async function addStaff() {
   const name = document.getElementById('staffNameInput');
   const speciality = document.getElementById('staffSpecialityInput');
@@ -323,6 +388,11 @@ async function addStaff() {
   }
 }
 
+/**
+ * Removes link between a staff member and a child, then refreshes staff list if removal is successful
+ * @param {string} linkId
+ * @returns {Promise<void>} 
+ */
 async function removeStaffLink(linkId) {
   const body = new FormData();
   body.append('action',  'removeStaffLink');
@@ -340,6 +410,12 @@ async function removeStaffLink(linkId) {
 
 let currentEditStaffId = null;
 
+/**
+ * Opens edit staff modal for editing an existing staff member
+ * Pre-fills it with staff member's current information
+ * @param {string} staffId 
+ * @returns {Promise<void>}
+ */
 function openEditStaff(staffId) {
   const staff = staffCache[staffId];
   if (!staff) {
@@ -352,6 +428,10 @@ function openEditStaff(staffId) {
   document.getElementById('editStaffModalOverlay').classList.add('active');
 }
 
+/**
+ * Validates and submits edit staff form to server, then refreshes staff list if update is successful
+ * @returns {Promise<void>}
+ */
 async function saveEditStaff() {
   const name = document.getElementById('editStaffNameInput');
   const speciality = document.getElementById('editStaffSpecialityInput');
@@ -381,6 +461,11 @@ async function saveEditStaff() {
   }
 }
 
+/**
+ * Shows confirmation dialog and deletes a staff member from server and refreshes staff list if deletion is successful
+ * @param {string} staffId
+ * @returns {Promise<void>}
+ */
 async function deleteStaff(staffId) {
   if (!confirm('Remove this medical staff member? This will unlink them from all children.')) {
     return;
