@@ -3,11 +3,40 @@ require_once("Bdd.php");
 
 class MedicalStaffModel {
 
-  /**
-   * Gets all medical staff associated with a parent ID, including the children they are linked to
-   * @param {int} $parent_id - ID of parent
-   * @return {array} array of medical staff records, each with an additional 'children
-   */
+  public static function getByEmail($email) {
+    $db   = Bdd::getInstance();
+    $stmt = $db->prepare("SELECT * FROM medical_staff WHERE email = :email LIMIT 1");
+    $stmt->execute([':email' => $email]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public static function getById($staff_id) {
+    $db   = Bdd::getInstance();
+    $stmt = $db->prepare("SELECT id, fullname, email, speciality FROM medical_staff WHERE id = :id");
+    $stmt->execute([':id' => (int) $staff_id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public static function getPatientsByStaffId($staff_id) {
+    $db   = Bdd::getInstance();
+    $stmt = $db->prepare("
+      SELECT c.id, c.fullname, c.age, c.disease, c.avatar, c.xp, c.streak
+      FROM child c
+      JOIN child_medical_staff cms ON cms.child_id = c.id
+      WHERE cms.staff_id = :staff_id
+      ORDER BY c.fullname ASC
+    ");
+    $stmt->execute([':staff_id' => (int) $staff_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public static function isPatientOfStaff($child_id, $staff_id) {
+    $db   = Bdd::getInstance();
+    $stmt = $db->prepare("SELECT 1 FROM child_medical_staff WHERE child_id = :child_id AND staff_id = :staff_id LIMIT 1");
+    $stmt->execute([':child_id' => (int) $child_id, ':staff_id' => (int) $staff_id]);
+    return (bool) $stmt->fetchColumn();
+  }
+
   public static function getStaffByParentId($parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -29,14 +58,7 @@ class MedicalStaffModel {
     return $rows;
   }
 
-  /**
-   * Creates a new medical staff member with randomly generated password
-   * @param {string} $fullname - Full name of medical staff
-   * @param {string} $speciality - Speciality of medical staff
-   * @param {string} $email - Email of medical staff
-   * @return {int} ID of newly created medical staff
-   */
-  public static function createStaff($fullname, $speciality, $email) {
+  public static function createStaffWithPassword($fullname, $speciality, $email, $hashed_password) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
       INSERT INTO medical_staff (fullname, speciality, email, password)
@@ -47,18 +69,31 @@ class MedicalStaffModel {
       ':fullname'   => $fullname,
       ':speciality' => $speciality,
       ':email'      => $email,
-      ':password'   => password_hash(bin2hex(random_bytes(8)), PASSWORD_ARGON2ID),
+      ':password'   => $hashed_password,
     ]);
     return (int) $stmt->fetchColumn();
   }
 
-  /**
-   * Links medical staff member to child under specific parent
-   * @param {int} $staff_id - ID of medical staff
-   * @param {int} $child_id - ID of child
-   * @param {int} $parent_id - ID of parent
-   * @return void
-   */
+  public static function createStaff($fullname, $speciality, $email) {
+    return self::createStaffWithPassword(
+      $fullname, $speciality, $email,
+      password_hash(bin2hex(random_bytes(8)), PASSWORD_ARGON2ID)
+    );
+  }
+
+  public static function searchStaff($query) {
+    $db   = Bdd::getInstance();
+    $stmt = $db->prepare("
+      SELECT id, fullname, speciality, email
+      FROM medical_staff
+      WHERE fullname ILIKE :q OR email ILIKE :q
+      ORDER BY fullname ASC
+      LIMIT 10
+    ");
+    $stmt->execute([':q' => '%' . $query . '%']);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public static function linkToChild($staff_id, $child_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -72,27 +107,12 @@ class MedicalStaffModel {
     ]);
   }
 
-  /**
-   * Unlinks medical staff member from child
-   * @param {int} $link_id - ID of link between medical staff and child
-   * @param {int} $parent_id - ID of parent (makes sure they can only remove their own links)
-   * @return void
-   */
   public static function unlinkFromChild($link_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("DELETE FROM child_medical_staff WHERE id = :id AND parent_id = :parent_id");
     $stmt->execute([':id' => (int) $link_id, ':parent_id' => (int) $parent_id]);
   }
 
-  /**
-   * Updates medical staff member's profile details - only allowed if parent is linked to them
-   * @param {int} $staff_id - ID of medical staff
-   * @param {string} $fullname - Updated full name of medical staff
-   * @param {string} $speciality - Updated speciality of medical staff
-   * @param {string} $email - Updated email of medical staff
-   * @param {int} $parent_id - ID of parent (used to make sure they can only edit their own staff)
-   * @return void
-   */
   public static function updateStaff($staff_id, $fullname, $speciality, $email, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("
@@ -110,12 +130,6 @@ class MedicalStaffModel {
     ]);
   }
 
-  /**
-   * Deletes medical staff member from database, along with all their links to children under this parent
-   * @param {int} $staff_id - ID of medical staff to delete
-   * @param {int} $parent_id - ID of parent (used to restrict deletion to their own staff)
-   * @return void
-   */
   public static function deleteStaff($staff_id, $parent_id) {
     $db   = Bdd::getInstance();
     $stmt = $db->prepare("DELETE FROM child_medical_staff WHERE staff_id = :staff_id AND parent_id = :parent_id");
