@@ -111,14 +111,13 @@
         <div class="modal-overlay" id="staffModalOverlay">
           <div class="modal-box">
             <h2>Add medical staff</h2>
-            <p>Link a healthcare professional to one or more heroes.</p>
-            <label for="staffNameInput">Full name</label>
-            <input class="modal-input" id="staffNameInput" type="text" placeholder="Dr. Smith" maxlength="100" />
-            <label for="staffSpecialityInput">Speciality</label>
-            <input class="modal-input" id="staffSpecialityInput" type="text" placeholder="Pediatrician, Cardiologist…" maxlength="100" />
-            <label for="staffEmailInput">Email</label>
-            <input class="modal-input" id="staffEmailInput" type="email" placeholder="doctor@hospital.com" maxlength="100" />
-            <label>Assign to</label>
+            <p>Search for a healthcare professional who already has an account.</p>
+            <label for="staffSearchInput">Search by name or email</label>
+            <input class="modal-input" id="staffSearchInput" type="text" placeholder="Dr. Smith or doctor@hospital.com" autocomplete="off" />
+            <div id="staffSearchResults"></div>
+            <div id="staffSelectedCard" style="display:none;background:#e8f8f4;border:1.5px solid #3dbfa0;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.85rem;font-weight:700;color:#2a9d85;"></div>
+            <input type="hidden" id="selectedStaffId" value="" />
+            <label style="margin-top:4px;">Assign to</label>
             <div class="child-checkboxes" id="staffChildCheckboxes"></div>
             <button class="btn-add" onclick="addStaff()">Save</button>
             <br />

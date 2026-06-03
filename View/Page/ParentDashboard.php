@@ -104,10 +104,14 @@
         </div>
 
         <div class="tab-panel" id="tab-analytics">
-          <div class="panel-header"><div class="panel-title">Weekly Overview</div></div>
+          <div class="panel-header"><div class="panel-title">Analytics</div></div>
           <div class="chart-card">
-            <div class="clabel">Tasks Completed Per Day</div>
-            <div class="bar-chart" id="barChart"></div>
+            <div class="clabel">Routine completion</div>
+            <div id="routineChart"></div>
+          </div>
+          <div class="chart-card" style="margin-top:14px;">
+            <div class="clabel">Feelings distribution</div>
+            <div id="feelingsChart"></div>
           </div>
         </div>
 
