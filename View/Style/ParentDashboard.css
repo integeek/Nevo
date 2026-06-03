@@ -573,11 +573,20 @@ main {
     margin-top: 1px; 
 }
 
-.clabel { 
-    font-size: 0.75rem; 
-    font-weight: 700; 
-    color: var(--text-muted); 
-    margin-bottom: 14px; 
+.clabel {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.chart-card {
+    background: #fafaf8;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
 }
 
 .bar-chart { 
@@ -616,43 +625,49 @@ main {
     font-weight: 600; 
 }
 
-.cat-row { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    margin-bottom: 8px; 
+.cat-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
-.cat-row:last-child { 
+.cat-row:last-child {
     margin-bottom: 0;
 }
 
-.cname { 
-    font-size: 0.75rem; 
-    font-weight: 600; 
-    width: 68px; 
-    flex-shrink: 0; 
+.cname {
+    font-size: 0.76rem;
+    font-weight: 700;
+    width: 82px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #333;
 }
 
-.ctrack { 
-    flex: 1; 
-    height: 7px;
-    background: #ede8e0; 
-    border-radius: 10px; 
-    overflow: hidden; 
+.ctrack {
+    flex: 1;
+    height: 12px;
+    background: #ede8e0;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-.cfill { 
-    height: 100%; 
-    border-radius: 10px; 
+.cfill {
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
 }
 
-.cpct { 
-    font-size: 0.72rem; 
-    font-weight: 700; 
-    color: var(--text-muted); 
-    width: 34px; 
-    text-align: right; 
+.cpct {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #555;
+    width: 38px;
+    text-align: right;
+    flex-shrink: 0;
 }
 
 .sico  { 
