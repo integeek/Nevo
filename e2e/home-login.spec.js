@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const HOME_LOGIN_URL = 'http://127.0.0.1/Nevo/View/Page/HomeLogin.php';
+const HOME_LOGIN_URL = 'http://localhost/View/Page/HomeLogin.php';
 
 test('clicking parent card navigates away from HomeLogin', async ({ page }) => {
     await page.goto(HOME_LOGIN_URL, { waitUntil: 'domcontentloaded' });

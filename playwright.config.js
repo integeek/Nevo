@@ -7,7 +7,7 @@ module.exports = defineConfig({
   retries: 0,
   reporter: 'html',
   use: {
-    baseURL: 'http://127.0.0.1/Nevo',
+    baseURL: 'http://localhost/',
     trace: 'on-first-retry',
   },
   projects: [

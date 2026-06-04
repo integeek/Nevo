@@ -1,14 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
-const CLEANUP_URL = 'http://127.0.0.1/Nevo/e2e/cleanup.php';
-const SIGNUP_URL = 'http://127.0.0.1/Nevo/View/Page/SignupParent.php';
+const CLEANUP_URL = 'http://localhost/e2e/cleanup.php';
+const SIGNUP_URL = 'http://localhost/View/Page/SignupParent.php';
 
 test.beforeAll(async ({ browser }) => {
     const page = await browser.newPage();
     await page.goto(CLEANUP_URL);
     await page.close();
 });
-const LOGIN_URL = 'http://127.0.0.1/Nevo/View/Page/LoginParent.php';
+const LOGIN_URL = 'http://localhost/View/Page/LoginParent.php';
 const EMAIL = 'test_playwright@test.com';
 const PASSWORD = 'TestPassword1';
 

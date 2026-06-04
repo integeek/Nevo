@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const REWARDS_URL = 'http://127.0.0.1/Nevo/View/Page/RewardShop.php';
+const REWARDS_URL = 'http://localhost/View/Page/RewardShop.php';
 
 test('XP value is displayed', async ({ page }) => {
     await page.goto(REWARDS_URL, { waitUntil: 'domcontentloaded' });

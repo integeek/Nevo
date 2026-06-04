@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const DASHBOARD_URL = 'http://127.0.0.1/Nevo/View/Page/HomePageChild.php';
+const DASHBOARD_URL = 'http://localhost/View/Page/HomePageChild.php';
 
 test('XP bar is visible on the dashboard', async ({ page }) => {
     await page.goto(DASHBOARD_URL, { waitUntil: 'domcontentloaded' });

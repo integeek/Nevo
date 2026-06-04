@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const FEELINGS_URL = 'http://127.0.0.1/Nevo/View/Page/WriteFeelings.php';
+const FEELINGS_URL = 'http://localhost/View/Page/WriteFeelings.php';
 
 test('6 feeling buttons are visible', async ({ page }) => {
     await page.goto(FEELINGS_URL, { waitUntil: 'domcontentloaded' });
