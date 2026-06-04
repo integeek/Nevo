@@ -44,6 +44,11 @@
       return $query -> fetch();
     }
 
+    /**
+     * Fetches parent's details from database by ID
+     * @param {int} $id - ID of parent to fetch
+     * @return {array|false} associative array of parent's details if parent with given ID exists, false otherwise
+     */
     public static function getUserById($id) {
       $db = Bdd::getInstance();
       $sql = "SELECT * FROM parent WHERE id = :id";
@@ -109,6 +114,11 @@
       ]);
     }
 
+    /**
+     * Fetches parent's details from database by ID
+     * @param {int} $id - ID of parent to fetch
+     * @return {array|false} associative array of parent's details if parent with given ID exists, false otherwise
+     */
     public static function getParentById($id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("SELECT id, fullname, email FROM parent WHERE id = :id");
@@ -116,12 +126,23 @@
       return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Updates parent's profile information (name)
+     * @param {int} $id - ID of parent
+     * @param {string} $fullname - Updated full name of parent
+     * @return void
+     */
     public static function updateParent($id, $fullname) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE parent SET fullname = :fullname WHERE id = :id");
       $stmt->execute([':fullname' => $fullname, ':id' => (int) $id]);
     }
 
+    /**
+     * Deletes parent from database
+     * @param {int} $id - ID of parent to delete
+     * @return void
+     */
     public static function deleteParent($id) {
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM parent WHERE id = :id");

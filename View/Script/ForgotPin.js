@@ -1,3 +1,8 @@
+/**
+ * Toggles password field between visible and hidden states
+ * Updates toggle button's icon accordingly
+ * @returns {void}
+ */
 function togglePassword() {
   const input = document.getElementById("passwordInput");
   const btn = document.getElementById("toggleBtn");
@@ -11,6 +16,12 @@ function togglePassword() {
     btn.alt = "Show password";
   }
 }
+
+/**
+ * Validates PIN fields and redirects to login page if everything is valid
+ * Highlights invalid fields with red border if validation fails
+ * @returns {void}
+ */
 function setNewPin() {
   const secretPin = document.getElementById("secretPin");
   const confirmSecretPin = document.getElementById("confirmSecretPin");

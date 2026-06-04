@@ -6,16 +6,36 @@ let selectedAvatar = {
 let pinCode = "";
 let selectedChildId = null;
 
+/**
+ * Opens add profile modal and focuses on name input field
+ * Resets name input value to empty string
+ * @returns {void}
+ */
 function openModal() {
   document.getElementById("modalOverlay").classList.add("active");
   document.getElementById("profileNameInput").value = "";
   setTimeout(() => document.getElementById("profileNameInput").focus(), 100);
 }
 
+/**
+ * Closes specified modal by removing "active" class from its element
+ * @param {string} id 
+ * @returns {void}
+ */
 function closeModal(id) {
   document.getElementById(id).classList.remove("active");
 }
 
+/**
+ * Handles clicking on child profile card by applying click animation and then opening PIN entry screen for that child
+ * Does nothing if clicked card is "add profile" card
+ * @param {HTMLElement} card 
+ * @param {string} childId 
+ * @param {string} name 
+ * @param {string} img 
+ * @param {string} bg 
+ * @returns {void}
+ */
 function selectProfile(card, childId, name, img, bg) {
   if (card.id === "addCard") {
     return;
@@ -27,6 +47,14 @@ function selectProfile(card, childId, name, img, bg) {
   setTimeout(() => openPinScreen(childId, name, img, bg), 200);
 }
 
+/**
+ * Opens PIN entry screen for selected child profile
+ * @param {string} childId 
+ * @param {string} name 
+ * @param {string} img 
+ * @param {string} bg 
+ * @returns {void}
+ */
 function openPinScreen(childId, name, img, bg) {
   selectedChildId = childId;
   pinCode = "";
@@ -44,6 +72,11 @@ function openPinScreen(childId, name, img, bg) {
   });
 }
 
+/**
+ * Adds a digit to PIN and triggers check when 4 digits are entered
+ * @param {string} digit 
+ * @returns {void}
+ */
 function pressKey(digit) {
   if (pinCode.length >= 4) {
     return;
@@ -55,11 +88,19 @@ function pressKey(digit) {
   }
 }
 
+/**
+ * Deletes last entered digit from PIN
+ * @returns {void}
+ */
 function deleteKey() {
   pinCode = pinCode.slice(0, -1);
   updateDots();
 }
 
+/**
+ * Updates visual representation of PIN entry dots based on how many digits have been entered
+ * @returns {void}
+ */
 function updateDots() {
   for (let i = 0; i < 4; i++) {
     const dot = document.getElementById("dot" + i);
@@ -68,6 +109,10 @@ function updateDots() {
   }
 }
 
+/**
+ * Sends entered PIN to server for validation and redirects to appropriate page if PIN is correct, otherwise shows error animation
+ * @returns {Promise<void>}
+ */
 async function checkPin() {
   const body = new URLSearchParams();
   body.append("child_id", selectedChildId);
@@ -100,6 +145,10 @@ async function checkPin() {
   showPinError();
 }
 
+/**
+ * Shows error animation on PIN entry screen by shaking card and highlighting dots in red, then resets PIN code
+ * @returns {void}
+ */
 function showPinError() {
   for (let i = 0; i < 4; i++) {
     document.getElementById("dot" + i).classList.add("error");
@@ -127,6 +176,11 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+/**
+ * Handles avatar selection in add profile modal
+ * @param {HTMLElement} el 
+ * @returns {void}
+ */
 function pickAvatar(el) {
   document
     .querySelectorAll(".avatar-option")
@@ -140,6 +194,11 @@ function pickAvatar(el) {
   document.getElementById("selectedAvatarInput").value = selectedAvatar.avatar;
 }
 
+/**
+ * Validates add profile form and submits it if everything is valid, otherwise highlights invalid fields with red border
+ * Adds new child profile with provided details
+ * @returns {void}
+ */
 function addProfile() {
   const name = document.getElementById("profileNameInput").value.trim();
   if (!name) {

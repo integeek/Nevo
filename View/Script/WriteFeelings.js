@@ -88,8 +88,8 @@ async function loadFeelings() {
 
 /**
  * Formats date string into "DD MMM HH:mm" format for display in recent feelings list
- * @param {*} dateStr 
- * @returns 
+ * @param {string} dateStr 
+ * @returns {string}
  */
 function formatDate(dateStr) {
   const date = new Date(dateStr);

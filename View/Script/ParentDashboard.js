@@ -16,15 +16,31 @@ const makeIcon = (name) => {
   return `<img src="${src}" style="width:24px;height:24px;object-fit:contain;">`;
 };
 
+/**
+ * Opens a modal dialog by adding "active" class to its element and focuses on it
+ * @param {string} id 
+ * @returns {void}
+ */
 function openModal(id) {
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
 
+/**
+ * Closes a modal dialog by removing "active" class from its element
+ * @param {string} id 
+ * @returns {void}
+ */
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
+/**
+ * Switches active tab in dashboard
+ * @param {HTMLElement} btn 
+ * @param {string} tab 
+ * @returns {void}
+ */
 function switchTab(btn, tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -32,12 +48,21 @@ function switchTab(btn, tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
+/**
+ * Toggle visibility of substeps for a routine item
+ * @param {HTMLElement} btn 
+ * @returns {void}
+ */
 function toggleSteps(btn) {
   const item = btn.closest('.routine-item');
   item.querySelector('.routine-substeps').classList.toggle('open');
   btn.classList.toggle('open');
 }
 
+/**
+ * Fetches initial data (children list) from server and renders child pills in sidebar, then loads data for first child if there is at least one child
+ * @returns {Promise<void>}
+ */
 async function loadInit() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/ParentDashboard.php?action=init');
@@ -54,6 +79,11 @@ async function loadInit() {
   }
 }
 
+/**
+ * Renders child profile pills in top bar based on provided children data, marking first child as active by default
+ * @param {Array} children
+ * @returns {void} 
+ */
 function renderChildPills(children) {
   const bar = document.getElementById('childPillsBar');
   bar.innerHTML = children.map((child, i) => {
@@ -72,12 +102,23 @@ function renderChildPills(children) {
   }).join('');
 }
 
+/**
+ * Switches active child profile based on pill clicked - marks it as active and loads corresponding data for that child
+ * @param {string} childId 
+ * @param {HTMLElement} el 
+ * @returns {void}
+ */
 function switchChildByPill(childId, el) {
   document.querySelectorAll('.child-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   switchChild(childId);
 }
 
+/**
+ * Loads all sections of dashboard for selected child in parallel 
+ * @param {string} childId 
+ * @returns {Promise<void>}
+ */
 async function switchChild(childId) {
   currentChildId = childId;
   await Promise.all([
@@ -88,6 +129,11 @@ async function switchChild(childId) {
   ]);
 }
 
+/**
+ * Loads statistics (completion, week, streak, routines) for selected child
+ * @param {string} childId 
+ * @returns {Promise<void>}
+ */
 async function loadStats(childId) {
   try {
     const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
@@ -107,6 +153,11 @@ async function loadStats(childId) {
   }
 }
 
+/**
+ * Loads routines for selected child and renders them
+ * @param {string} childId 
+ * @returns {Promise<void>}
+ */
 async function loadRoutines(childId) {
   try {
     const res = await fetch(`../../Controller/ParentDashboard/Routine.php?action=getRoutines&child_id=${childId}`);
@@ -120,6 +171,11 @@ async function loadRoutines(childId) {
   }
 }
 
+/**
+ * Renders list of routines in dashboard
+ * @param {Array} routines 
+ * @returns {void}
+ */
 function renderRoutines(routines) {
   document.getElementById('routinesList').innerHTML = routines.map(r => `
     <div class="routine-item" data-id="${r.id}">
@@ -152,6 +208,10 @@ function renderRoutines(routines) {
   `).join('');
 }
 
+/**
+ * Validates and submits new routine to server
+ * @returns {Promise<void>}
+ */
 async function saveRoutine() {
   const name = document.getElementById('nameInput');
   const xp = document.getElementById('xpInput');
@@ -191,6 +251,12 @@ async function saveRoutine() {
   }
 }
 
+/**
+ * Opens edit modal for a routine and pre-fills it with current data of routine, allowing user to edit routine details
+ * @param {HTMLElement} card 
+ * @param {string} modalId 
+ * @returns {void}
+ */
 function openEdit(card, modalId) {
   currentEditCard = card;
   if (modalId === 'editRoutineModalOverlay') {
@@ -208,6 +274,10 @@ function openEdit(card, modalId) {
   openModal(modalId);
 }
 
+/**
+ * Validates and submits edited routine details to server, then refreshes routine list and stats if update is successful
+ * @returns {Promise<void>}
+ */
 async function editRoutine() {
   const name = document.getElementById('editNameInput');
   const xp = document.getElementById('editXpInput');
@@ -247,6 +317,11 @@ async function editRoutine() {
   }
 }
 
+/**
+ * Shows a confirmation dialog before deleting a routine, then sends delete request to server and refreshes routine list and stats if deletion is successful
+ * @param {HTMLElement} card 
+ * @returns {Promise<void>}
+ */
 async function confirmDeleteRoutine(card) {
   const name = card.querySelector('.routine-name').textContent;
   if (!confirm(`Do you really want to delete the routine "${name}" ? You will no longer be able to recover the data.`)) {
@@ -270,6 +345,11 @@ async function confirmDeleteRoutine(card) {
   }
 }
 
+/**
+ * Fetches rewards for selected child from server and renders them in rewards section of dashboard, allowing parent to view and manage rewards for that child
+ * @param {string} childId 
+ * @returns {Promise<void>}
+ */
 async function loadRewards(childId) {
   try {
     const res = await fetch(`../../Controller/ParentDashboard/Reward.php?action=getRewards&child_id=${childId}`);
@@ -283,6 +363,11 @@ async function loadRewards(childId) {
   }
 }
 
+/**
+ * Renders reward cards in rewards list
+ * @param {Array} rewards 
+ * @returns {void}
+ */
 function renderRewards(rewards) {
   document.getElementById('rewardsList').innerHTML = rewards.map(r => `
     <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}">
@@ -306,12 +391,22 @@ function renderRewards(rewards) {
   `).join('');
 }
 
+/**
+ * Handles clicking reward type button and updates hidden input value
+ * @param {HTMLElement} btn 
+ * @param {string} hiddenId 
+ * @returns {void}
+ */
 function selectRewardType(btn, hiddenId) {
   btn.closest('.type-toggle').querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(hiddenId).value = btn.dataset.value;
 }
 
+/**
+ * Validates and submits new reward form
+ * @returns {Promise<void>}
+ */
 async function saveReward() {
   const name = document.getElementById('nameRewardInput');
   const xp = document.getElementById('xpRewardInput');
@@ -348,6 +443,10 @@ async function saveReward() {
   }
 }
 
+/**
+ * Validates and submits edited reward details to server, then refreshes rewards list if update is successful
+ * @returns {Promise<void>}
+ */
 async function editReward() {
   const name = document.getElementById('editRewardNameInput');
   const xp = document.getElementById('editRewardXpInput');
@@ -382,6 +481,11 @@ async function editReward() {
   }
 }
 
+/**
+ * Shows confirmation dialog for deleting a reward and sends delete request to server
+ * @param {HTMLElement} card 
+ * @returns {Promise<void>}
+ */
 async function confirmDeleteReward(card) {
   const name = card.querySelector('.reward-name').textContent;
   if (!confirm(`Do you really want to delete the reward "${name}" ? You will no longer be able to recover the data.`)) {
@@ -404,6 +508,11 @@ async function confirmDeleteReward(card) {
   }
 }
 
+/**
+ * Fetches feelings for child and renders them
+ * @param {string} childId 
+ * @returns {Promise<void>}
+ */
 async function loadFeelings(childId) {
   try {
     const res = await fetch(`../../Controller/HomePageChild/Feeling.php?action=getFeelings&child_id=${childId}`);
@@ -417,6 +526,11 @@ async function loadFeelings(childId) {
   }
 }
 
+/**
+ * Renders list of feelings in dashboard or shows a placeholder if there are none
+ * @param {Array} feelings 
+ * @returns {void}
+ */
 function renderFeelings(feelings) {
   if (feelings.length === 0) {
     document.getElementById('feelingsList').innerHTML = '<p style="color:#aaa;text-align:center;padding:24px;">No feelings recorded yet.</p>';
@@ -433,6 +547,11 @@ function renderFeelings(feelings) {
   `).join('');
 }
 
+/**
+ * Formats a date string into a readable English format (Mon dd, hh:mm)
+ * @param {string} dateStr 
+ * @returns {string}
+ */
 function formatDate(dateStr) {
   if (!dateStr) {
     return '';

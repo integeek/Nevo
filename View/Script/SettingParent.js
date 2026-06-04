@@ -1,5 +1,9 @@
 // ── Load ──────────────────────────────────────────────────────────────────────
 
+/**
+ * Loads parent information from server and populates form fields
+ * @returns {Promise<void>}
+ */
 async function loadParent() {
   try {
     const res  = await fetch('../../Controller/ParentDashboard/SettingParent.php?action=getParent');
@@ -14,7 +18,11 @@ async function loadParent() {
   }
 }
 
-
+/**
+ * Validates and submits parent profile update form
+ * Saves updated parent information to server, shows a brief confirmation message if update is successful
+ * @returns {Promise<void>}
+ */
 async function saveParent() {
   const nameInput = document.getElementById('parentNameInput');
   const name = nameInput.value.trim();
@@ -41,6 +49,11 @@ async function saveParent() {
   }
 }
 
+/**
+ * Shows confirmation dialog and deletes parent's account from server permanently
+ * Redirects to homepage after successful deletion
+ * @returns {Promise<void>}
+ */
 async function deleteAccount() {
   if (!confirm('Are you sure you want to delete your account ? This action is irreversible and will delete all your family data.')) {
     return;
