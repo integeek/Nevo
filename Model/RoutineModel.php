@@ -100,7 +100,19 @@
      */
     public static function getCompletedCount($child_id) {
       $db   = Bdd::getInstance();
-      $stmt = $db->prepare("SELECT COUNT(*) as total, SUM(CASE WHEN is_completed = true THEN 1 ELSE 0 END) as completed FROM routine WHERE child_id = :child_id AND is_active = true");
+      $stmt = $db->prepare("
+        SELECT COUNT(*) AS total,
+               SUM(CASE
+                 WHEN r.is_completed = true THEN 1
+                 WHEN (SELECT COUNT(*) FROM routine_step rs WHERE rs.routine_id = r.id) > 0
+                  AND (SELECT COUNT(*) FROM routine_step rs WHERE rs.routine_id = r.id AND rs.is_completed = true)
+                    = (SELECT COUNT(*) FROM routine_step rs WHERE rs.routine_id = r.id)
+                 THEN 1
+                 ELSE 0
+               END) AS completed
+        FROM routine r
+        WHERE r.child_id = :child_id AND r.is_active = true
+      ");
       $stmt->execute([':child_id' => (int) $child_id]);
       return $stmt->fetch(PDO::FETCH_ASSOC);
     }
