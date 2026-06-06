@@ -7,11 +7,10 @@
     exit;
   }
 
-  $fullname         = trim($_POST['fullname']         ?? '');
-  $speciality       = trim($_POST['speciality']       ?? '');
-  $email            = trim($_POST['email']            ?? '');
-  $password         = $_POST['password']              ?? '';
-  $confirm_password = $_POST['confirm_password']      ?? '';
+  $fullname   = trim($_POST['fullname']   ?? '');
+  $speciality = trim($_POST['speciality'] ?? '');
+  $email      = trim($_POST['email']      ?? '');
+  $password   = $_POST['password']        ?? '';
 
   if (empty($fullname) || empty($email) || empty($password)) {
     $_SESSION['staff_error'] = 'The form is incomplete';
@@ -39,12 +38,6 @@
 
   if (!preg_match('/[A-Z]/', $password)) {
     $_SESSION['staff_error'] = 'Password must contain at least one uppercase letter';
-    header('Location: ../../View/Page/MedicalSignup.php');
-    exit;
-  }
-
-  if ($password !== $confirm_password) {
-    $_SESSION['staff_error'] = 'Passwords do not match';
     header('Location: ../../View/Page/MedicalSignup.php');
     exit;
   }
