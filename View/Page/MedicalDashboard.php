@@ -24,6 +24,7 @@
         <div class="logo-icon">✦</div>
         Miro
       </a>
+      <a href="../../Controller/Authentication/Logout.php" class="nav-btn-logout">Logout</a>
     </nav>
 
     <main>

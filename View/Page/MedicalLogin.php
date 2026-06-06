@@ -22,7 +22,7 @@
   </head>
   <body>
     <nav>
-      <a href="HomeLogin.html" class="nav-logo">
+      <a href="HomeLogin.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Miro
       </a>

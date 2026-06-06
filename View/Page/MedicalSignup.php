@@ -20,10 +20,25 @@
     <link rel="stylesheet" href="../Style/LoginParent.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="../Script/TogglePassword.js" defer></script>
+    <style>
+      .pwd-rule { font-size:0.78rem; font-weight:600; color:#e57373; transition:color 0.2s; }
+      .pwd-rule.valid { color:#3dbfa0; }
+    </style>
+    <script>
+      function checkPasswordStrength(val) {
+        const set = (id, ok) => document.getElementById(id).className = 'pwd-rule' + (ok ? ' valid' : '');
+        set('rule-length', val.length >= 8);
+        set('rule-upper',  /[A-Z]/.test(val));
+        set('rule-number', /[0-9]/.test(val));
+        document.getElementById('rule-length').textContent = (val.length >= 8 ? '✓' : '✗') + ' At least 8 characters';
+        document.getElementById('rule-upper').textContent  = (/[A-Z]/.test(val) ? '✓' : '✗') + ' One uppercase letter';
+        document.getElementById('rule-number').textContent = (/[0-9]/.test(val) ? '✓' : '✗') + ' One number';
+      }
+    </script>
   </head>
   <body>
     <nav>
-      <a href="HomeLogin.html" class="nav-logo">
+      <a href="HomeLogin.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Miro
       </a>
@@ -53,13 +68,13 @@
 
             <label for="passwordInput">Password</label>
             <div class="input-wrap">
-              <input type="password" class="form-input" name="password" placeholder="••••••••" id="passwordInput"/>
+              <input type="password" class="form-input" name="password" placeholder="••••••••" id="passwordInput" oninput="checkPasswordStrength(this.value)"/>
               <img class="toggle-pass" id="toggleBtn" src="../Assets/img/icon-eye-open.png" alt="Show/Hide password"/>
             </div>
-
-            <label for="confirmPasswordInput">Confirm password</label>
-            <div class="input-wrap">
-              <input type="password" class="form-input" name="confirm_password" placeholder="••••••••" id="confirmPasswordInput"/>
+            <div id="pwdRules" style="margin-bottom:16px;display:flex;flex-direction:column;gap:4px;">
+              <div class="pwd-rule" id="rule-length">✗ At least 8 characters</div>
+              <div class="pwd-rule" id="rule-upper">✗ One uppercase letter</div>
+              <div class="pwd-rule" id="rule-number">✗ One number</div>
             </div>
 
             <button class="btn-login" type="submit">Create my account <span>→</span></button>

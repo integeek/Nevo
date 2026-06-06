@@ -27,6 +27,7 @@
       <div style="display:flex; gap:10px; align-items:center;">
         <a href="SettingParent.php" class="nav-btn nav-btn-outline">⚙ Settings</a>
         <a href="SettingFamily.php" class="nav-btn">My family</a>
+        <a href="../../Controller/Authentication/Logout.php" class="nav-btn nav-btn-outline">Logout</a>
       </div>
     </nav>
 
