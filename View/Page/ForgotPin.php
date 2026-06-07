@@ -35,7 +35,7 @@
     <nav>
       <a href="#" class="nav-logo">
         <div class="logo-icon">✦</div>
-        Miro
+        Nevo
       </a>
     </nav>
 

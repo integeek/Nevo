@@ -21,7 +21,7 @@
     <nav>
       <a href="#" class="nav-logo">
         <div class="logo-icon">✦</div>
-        Miro
+        Nevo
       </a>
       <a href="ParentDashboard.php" class="nav-btn">← Dashboard</a>
     </nav>

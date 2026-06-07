@@ -22,7 +22,7 @@
     <nav>
       <a href="#" class="nav-logo">
         <div class="logo-icon">✦</div>
-        Miro
+        Nevo
       </a>
       <div style="display:flex; gap:10px; align-items:center;">
         <a href="SettingParent.php" class="nav-btn nav-btn-outline">⚙ Settings</a>
