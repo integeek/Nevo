@@ -119,15 +119,15 @@ h1 span {
 }
 
 #staff-card:hover {
-  border: 2px solid #3b82f6;
+  border: 2px solid rgb(59, 131, 246);
 }
 
 .card-icon.blue {
-  background: #dbeafe;
+  background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
 }
 
 .card-link.blue {
-  color: #2563eb;
+  color: rgb(59, 131, 246);
 }
 
 .card-icon {

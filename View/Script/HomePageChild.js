@@ -118,22 +118,10 @@ function renderRoutines(routines) {
   list.innerHTML = '';
 
   routines.forEach(routine => {
-    const steps = (() => {
-      if (Array.isArray(routine.steps)) {
-        return routine.steps;
-      }
-      if (typeof routine.steps === 'string') {
-        try {
-          return JSON.parse(routine.steps);
-        } catch (err) {
-          return [];
-        }
-      }
-      if (routine.steps && typeof routine.steps === 'object') {
-        return Object.values(routine.steps);
-      }
-      return [];
-    })().filter(s => s && s.id);
+const stepsData = routine.steps || [];
+  const steps = Array.isArray(stepsData)
+    ? stepsData.filter(s => s.id)
+    : JSON.parse(stepsData).filter(s => s.id);
     const done = steps.filter(s => s.is_completed).length;
     const total = steps.length;
     const allDone = routine.is_completed;

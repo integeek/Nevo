@@ -16,31 +16,18 @@
     <title>Medical Sign up — Miro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     <link rel="stylesheet" href="../Style/Variables.css">
-    <link rel="stylesheet" href="../Style/LoginParent.css">
+    <link rel="stylesheet" href="../Style/MedicalSignup.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="../Script/TogglePassword.js" defer></script>
-    <style>
-      .pwd-rule { font-size:0.78rem; font-weight:600; color:#e57373; transition:color 0.2s; }
-      .pwd-rule.valid { color:#3dbfa0; }
-    </style>
-    <script>
-      function checkPasswordStrength(val) {
-        const set = (id, ok) => document.getElementById(id).className = 'pwd-rule' + (ok ? ' valid' : '');
-        set('rule-length', val.length >= 8);
-        set('rule-upper',  /[A-Z]/.test(val));
-        set('rule-number', /[0-9]/.test(val));
-        document.getElementById('rule-length').textContent = (val.length >= 8 ? '✓' : '✗') + ' At least 8 characters';
-        document.getElementById('rule-upper').textContent  = (/[A-Z]/.test(val) ? '✓' : '✗') + ' One uppercase letter';
-        document.getElementById('rule-number').textContent = (/[0-9]/.test(val) ? '✓' : '✗') + ' One number';
-      }
-    </script>
+    <script src="../Script/validatorCriters.js" defer></script>
   </head>
   <body>
     <nav>
       <a href="HomeLogin.php" class="nav-logo">
         <div class="logo-icon">✦</div>
-        Miro
+        Nevo
       </a>
     </nav>
 
@@ -48,9 +35,9 @@
       <div class="page-center">
         <div class="login-card">
           <h1 class="card-title">Create your account</h1>
-          <p class="card-subtitle">Join Miro to follow your patients' progress</p>
+          <p class="card-subtitle">Join Nevo to follow your patients' progress</p>
 
-          <form action="../../Controller/Authentication/MedicalSignup.php" method="post">
+          <form action="../../Controller/Authentication/MedicalSignup.php" method="post" class="groupForm">
             <label for="nameInput">Full name</label>
             <div class="input-wrap">
               <input type="text" class="form-input" name="fullname" placeholder="Dr. Smith" id="nameInput" maxlength="100"/>
@@ -68,13 +55,14 @@
 
             <label for="passwordInput">Password</label>
             <div class="input-wrap">
-              <input type="password" class="form-input" name="password" placeholder="••••••••" id="passwordInput" oninput="checkPasswordStrength(this.value)"/>
+              <input type="password" class="form-input" name="password" placeholder="••••••••" id="passwordInput"/>
               <img class="toggle-pass" id="toggleBtn" src="../Assets/img/icon-eye-open.png" alt="Show/Hide password"/>
             </div>
-            <div id="pwdRules" style="margin-bottom:16px;display:flex;flex-direction:column;gap:4px;">
-              <div class="pwd-rule" id="rule-length">✗ At least 8 characters</div>
-              <div class="pwd-rule" id="rule-upper">✗ One uppercase letter</div>
-              <div class="pwd-rule" id="rule-number">✗ One number</div>
+            <div class="validatorCriters">
+              <div class="digit"><i class="far fa-check-circle"></i> &nbsp;Your password must contain at least one number</div>
+              <div class="uppercase"><i class="far fa-check-circle"></i> &nbsp;Your password must contain at least one uppercase letter</div>
+              <div class="lowercase"><i class="far fa-check-circle"></i> &nbsp;Your password must contain at least one lowercase letter</div>
+              <div class="length"><i class="far fa-check-circle"></i> &nbsp;Your password must contain at least 8 characters</div>
             </div>
 
             <button class="btn-login" type="submit">Create my account <span>→</span></button>
