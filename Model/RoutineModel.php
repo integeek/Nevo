@@ -9,7 +9,6 @@
      */
     public static function getRoutinesWithStepsByChildId($child_id) {
       $db = Bdd::getInstance();
-
       $stmt = $db->prepare("
         SELECT r.*,
                COALESCE(
@@ -39,11 +38,11 @@
      * @return {int} ID of newly created routine
      */
     public static function createRoutine($name, $icon, $xp_value, $child_id, $steps) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("INSERT INTO routine (name, icon, xp_value, is_active, is_completed, created_at, child_id) VALUES (:name, :icon, :xp_value, true, false, NOW(), :child_id) RETURNING id");
       $stmt->execute([
-        ':name'     => $name,
-        ':icon'     => $icon,
+        ':name' => $name,
+        ':icon' => $icon,
         ':xp_value' => (int) $xp_value,
         ':child_id' => (int) $child_id,
       ]);
@@ -65,12 +64,12 @@
      * @return {void}
      */
     public static function updateRoutine($id, $name, $xp_value, $child_id, $steps) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE routine SET name = :name, xp_value = :xp_value WHERE id = :id AND child_id = :child_id");
       $stmt->execute([
-        ':name'     => $name,
+        ':name' => $name,
         ':xp_value' => (int) $xp_value,
-        ':id'       => (int) $id,
+        ':id' => (int) $id,
         ':child_id' => (int) $child_id,
       ]);
       $stmt = $db->prepare("DELETE FROM routine_step WHERE routine_id = :routine_id");
@@ -88,7 +87,7 @@
      * @return {void}
      */
     public static function deleteRoutine($id, $child_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM routine WHERE id = :id AND child_id = :child_id");
       $stmt->execute([':id' => (int) $id, ':child_id' => (int) $child_id]);
     }
@@ -99,7 +98,7 @@
      * @return {array} associative array with total and completed counts
      */
     public static function getCompletedCount($child_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("
         SELECT COUNT(*) AS total,
                SUM(CASE

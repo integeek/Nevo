@@ -91,7 +91,7 @@ async function switchChild(childId) {
 
 async function loadStats(childId) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
+    const res = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
     const data = await res.json();
     if (!data.success) {
       return;
@@ -435,9 +435,11 @@ function renderFeelings(feelings) {
 
 async function loadAnalytics(childId) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getAnalytics&child_id=${childId}`);
+    const res = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getAnalytics&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     renderAnalytics(data);
   } catch (e) {
     console.error(e);
@@ -455,11 +457,10 @@ function renderAnalytics(data) {
     'icon-hurt':'#f87171','icon-sad':'#fbbf24','icon-angry':'#f97316'
   };
 
-  // Chart 1 — Routine completion
-  const done    = data.routines_done;
+  const done = data.routines_done;
   const pending = data.routines_pending;
-  const total   = data.routines_total;
-  const donePct    = total > 0 ? Math.round(done    / total * 100) : 0;
+  const total = data.routines_total;
+  const donePct = total > 0 ? Math.round(done / total * 100) : 0;
   const pendingPct = total > 0 ? Math.round(pending / total * 100) : 0;
 
   document.getElementById('routineChart').innerHTML = total === 0
@@ -490,15 +491,14 @@ function renderAnalytics(data) {
       <div class="cpct">${pending}</div>
     </div>`;
 
-  // Chart 2 — Feelings distribution
-  const counts  = data.feelings_counts || {};
-  const ftotal  = data.feelings_total || 0;
+  const counts = data.feelings_counts || {};
+  const ftotal = data.feelings_total || 0;
   const entries = Object.entries(counts);
   document.getElementById('feelingsChart').innerHTML = entries.length === 0
     ? '<p style="color:#aaa;font-size:0.82rem;padding:4px 0;">No feelings logged yet.</p>'
     : `<div style="font-size:0.75rem;color:#7a9490;margin-bottom:12px;">${ftotal} feelings recorded</div>` +
       entries.map(([emoji, count]) => {
-        const pct   = ftotal > 0 ? Math.round(count / ftotal * 100) : 0;
+        const pct = ftotal > 0 ? Math.round(count / ftotal * 100) : 0;
         const label = FEELING_LABELS[emoji] || emoji.replace('icon-','');
         const color = COLORS[emoji] || '#aaa';
         return `

@@ -279,12 +279,12 @@ function renderStaff(staffList) {
 let staffSearchTimeout = null;
 
 function openStaffModal() {
-  document.getElementById('staffSearchInput').value          = '';
-  document.getElementById('staffSearchResults').innerHTML    = '';
+  document.getElementById('staffSearchInput').value  = '';
+  document.getElementById('staffSearchResults').innerHTML = '';
   document.getElementById('staffSelectedCard').style.display = 'none';
-  document.getElementById('staffSelectedCard').innerHTML     = '';
-  document.getElementById('selectedStaffId').value           = '';
-  document.getElementById('staffChildCheckboxes').innerHTML  = childrenCache.map(c => `
+  document.getElementById('staffSelectedCard').innerHTML = '';
+  document.getElementById('selectedStaffId').value = '';
+  document.getElementById('staffChildCheckboxes').innerHTML = childrenCache.map(c => `
     <label class="child-checkbox-item">
       <input type="checkbox" value="${c.id}" />
       ${c.fullname} (${c.age} y/o)
@@ -295,9 +295,11 @@ function openStaffModal() {
 
 async function searchStaffMembers(q) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/SettingFamily.php?action=searchStaff&q=${encodeURIComponent(q)}`);
+    const res = await fetch(`../../Controller/ParentDashboard/SettingFamily.php?action=searchStaff&q=${encodeURIComponent(q)}`);
     const data = await res.json();
-    if (!data.success) return;
+    if (!data.success) {
+      return;
+    }
     const box = document.getElementById('staffSearchResults');
     if (!data.staff.length) {
       box.innerHTML = '<div style="font-size:0.78rem;color:#aaa;padding:6px 2px;">No staff found. They must create an account first.</div>';
@@ -348,10 +350,12 @@ async function addStaff() {
     document.getElementById('staffSearchInput').style.borderColor = '#e57373';
     return;
   }
-  if (checked.length === 0) return;
+  if (checked.length === 0) {
+    return;
+  }
 
-  const body = new FormData();
-  body.append('action',   'linkStaff');
+  const body = new FormData(); 
+  body.append('action','linkStaff');
   body.append('staff_id', staffId);
   checked.forEach(id => body.append('child_ids[]', id));
 

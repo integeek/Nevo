@@ -11,7 +11,7 @@
     exit;
   }
 
-  $action    = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $parent_id = (int) $_SESSION['parent']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'init') {
@@ -34,17 +34,17 @@
         echo json_encode(['success' => false, 'message' => 'Forbidden']);
         exit;
       }
-      $counts    = RoutineModel::getCompletedCount($child_id);
-      $total     = (int) ($counts['total'] ?? 0);
+      $counts = RoutineModel::getCompletedCount($child_id);
+      $total = (int) ($counts['total'] ?? 0);
       $completed = (int) ($counts['completed'] ?? 0);
       $completion = $total > 0 ? round(($completed / $total) * 100) . '%' : '0%';
       echo json_encode([
-        'success'      => true,
-        'completion'   => $completion,
-        'streak'       => ($child['streak'] ?? 0) . ' days',
-        'routines'     => $total,
-        'week'         => $completed . '<sub>/' . $total . '</sub>',
-        'child_name'   => $child['fullname'],
+        'success' => true,
+        'completion' => $completion,
+        'streak' => ($child['streak'] ?? 0) . ' days',
+        'routines' => $total,
+        'week' => $completed . '<sub>/' . $total . '</sub>',
+        'child_name' => $child['fullname'],
         'child_avatar' => $child['avatar'] ?? 'icon-superhero',
       ]);
     } catch (PDOException $e) {
@@ -82,8 +82,8 @@
         exit;
       }
 
-      $counts    = RoutineModel::getCompletedCount($child_id);
-      $total     = (int) ($counts['total'] ?? 0);
+      $counts = RoutineModel::getCompletedCount($child_id);
+      $total = (int) ($counts['total'] ?? 0);
       $completed = (int) ($counts['completed'] ?? 0);
 
       $feelings = FeelingModel::getFeelingsByChildId($child_id);
@@ -95,12 +95,12 @@
       arsort($feelingCounts);
 
       echo json_encode([
-        'success'          => true,
-        'routines_total'   => $total,
-        'routines_done'    => $completed,
+        'success' => true,
+        'routines_total' => $total,
+        'routines_done' => $completed,
         'routines_pending' => $total - $completed,
-        'feelings_counts'  => $feelingCounts,
-        'feelings_total'   => count($feelings),
+        'feelings_counts' => $feelingCounts,
+        'feelings_total' => count($feelings),
       ]);
     } catch (\Throwable $e) {
       http_response_code(500);

@@ -10,7 +10,7 @@
     exit;
   }
 
-  $action    = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $parent_id = (int) $_SESSION['parent']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getChildren') {
@@ -31,10 +31,10 @@
       exit;
     }
     $fullname = trim($_POST['fullname']);
-    $age      = (int) $_POST['age'];
-    $avatar   = trim($_POST['avatar']);
-    $pin      = (int) $_POST['pin'];
-    $disease  = trim($_POST['disease'] ?? '');
+    $age = (int) $_POST['age'];
+    $avatar = trim($_POST['avatar']);
+    $pin = (int) $_POST['pin'];
+    $disease = trim($_POST['disease'] ?? '');
     if (empty($fullname) || $age <= 0 || $age > 18) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Invalid data']);
@@ -58,8 +58,8 @@
     }
     $child_id = (int) $_POST['child_id'];
     $fullname = trim($_POST['fullname']);
-    $age      = (int) $_POST['age'];
-    $disease  = trim($_POST['disease'] ?? '');
+    $age = (int) $_POST['age'];
+    $disease = trim($_POST['disease'] ?? '');
     if (empty($fullname) || $age <= 0) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Invalid data']);
@@ -114,7 +114,7 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $staff_id  = (int) $_POST['staff_id'];
+    $staff_id = (int) $_POST['staff_id'];
     $child_ids = array_map('intval', (array) $_POST['child_ids']);
     if ($staff_id <= 0 || empty($child_ids)) {
       http_response_code(400);
@@ -153,10 +153,10 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $fullname   = trim($_POST['fullname']);
+    $fullname = trim($_POST['fullname']);
     $speciality = trim($_POST['speciality'] ?? '');
-    $email      = trim($_POST['email'] ?? '');
-    $child_ids  = array_map('intval', (array) $_POST['child_ids']);
+    $email = trim($_POST['email'] ?? '');
+    $child_ids = array_map('intval', (array) $_POST['child_ids']);
     if (empty($fullname) || empty($child_ids)) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Invalid data']);

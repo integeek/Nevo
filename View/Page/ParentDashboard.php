@@ -181,8 +181,8 @@
               <input class="modal-input" id="editRewardXpInput" type="text" placeholder="15" maxlength="4" />
               <label>Type</label>
               <div class="type-toggle">
-                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'editRewardType')">🎁 Real reward</button>
-                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'editRewardType')">⭐ In-app</button>
+                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'editRewardType')"><img src="../Assets/img/icon-gift.svg" alt=""> Real reward</button>
+                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'editRewardType')"><img src="../Assets/img/icon-star.svg" alt=""> In-app</button>
               </div>
               <input type="hidden" id="editRewardType" value="out_app" />
             </div>

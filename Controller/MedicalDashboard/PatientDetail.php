@@ -13,7 +13,7 @@
     exit;
   }
 
-  $action   = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $staff_id = (int) $_SESSION['staff']['id'];
   $child_id = (int) ($_GET['child_id'] ?? 0);
 
@@ -31,15 +31,15 @@
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getPatient') {
     try {
-      $child  = ChildModel::getChildById($child_id);
+      $child = ChildModel::getChildById($child_id);
       $counts = RoutineModel::getCompletedCount($child_id);
-      $total  = (int) ($counts['total'] ?? 0);
-      $done   = (int) ($counts['completed'] ?? 0);
+      $total = (int) ($counts['total'] ?? 0);
+      $done = (int) ($counts['completed'] ?? 0);
       echo json_encode([
-        'success'    => true,
-        'child'      => $child,
+        'success' => true,
+        'child' => $child,
         'completion' => $total > 0 ? round(($done / $total) * 100) . '%' : '0%',
-        'routines'   => $total,
+        'routines' => $total,
       ]);
     } catch (\Throwable $e) {
       http_response_code(500);

@@ -12,12 +12,12 @@
     exit;
   }
 
-  $action   = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $staff_id = (int) $_SESSION['staff']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'init') {
     try {
-      $staff    = MedicalStaffModel::getById($staff_id);
+      $staff = MedicalStaffModel::getById($staff_id);
       $patients = MedicalStaffModel::getPatientsByStaffId($staff_id);
       echo json_encode(['success' => true, 'staff' => $staff, 'patients' => $patients]);
     } catch (\Throwable $e) {
@@ -35,17 +35,17 @@
         echo json_encode(['success' => false, 'message' => 'Forbidden']);
         exit;
       }
-      $child    = ChildModel::getChildById($child_id);
-      $counts   = RoutineModel::getCompletedCount($child_id);
-      $total    = (int) ($counts['total'] ?? 0);
-      $done     = (int) ($counts['completed'] ?? 0);
+      $child = ChildModel::getChildById($child_id);
+      $counts = RoutineModel::getCompletedCount($child_id);
+      $total = (int) ($counts['total'] ?? 0);
+      $done = (int) ($counts['completed'] ?? 0);
       $feelings = FeelingModel::getFeelingsByChildId($child_id);
       echo json_encode([
-        'success'      => true,
-        'completion'   => $total > 0 ? round(($done / $total) * 100) . '%' : '0%',
-        'routines'     => $total,
-        'streak'       => ($child['streak'] ?? 0) . ' days',
-        'xp'           => $child['xp'] ?? 0,
+        'success' => true,
+        'completion' => $total > 0 ? round(($done / $total) * 100) . '%' : '0%',
+        'routines' => $total,
+        'streak' => ($child['streak'] ?? 0) . ' days',
+        'xp' => $child['xp'] ?? 0,
         'last_feeling' => count($feelings) > 0 ? $feelings[0]['emoji'] : null,
       ]);
     } catch (\Throwable $e) {

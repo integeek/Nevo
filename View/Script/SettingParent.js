@@ -1,12 +1,10 @@
-// ── Load ──────────────────────────────────────────────────────────────────────
-
 /**
  * Loads parent information from server and populates form fields
  * @returns {Promise<void>}
  */
 async function loadParent() {
   try {
-    const res  = await fetch('../../Controller/ParentDashboard/SettingParent.php?action=getParent');
+    const res = await fetch('../../Controller/ParentDashboard/SettingParent.php?action=getParent');
     const data = await res.json();
     if (!data.success) {
       return;
