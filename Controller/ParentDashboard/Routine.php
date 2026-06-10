@@ -10,7 +10,7 @@
     exit;
   }
 
-  $action    = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $parent_id = (int) $_SESSION['parent']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getRoutines') {
@@ -45,10 +45,10 @@
         echo json_encode(['success' => false, 'message' => 'Forbidden']);
         exit;
       }
-      $name  = trim($_POST['name']);
-      $xp    = (int) $_POST['xp_value'];
+      $name = trim($_POST['name']);
+      $xp = (int) $_POST['xp_value'];
       $steps = array_values(array_filter(array_map('trim', explode("\n", $_POST['steps']))));
-      $id    = RoutineModel::createRoutine($name, 'icon-alarm', $xp, $child_id, $steps);
+      $id = RoutineModel::createRoutine($name, 'icon-alarm', $xp, $child_id, $steps);
       echo json_encode(['success' => true, 'id' => $id]);
     } catch (\Throwable $e) {
       http_response_code(500);
@@ -63,7 +63,7 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $child_id   = (int) $_POST['child_id'];
+    $child_id = (int) $_POST['child_id'];
     $routine_id = (int) $_POST['routine_id'];
     try {
       $child = ChildModel::getChildById($child_id);
@@ -72,8 +72,8 @@
         echo json_encode(['success' => false, 'message' => 'Forbidden']);
         exit;
       }
-      $name  = trim($_POST['name']);
-      $xp    = (int) $_POST['xp_value'];
+      $name = trim($_POST['name']);
+      $xp = (int) $_POST['xp_value'];
       $steps = array_values(array_filter(array_map('trim', explode("\n", $_POST['steps']))));
       RoutineModel::updateRoutine($routine_id, $name, $xp, $child_id, $steps);
       echo json_encode(['success' => true]);
@@ -90,7 +90,7 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $child_id   = (int) $_POST['child_id'];
+    $child_id = (int) $_POST['child_id'];
     $routine_id = (int) $_POST['routine_id'];
     try {
       $child = ChildModel::getChildById($child_id);

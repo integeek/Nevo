@@ -24,7 +24,7 @@
   </head>
   <body>
     <nav>
-      <a href="#" class="nav-logo">
+      <a href="HomeLogin.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Nevo
       </a>

@@ -62,7 +62,7 @@
 
   <body>
     <nav>
-      <a class="nav-logo" href="#">
+      <a class="nav-logo" href="HomeLogin.php">
         <div class="logo-icon">✦</div>
         Nevo
       </a>

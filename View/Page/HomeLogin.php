@@ -8,7 +8,6 @@
 
   $cards = [
     [
-      "role" => "parent",
       "id" => "parent-card",
       "color" => "teal",
       "icon" => "../Assets/img/icon-shield.svg",
@@ -16,9 +15,9 @@
       "title" => "I'm a Parent",
       "description" => "Create routines, track progress, and celebrate your child's achievements.",
       "linkText" => "Open Dashboard",
+      "href" => $controllerPath . "?role=parent",
     ],
     [
-      "role" => "child",
       "id" => "hero-card",
       "color" => "coral",
       "icon" => "../Assets/img/icon-star.svg",
@@ -26,6 +25,18 @@
       "title" => "I'm a Hero!",
       "description" => "Complete quests, earn rewards, and level up every day!",
       "linkText" => "Start Adventure",
+      "href" => $controllerPath . "?role=child",
+    ],
+    [
+      "role" => "staff",
+      "id" => "staff-card",
+      "color" => "blue",
+      "icon" => "../Assets/img/icon-medical.svg",
+      "iconAlt" => "medical icon",
+      "title" => "I'm a Healthcare Pro",
+      "description" => "Follow your patients' routines, feelings and progress in one place.",
+      "linkText" => "Access medical dashboard",
+      "href" => "MedicalLogin.php",
     ],
   ];
 
@@ -78,7 +89,7 @@
       <div class="cards-row">
         <?php foreach ($cards as $card): ?>
           <a
-            href="<?= $controllerPath ?>?role=<?= urlencode($card["role"]) ?>"
+            href="<?= htmlspecialchars($card["href"]) ?>"
             class="quest-card"
             id="<?= htmlspecialchars($card["id"]) ?>"
           >

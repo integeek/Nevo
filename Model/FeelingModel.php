@@ -12,8 +12,8 @@
       $sql = "INSERT INTO feeling (emoji, text, child_id) VALUES (:emoji, :text, :child_id)";
       $stmt = $db-> prepare($sql);
       $stmt-> execute([
-        ':emoji'    => $emoji,
-        ':text'     => $text,
+        ':emoji' => $emoji,
+        ':text' => $text,
         ':child_id' => $child_id,
       ]);
     }
@@ -24,8 +24,8 @@
      * @return {array} list of feeling entries as associative arrays, empty list if no entries found
      */
     public static function getFeelingsByChildId($child_id) {
-      $db   = Bdd::getInstance();
-      $sql  = "SELECT * FROM feeling WHERE child_id = :child_id ORDER BY created_at DESC";
+      $db = Bdd::getInstance();
+      $sql = "SELECT * FROM feeling WHERE child_id = :child_id ORDER BY created_at DESC";
       $stmt = $db->prepare($sql);
       $stmt->execute([
         ':child_id' => $child_id

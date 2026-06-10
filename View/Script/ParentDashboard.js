@@ -16,31 +16,15 @@ const makeIcon = (name) => {
   return `<img src="${src}" style="width:24px;height:24px;object-fit:contain;">`;
 };
 
-/**
- * Opens a modal dialog by adding "active" class to its element and focuses on it
- * @param {string} id 
- * @returns {void}
- */
 function openModal(id) {
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
 
-/**
- * Closes a modal dialog by removing "active" class from its element
- * @param {string} id 
- * @returns {void}
- */
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
-/**
- * Switches active tab in dashboard
- * @param {HTMLElement} btn 
- * @param {string} tab 
- * @returns {void}
- */
 function switchTab(btn, tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -48,21 +32,12 @@ function switchTab(btn, tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-/**
- * Toggle visibility of substeps for a routine item
- * @param {HTMLElement} btn 
- * @returns {void}
- */
 function toggleSteps(btn) {
   const item = btn.closest('.routine-item');
   item.querySelector('.routine-substeps').classList.toggle('open');
   btn.classList.toggle('open');
 }
 
-/**
- * Fetches initial data (children list) from server and renders child pills in sidebar, then loads data for first child if there is at least one child
- * @returns {Promise<void>}
- */
 async function loadInit() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/ParentDashboard.php?action=init');
@@ -79,11 +54,6 @@ async function loadInit() {
   }
 }
 
-/**
- * Renders child profile pills in top bar based on provided children data, marking first child as active by default
- * @param {Array} children
- * @returns {void} 
- */
 function renderChildPills(children) {
   const bar = document.getElementById('childPillsBar');
   bar.innerHTML = children.map((child, i) => {
@@ -102,23 +72,12 @@ function renderChildPills(children) {
   }).join('');
 }
 
-/**
- * Switches active child profile based on pill clicked - marks it as active and loads corresponding data for that child
- * @param {string} childId 
- * @param {HTMLElement} el 
- * @returns {void}
- */
 function switchChildByPill(childId, el) {
   document.querySelectorAll('.child-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   switchChild(childId);
 }
 
-/**
- * Loads all sections of dashboard for selected child in parallel 
- * @param {string} childId 
- * @returns {Promise<void>}
- */
 async function switchChild(childId) {
   currentChildId = childId;
   await Promise.all([
@@ -126,17 +85,13 @@ async function switchChild(childId) {
     loadRoutines(childId),
     loadRewards(childId),
     loadFeelings(childId),
+    loadAnalytics(childId),
   ]);
 }
 
-/**
- * Loads statistics (completion, week, streak, routines) for selected child
- * @param {string} childId 
- * @returns {Promise<void>}
- */
 async function loadStats(childId) {
   try {
-    const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
+    const res = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getStats&child_id=${childId}`);
     const data = await res.json();
     if (!data.success) {
       return;
@@ -153,11 +108,6 @@ async function loadStats(childId) {
   }
 }
 
-/**
- * Loads routines for selected child and renders them
- * @param {string} childId 
- * @returns {Promise<void>}
- */
 async function loadRoutines(childId) {
   try {
     const res = await fetch(`../../Controller/ParentDashboard/Routine.php?action=getRoutines&child_id=${childId}`);
@@ -171,11 +121,6 @@ async function loadRoutines(childId) {
   }
 }
 
-/**
- * Renders list of routines in dashboard
- * @param {Array} routines 
- * @returns {void}
- */
 function renderRoutines(routines) {
   document.getElementById('routinesList').innerHTML = routines.map(r => `
     <div class="routine-item" data-id="${r.id}">
@@ -208,10 +153,6 @@ function renderRoutines(routines) {
   `).join('');
 }
 
-/**
- * Validates and submits new routine to server
- * @returns {Promise<void>}
- */
 async function saveRoutine() {
   const name = document.getElementById('nameInput');
   const xp = document.getElementById('xpInput');
@@ -251,12 +192,6 @@ async function saveRoutine() {
   }
 }
 
-/**
- * Opens edit modal for a routine and pre-fills it with current data of routine, allowing user to edit routine details
- * @param {HTMLElement} card 
- * @param {string} modalId 
- * @returns {void}
- */
 function openEdit(card, modalId) {
   currentEditCard = card;
   if (modalId === 'editRoutineModalOverlay') {
@@ -274,10 +209,6 @@ function openEdit(card, modalId) {
   openModal(modalId);
 }
 
-/**
- * Validates and submits edited routine details to server, then refreshes routine list and stats if update is successful
- * @returns {Promise<void>}
- */
 async function editRoutine() {
   const name = document.getElementById('editNameInput');
   const xp = document.getElementById('editXpInput');
@@ -317,11 +248,6 @@ async function editRoutine() {
   }
 }
 
-/**
- * Shows a confirmation dialog before deleting a routine, then sends delete request to server and refreshes routine list and stats if deletion is successful
- * @param {HTMLElement} card 
- * @returns {Promise<void>}
- */
 async function confirmDeleteRoutine(card) {
   const name = card.querySelector('.routine-name').textContent;
   if (!confirm(`Do you really want to delete the routine "${name}" ? You will no longer be able to recover the data.`)) {
@@ -345,11 +271,6 @@ async function confirmDeleteRoutine(card) {
   }
 }
 
-/**
- * Fetches rewards for selected child from server and renders them in rewards section of dashboard, allowing parent to view and manage rewards for that child
- * @param {string} childId 
- * @returns {Promise<void>}
- */
 async function loadRewards(childId) {
   try {
     const res = await fetch(`../../Controller/ParentDashboard/Reward.php?action=getRewards&child_id=${childId}`);
@@ -363,11 +284,6 @@ async function loadRewards(childId) {
   }
 }
 
-/**
- * Renders reward cards in rewards list
- * @param {Array} rewards 
- * @returns {void}
- */
 function renderRewards(rewards) {
   document.getElementById('rewardsList').innerHTML = rewards.map(r => `
     <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}">
@@ -391,22 +307,12 @@ function renderRewards(rewards) {
   `).join('');
 }
 
-/**
- * Handles clicking reward type button and updates hidden input value
- * @param {HTMLElement} btn 
- * @param {string} hiddenId 
- * @returns {void}
- */
 function selectRewardType(btn, hiddenId) {
   btn.closest('.type-toggle').querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(hiddenId).value = btn.dataset.value;
 }
 
-/**
- * Validates and submits new reward form
- * @returns {Promise<void>}
- */
 async function saveReward() {
   const name = document.getElementById('nameRewardInput');
   const xp = document.getElementById('xpRewardInput');
@@ -443,10 +349,6 @@ async function saveReward() {
   }
 }
 
-/**
- * Validates and submits edited reward details to server, then refreshes rewards list if update is successful
- * @returns {Promise<void>}
- */
 async function editReward() {
   const name = document.getElementById('editRewardNameInput');
   const xp = document.getElementById('editRewardXpInput');
@@ -481,11 +383,6 @@ async function editReward() {
   }
 }
 
-/**
- * Shows confirmation dialog for deleting a reward and sends delete request to server
- * @param {HTMLElement} card 
- * @returns {Promise<void>}
- */
 async function confirmDeleteReward(card) {
   const name = card.querySelector('.reward-name').textContent;
   if (!confirm(`Do you really want to delete the reward "${name}" ? You will no longer be able to recover the data.`)) {
@@ -508,29 +405,17 @@ async function confirmDeleteReward(card) {
   }
 }
 
-/**
- * Fetches feelings for child and renders them
- * @param {string} childId 
- * @returns {Promise<void>}
- */
 async function loadFeelings(childId) {
   try {
-    const res = await fetch(`../../Controller/HomePageChild/Feeling.php?action=getFeelings&child_id=${childId}`);
+    const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getFeelings&child_id=${childId}`);
     const data = await res.json();
-    if (!data.success) {
-      return;
-    }
+    if (!data.success) return;
     renderFeelings(data.feelings);
   } catch (e) {
     console.error(e);
   }
 }
 
-/**
- * Renders list of feelings in dashboard or shows a placeholder if there are none
- * @param {Array} feelings 
- * @returns {void}
- */
 function renderFeelings(feelings) {
   if (feelings.length === 0) {
     document.getElementById('feelingsList').innerHTML = '<p style="color:#aaa;text-align:center;padding:24px;">No feelings recorded yet.</p>';
@@ -538,20 +423,96 @@ function renderFeelings(feelings) {
   }
   document.getElementById('feelingsList').innerHTML = feelings.map(f => `
     <div class="feeling-row">
-      <div class="fmoji" style="font-size:1.5rem">${f.emoji}</div>
+      <img src="../Assets/img/${f.emoji}.svg" alt="${f.emoji}" style="width:32px;height:32px;flex-shrink:0;">
       <div class="fbody">
-        <div class="ftext">${f.text || ''}</div>
+        <div class="ftag">${f.emoji.replace('icon-', '')}</div>
+        <div class="ftext">${f.text || '—'}</div>
         <div class="ftime">${formatDate(f.created_at)}</div>
       </div>
     </div>
   `).join('');
 }
 
-/**
- * Formats a date string into a readable English format (Mon dd, hh:mm)
- * @param {string} dateStr 
- * @returns {string}
- */
+async function loadAnalytics(childId) {
+  try {
+    const res = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getAnalytics&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) {
+      return;
+    }
+    renderAnalytics(data);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderAnalytics(data) {
+  const FEELING_LABELS = {
+    'icon-awesome': 'Awesome', 'icon-good': 'Good', 'icon-lost': 'Lost',
+    'icon-hurt': 'Hurt', 'icon-sad': 'Sad', 'icon-angry': 'Angry'
+  };
+
+  const COLORS = {
+    'icon-awesome':'#3dbfa0','icon-good':'#60a5fa','icon-lost':'#a78bfa',
+    'icon-hurt':'#f87171','icon-sad':'#fbbf24','icon-angry':'#f97316'
+  };
+
+  const done = data.routines_done;
+  const pending = data.routines_pending;
+  const total = data.routines_total;
+  const donePct = total > 0 ? Math.round(done / total * 100) : 0;
+  const pendingPct = total > 0 ? Math.round(pending / total * 100) : 0;
+
+  document.getElementById('routineChart').innerHTML = total === 0
+    ? '<p style="color:#aaa;font-size:0.82rem;padding:4px 0;">No routines yet.</p>'
+    : `
+    <div style="display:flex;gap:20px;margin-bottom:18px;">
+      <div style="text-align:center;">
+        <div style="font-size:1.6rem;font-weight:800;color:#3dbfa0;">${donePct}%</div>
+        <div style="font-size:0.7rem;color:#7a9490;font-weight:600;">Done</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:1.6rem;font-weight:800;color:#f59e0b;">${pendingPct}%</div>
+        <div style="font-size:0.7rem;color:#7a9490;font-weight:600;">Pending</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:1.6rem;font-weight:800;color:#555;">${total}</div>
+        <div style="font-size:0.7rem;color:#7a9490;font-weight:600;">Total</div>
+      </div>
+    </div>
+    <div class="cat-row">
+      <div class="cname">✓ Done</div>
+      <div class="ctrack"><div class="cfill" style="width:${donePct}%;background:#3dbfa0;"></div></div>
+      <div class="cpct">${done}</div>
+    </div>
+    <div class="cat-row">
+      <div class="cname">⏳ Pending</div>
+      <div class="ctrack"><div class="cfill" style="width:${pendingPct}%;background:#f59e0b;"></div></div>
+      <div class="cpct">${pending}</div>
+    </div>`;
+
+  const counts = data.feelings_counts || {};
+  const ftotal = data.feelings_total || 0;
+  const entries = Object.entries(counts);
+  document.getElementById('feelingsChart').innerHTML = entries.length === 0
+    ? '<p style="color:#aaa;font-size:0.82rem;padding:4px 0;">No feelings logged yet.</p>'
+    : `<div style="font-size:0.75rem;color:#7a9490;margin-bottom:12px;">${ftotal} feelings recorded</div>` +
+      entries.map(([emoji, count]) => {
+        const pct = ftotal > 0 ? Math.round(count / ftotal * 100) : 0;
+        const label = FEELING_LABELS[emoji] || emoji.replace('icon-','');
+        const color = COLORS[emoji] || '#aaa';
+        return `
+        <div class="cat-row">
+          <div class="cname">
+            <img src="../Assets/img/${emoji}.svg" style="width:15px;height:15px;flex-shrink:0;">
+            ${label}
+          </div>
+          <div class="ctrack"><div class="cfill" style="width:${pct}%;background:${color};"></div></div>
+          <div class="cpct">${pct}%</div>
+        </div>`;
+      }).join('');
+}
+
 function formatDate(dateStr) {
   if (!dateStr) {
     return '';

@@ -13,10 +13,6 @@ let selectedAvatar = {
 
 let currentEditCard = null;
 
-/**
- * Fetches all children for curren parent and renders them as cards
- * @returns {Promise<void>}
- */
 async function loadChildren() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getChildren');
@@ -30,12 +26,6 @@ async function loadChildren() {
   }
 }
 
-/**
- * Renders child profile cards in heroes grid
- * Shows empty state message if there are no children, otherwise creates card for each child with their avatar, name, age, XP, streak, and edit/delete buttons
- * @param {Array} children 
- * @returns {void}
- */
 function renderChildren(children) {
   childrenCache = children;
   const grid = document.getElementById('heroesGrid');
@@ -86,39 +76,20 @@ function renderChildren(children) {
   });
 }
 
-/**
- * Opens add child modal and focuses on name input field
- * Resets all input values to empty strings
- * @returns {void}
- */
 function openModal() {
   document.getElementById('modalOverlay').classList.add('active');
   document.getElementById('profileNameInput').value = '';
   setTimeout(() => document.getElementById('profileNameInput').focus(), 100);
 }
 
-/**
- * Opens edit child modal
- * @returns {void}
- */
 function openModalEdit() {
   document.getElementById('editModalOverlay').classList.add('active');
 }
 
-/**
- * Closes a modal by removing 'active' class from it
- * @param {string} id 
- * @returns {void}
- */
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
-/**
- * Handles avatar selection for child profile - marks clicked avatar as selected
- * @param {HTMLElement} el 
- * @returns {void}
- */
 function pickAvatar(el) {
   document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
   el.classList.add('selected-avatar');
@@ -128,10 +99,6 @@ function pickAvatar(el) {
   };
 }
 
-/**
- * Validate and submits add child form to server, then refreshes children list if addition is successful
- * @returns {Promise<void>}
- */
 async function addProfile() {
   const name = document.getElementById('profileNameInput');
   const age = document.getElementById('age');
@@ -178,11 +145,6 @@ async function addProfile() {
   }
 }
 
-/**
- * Opens edit child modal and pre-fills it with child's current details (name, age, disease)
- * @param {HTMLElement} card 
- * @returns {void}
- */
 function openEdit(card) {
   currentEditCard = card;
   document.getElementById('editNameInput').value = card.querySelector('.hero-name').textContent;
@@ -191,10 +153,6 @@ function openEdit(card) {
   openModalEdit();
 }
 
-/**
- * Validates and submits edited child details to server, then updates child card in UI if update is successful
- * @returns {Promise<void>}
- */
 async function saveEdit() {
   const nameInput = document.getElementById('editNameInput');
   const ageInput = document.getElementById('editAgeInput');
@@ -234,11 +192,6 @@ async function saveEdit() {
   }
 }
 
-/**
- * Shows confirmation dialog before deleting a child profile, then sends delete request to server and removes child card from UI if deletion is successful
- * @param {HTMLElement} card 
- * @returns {Promise<void>}
- */
 async function openDelete(card) {
   const name = card.querySelector('.hero-name').textContent;
   if (!confirm(`Do you really want to delete the profile of ${name} ? You will no longer be able to recover the data.`)) {
@@ -265,10 +218,6 @@ async function openDelete(card) {
 
 let childrenCache = [];
 
-/**
- * Loads staff members from server and renders them in UI
- * @returns {Promise<void>}
- */
 async function loadStaff() {
   try {
     const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php?action=getStaff');
@@ -284,12 +233,6 @@ async function loadStaff() {
 
 const staffCache = {};
 
-/**
- * Renders list of staff cards in staff grid
- * Shows empty state message if there are no staff members, otherwise creates card for each staff member with their initials as avatar, name, speciality, linked children, and edit/delete buttons
- * @param {Array} staffList 
- * @returns {void}
- */
 function renderStaff(staffList) {
   const grid = document.getElementById('staffGrid');
   const empty = document.getElementById('staffEmptyState');
@@ -333,51 +276,91 @@ function renderStaff(staffList) {
   });
 }
 
-/**
- * Opens add staff modal for adding new staff member and populates it with child checkboxes
- * @returns {void}
- */
+let staffSearchTimeout = null;
+
 function openStaffModal() {
-  const box = document.getElementById('staffChildCheckboxes');
-  box.innerHTML = childrenCache.map(c => `
+  document.getElementById('staffSearchInput').value  = '';
+  document.getElementById('staffSearchResults').innerHTML = '';
+  document.getElementById('staffSelectedCard').style.display = 'none';
+  document.getElementById('staffSelectedCard').innerHTML = '';
+  document.getElementById('selectedStaffId').value = '';
+  document.getElementById('staffChildCheckboxes').innerHTML = childrenCache.map(c => `
     <label class="child-checkbox-item">
       <input type="checkbox" value="${c.id}" />
       ${c.fullname} (${c.age} y/o)
     </label>
   `).join('');
-  document.getElementById('staffNameInput').value = '';
-  document.getElementById('staffSpecialityInput').value = '';
-  document.getElementById('staffEmailInput').value = '';
   document.getElementById('staffModalOverlay').classList.add('active');
 }
 
-/**
- * Validates and submits add staff form to server, then refreshes staff list if addition is successful
- * @returns {Promise<void>}
- */
+async function searchStaffMembers(q) {
+  try {
+    const res = await fetch(`../../Controller/ParentDashboard/SettingFamily.php?action=searchStaff&q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    if (!data.success) {
+      return;
+    }
+    const box = document.getElementById('staffSearchResults');
+    if (!data.staff.length) {
+      box.innerHTML = '<div style="font-size:0.78rem;color:#aaa;padding:6px 2px;">No staff found. They must create an account first.</div>';
+      return;
+    }
+    box.innerHTML = data.staff.map(s => `
+      <div class="staff-result-item"
+           data-id="${s.id}"
+           data-name="${s.fullname.replace(/"/g,'&quot;')}"
+           data-speciality="${(s.speciality||'').replace(/"/g,'&quot;')}"
+           style="padding:10px 12px;border:1.5px solid #e4e0da;border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:0.85rem;transition:border-color 0.15s;">
+        <strong>${s.fullname}</strong>
+        <span style="color:#7a9490;font-size:0.75rem;"> — ${s.speciality || 'No speciality'}</span>
+        <div style="font-size:0.72rem;color:#aaa;">${s.email}</div>
+      </div>
+    `).join('');
+    box.querySelectorAll('.staff-result-item').forEach(el => {
+      el.addEventListener('mouseover', () => el.style.borderColor = '#3dbfa0');
+      el.addEventListener('mouseout',  () => el.style.borderColor = '#e4e0da');
+      el.addEventListener('click', () => selectStaff(el.dataset.id, el.dataset.name, el.dataset.speciality));
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function selectStaff(id, name, speciality) {
+  document.getElementById('selectedStaffId').value        = id;
+  document.getElementById('staffSearchInput').value       = '';
+  document.getElementById('staffSearchResults').innerHTML = '';
+  const card = document.getElementById('staffSelectedCard');
+  card.style.display = '';
+  card.innerHTML = `✓ <strong>${name}</strong> <span style="font-weight:400;color:#7a9490;font-size:0.78rem;">— ${speciality || 'No speciality'}</span>
+    <button onclick="clearSelectedStaff()" style="background:none;border:none;cursor:pointer;color:#2a9d85;font-size:0.85rem;margin-left:8px;">✕</button>`;
+}
+
+function clearSelectedStaff() {
+  document.getElementById('selectedStaffId').value           = '';
+  document.getElementById('staffSelectedCard').style.display = 'none';
+  document.getElementById('staffSelectedCard').innerHTML     = '';
+}
+
 async function addStaff() {
-  const name = document.getElementById('staffNameInput');
-  const speciality = document.getElementById('staffSpecialityInput');
-  const email = document.getElementById('staffEmailInput');
+  const staffId = document.getElementById('selectedStaffId').value;
   const checked = [...document.querySelectorAll('#staffChildCheckboxes input:checked')].map(i => i.value);
 
-  if (!name.value.trim()) { 
-    name.style.borderColor = '#e57373'; 
-    return; 
+  if (!staffId) {
+    document.getElementById('staffSearchInput').style.borderColor = '#e57373';
+    return;
   }
-  if (checked.length === 0) { 
-    return; 
+  if (checked.length === 0) {
+    return;
   }
 
-  const body = new FormData();
-  body.append('action', 'addStaff');
-  body.append('fullname', name.value.trim());
-  body.append('speciality', speciality.value.trim());
-  body.append('email', email.value.trim());
+  const body = new FormData(); 
+  body.append('action','linkStaff');
+  body.append('staff_id', staffId);
   checked.forEach(id => body.append('child_ids[]', id));
 
   try {
-    const res = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
+    const res  = await fetch('../../Controller/ParentDashboard/SettingFamily.php', { method: 'POST', body });
     const data = await res.json();
     if (data.success) {
       closeModal('staffModalOverlay');
@@ -388,11 +371,6 @@ async function addStaff() {
   }
 }
 
-/**
- * Removes link between a staff member and a child, then refreshes staff list if removal is successful
- * @param {string} linkId
- * @returns {Promise<void>} 
- */
 async function removeStaffLink(linkId) {
   const body = new FormData();
   body.append('action',  'removeStaffLink');
@@ -410,12 +388,6 @@ async function removeStaffLink(linkId) {
 
 let currentEditStaffId = null;
 
-/**
- * Opens edit staff modal for editing an existing staff member
- * Pre-fills it with staff member's current information
- * @param {string} staffId 
- * @returns {Promise<void>}
- */
 function openEditStaff(staffId) {
   const staff = staffCache[staffId];
   if (!staff) {
@@ -428,10 +400,6 @@ function openEditStaff(staffId) {
   document.getElementById('editStaffModalOverlay').classList.add('active');
 }
 
-/**
- * Validates and submits edit staff form to server, then refreshes staff list if update is successful
- * @returns {Promise<void>}
- */
 async function saveEditStaff() {
   const name = document.getElementById('editStaffNameInput');
   const speciality = document.getElementById('editStaffSpecialityInput');
@@ -461,11 +429,6 @@ async function saveEditStaff() {
   }
 }
 
-/**
- * Shows confirmation dialog and deletes a staff member from server and refreshes staff list if deletion is successful
- * @param {string} staffId
- * @returns {Promise<void>}
- */
 async function deleteStaff(staffId) {
   if (!confirm('Remove this medical staff member? This will unlink them from all children.')) {
     return;
@@ -485,6 +448,16 @@ async function deleteStaff(staffId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('staffSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      clearTimeout(staffSearchTimeout);
+      const q = this.value.trim();
+      if (q.length < 2) { document.getElementById('staffSearchResults').innerHTML = ''; return; }
+      staffSearchTimeout = setTimeout(() => searchStaffMembers(q), 300);
+    });
+  }
+
   document.querySelectorAll('.modal-input').forEach(field => {
     field.addEventListener('input', () => { field.style.borderColor = ''; });
   });

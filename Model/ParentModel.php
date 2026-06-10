@@ -120,7 +120,7 @@
      * @return {array|false} associative array of parent's details if parent with given ID exists, false otherwise
      */
     public static function getParentById($id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("SELECT id, fullname, email FROM parent WHERE id = :id");
       $stmt->execute([':id' => (int) $id]);
       return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -133,7 +133,7 @@
      * @return void
      */
     public static function updateParent($id, $fullname) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE parent SET fullname = :fullname WHERE id = :id");
       $stmt->execute([':fullname' => $fullname, ':id' => (int) $id]);
     }
@@ -144,7 +144,7 @@
      * @return void
      */
     public static function deleteParent($id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM parent WHERE id = :id");
       $stmt->execute([':id' => (int) $id]);
     }

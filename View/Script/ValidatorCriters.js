@@ -9,7 +9,6 @@ let length = document.querySelector(".length");
 let validator = document.querySelector(".validatorCriters");
 
 input.addEventListener("input", function(){
-  console.log(input)
     if (this.value && validator.style.display !== "block") {
         validator.style.display = "block";
     }

@@ -10,7 +10,7 @@
     exit;
   }
 
-  $action    = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $parent_id = (int) $_SESSION['parent']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getRewards') {
@@ -46,9 +46,9 @@
         exit;
       }
       $name = trim($_POST['name']);
-      $xp   = (int) $_POST['xp_cost'];
+      $xp = (int) $_POST['xp_cost'];
       $type = in_array($_POST['type'] ?? '', ['in_app', 'out_app']) ? $_POST['type'] : 'out_app';
-      $id   = RewardModel::createReward($name, 'icon-star', $xp, $type, $child_id, $parent_id);
+      $id = RewardModel::createReward($name, 'icon-star', $xp, $type, $child_id, $parent_id);
       echo json_encode(['success' => true, 'id' => $id]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -63,7 +63,7 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $child_id  = (int) $_POST['child_id'];
+    $child_id = (int) $_POST['child_id'];
     $reward_id = (int) $_POST['reward_id'];
     try {
       $child = ChildModel::getChildById($child_id);
@@ -73,7 +73,7 @@
         exit;
       }
       $name = trim($_POST['name']);
-      $xp   = (int) $_POST['xp_cost'];
+      $xp = (int) $_POST['xp_cost'];
       $type = in_array($_POST['type'] ?? '', ['in_app', 'out_app']) ? $_POST['type'] : 'out_app';
       RewardModel::updateReward($reward_id, $name, $xp, $type, $child_id);
       echo json_encode(['success' => true]);
@@ -90,7 +90,7 @@
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
     }
-    $child_id  = (int) $_POST['child_id'];
+    $child_id = (int) $_POST['child_id'];
     $reward_id = (int) $_POST['reward_id'];
     try {
       $child = ChildModel::getChildById($child_id);

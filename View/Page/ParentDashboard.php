@@ -27,6 +27,7 @@
       <div style="display:flex; gap:10px; align-items:center;">
         <a href="SettingParent.php" class="nav-btn nav-btn-outline">⚙ Settings</a>
         <a href="SettingFamily.php" class="nav-btn">My family</a>
+        <a href="../../Controller/Authentication/Logout.php" class="nav-btn nav-btn-outline">Logout</a>
       </div>
     </nav>
 
@@ -104,10 +105,14 @@
         </div>
 
         <div class="tab-panel" id="tab-analytics">
-          <div class="panel-header"><div class="panel-title">Weekly Overview</div></div>
+          <div class="panel-header"><div class="panel-title">Analytics</div></div>
           <div class="chart-card">
-            <div class="clabel">Tasks Completed Per Day</div>
-            <div class="bar-chart" id="barChart"></div>
+            <div class="clabel">Routine completion</div>
+            <div id="routineChart"></div>
+          </div>
+          <div class="chart-card" style="margin-top:14px;">
+            <div class="clabel">Feelings distribution</div>
+            <div id="feelingsChart"></div>
           </div>
         </div>
 
@@ -176,8 +181,8 @@
               <input class="modal-input" id="editRewardXpInput" type="text" placeholder="15" maxlength="4" />
               <label>Type</label>
               <div class="type-toggle">
-                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'editRewardType')">🎁 Real reward</button>
-                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'editRewardType')">⭐ In-app</button>
+                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'editRewardType')"><img src="../Assets/img/icon-gift.svg" alt=""> Real reward</button>
+                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'editRewardType')"><img src="../Assets/img/icon-star.svg" alt=""> In-app</button>
               </div>
               <input type="hidden" id="editRewardType" value="out_app" />
             </div>

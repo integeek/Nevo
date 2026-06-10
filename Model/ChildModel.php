@@ -97,11 +97,11 @@
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("INSERT INTO child (fullname, age, avatar, password, disease, xp, streak, parent_id) VALUES (:fullname, :age, :avatar, :password, :disease, 0, 0, :parent_id) RETURNING id");
       $stmt->execute([
-        ':fullname'  => $fullname,
-        ':age'       => (int) $age,
-        ':avatar'    => $avatar,
-        ':password'  => (int) $pin,
-        ':disease'   => $disease ?: null,
+        ':fullname' => $fullname,
+        ':age' => (int) $age,
+        ':avatar' => $avatar,
+        ':password' => (int) $pin,
+        ':disease' => $disease ?: null,
         ':parent_id' => (int) $parent_id,
       ]);
       return (int) $stmt->fetchColumn();
@@ -120,10 +120,10 @@
       $db   = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE child SET fullname = :fullname, age = :age, disease = :disease WHERE id = :id AND parent_id = :parent_id");
       $stmt->execute([
-        ':fullname'  => $fullname,
-        ':age'       => (int) $age,
-        ':disease'   => $disease ?: null,
-        ':id'        => (int) $id,
+        ':fullname' => $fullname,
+        ':age' => (int) $age,
+        ':disease' => $disease ?: null,
+        ':id' => (int) $id,
         ':parent_id' => (int) $parent_id,
       ]);
     }
@@ -135,7 +135,7 @@
      * @return void
      */
     public static function deleteChild($id, $parent_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("DELETE FROM child WHERE id = :id AND parent_id = :parent_id");
       $stmt->execute([':id' => (int) $id, ':parent_id' => (int) $parent_id]);
     }

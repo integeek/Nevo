@@ -9,7 +9,7 @@
     exit;
   }
 
-  $action    = $_GET['action'] ?? $_POST['action'] ?? '';
+  $action = $_GET['action'] ?? $_POST['action'] ?? '';
   $parent_id = (int) $_SESSION['parent']['id'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'getParent') {
