@@ -63,11 +63,12 @@
      * @param {array} $steps - Updated list of steps for routine
      * @return {void}
      */
-    public static function updateRoutine($id, $name, $xp_value, $child_id, $steps) {
+    public static function updateRoutine($id, $name, $icon, $xp_value, $child_id, $steps) {
       $db = Bdd::getInstance();
-      $stmt = $db->prepare("UPDATE routine SET name = :name, xp_value = :xp_value WHERE id = :id AND child_id = :child_id");
+      $stmt = $db->prepare("UPDATE routine SET name = :name, icon = :icon, xp_value = :xp_value WHERE id = :id AND child_id = :child_id");
       $stmt->execute([
         ':name' => $name,
+        ':icon' => $icon,
         ':xp_value' => (int) $xp_value,
         ':id' => (int) $id,
         ':child_id' => (int) $child_id,

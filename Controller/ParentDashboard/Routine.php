@@ -32,7 +32,7 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'addRoutine') {
-    if (!isset($_POST['name'], $_POST['xp_value'], $_POST['child_id'], $_POST['steps'])) {
+    if (!isset($_POST['name'], $_POST['icon'], $_POST['xp_value'], $_POST['child_id'], $_POST['steps'])) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
@@ -46,9 +46,10 @@
         exit;
       }
       $name = trim($_POST['name']);
+      $icon = trim($_POST['icon']);
       $xp = (int) $_POST['xp_value'];
       $steps = array_values(array_filter(array_map('trim', explode("\n", $_POST['steps']))));
-      $id = RoutineModel::createRoutine($name, 'icon-alarm', $xp, $child_id, $steps);
+      $id = RoutineModel::createRoutine($name, $icon, $xp, $child_id, $steps);
       echo json_encode(['success' => true, 'id' => $id]);
     } catch (\Throwable $e) {
       http_response_code(500);
@@ -58,7 +59,7 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'editRoutine') {
-    if (!isset($_POST['routine_id'], $_POST['name'], $_POST['xp_value'], $_POST['child_id'], $_POST['steps'])) {
+    if (!isset($_POST['routine_id'], $_POST['name'], $_POST['icon'], $_POST['xp_value'], $_POST['child_id'], $_POST['steps'])) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
@@ -73,9 +74,10 @@
         exit;
       }
       $name = trim($_POST['name']);
+      $icon = trim($_POST['icon']);
       $xp = (int) $_POST['xp_value'];
       $steps = array_values(array_filter(array_map('trim', explode("\n", $_POST['steps']))));
-      RoutineModel::updateRoutine($routine_id, $name, $xp, $child_id, $steps);
+      RoutineModel::updateRoutine($routine_id, $name, $icon, $xp, $child_id, $steps);
       echo json_encode(['success' => true]);
     } catch (\Throwable $e) {
       http_response_code(500);

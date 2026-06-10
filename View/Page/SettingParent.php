@@ -19,7 +19,7 @@
   <body>
     <div class="hero-bg"></div>
     <nav>
-      <a href="#" class="nav-logo">
+      <a href="ParentDashboard.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Nevo
       </a>

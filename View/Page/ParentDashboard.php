@@ -120,6 +120,25 @@
           <div class="modal-box">
             <h2>Create routine</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="routineIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#ffe082,#ffd54f)" data-icon="icon-alarm" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-alarm.svg" alt="Alarm icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-book-solo" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-book-solo.svg" alt="Book icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-pills" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-pills.svg" alt="Pills icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-sport" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-sport.svg" alt="Sport icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-drop-water" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-drop-water.svg" alt="Drop water icon" />
+                </div>
+              </div>
+              <input type="hidden" id="routineIcon" value="icon-alarm" />
               <label for="nameInput">Name</label>
               <input class="modal-input" id="nameInput" type="text" placeholder="Name" maxlength="12" />
               <label for="xpInput">Xp</label>
@@ -158,6 +177,25 @@
           <div class="modal-box">
             <h2>Edit routine</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editRoutineIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#ffe082,#ffd54f)" data-icon="icon-alarm" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-alarm.svg" alt="Alarm icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-book-solo" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-book-solo.svg" alt="Book icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-calendar" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-sport" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-sport.svg" alt="Sport icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-rocket" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-rocket.svg" alt="Rocket icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editRoutineIcon" value="icon-alarm" />
               <label for="editNameInput">Name</label>
               <input class="modal-input" id="editNameInput" type="text" placeholder="Name"/>
               <label for="editXpInput">Xp</label>

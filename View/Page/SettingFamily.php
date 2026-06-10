@@ -19,7 +19,7 @@
   <body>
     <div class="hero-bg"></div>
     <nav>
-      <a href="#" class="nav-logo">
+      <a href="ParentDashboard.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Nevo
       </a>
@@ -95,7 +95,6 @@
           </div>
         </div>
 
-        <!-- ── Medical Staff ─────────────────────────────────────── -->
         <div class="section-divider"></div>
 
         <div class="heroes-header" style="margin-top:32px">
@@ -107,7 +106,6 @@
           <div class="heroes-empty" id="staffEmptyState" style="display:none">No medical staff assigned yet.</div>
         </div>
 
-        <!-- Add staff modal -->
         <div class="modal-overlay" id="staffModalOverlay">
           <div class="modal-box">
             <h2>Add medical staff</h2>
@@ -125,7 +123,6 @@
           </div>
         </div>
 
-        <!-- Edit staff modal -->
         <div class="modal-overlay" id="editStaffModalOverlay">
           <div class="modal-box">
             <h2>Edit medical staff</h2>

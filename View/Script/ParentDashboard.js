@@ -9,6 +9,12 @@ const AVATAR_BG = {
   'icon-penguin':   'linear-gradient(135deg,#ffb74d,#e65100)',
   'icon-cat':       '#ede9fe',
   'icon-tiger':     '#fce7f3',
+  'icon-alarm':     'linear-gradient(135deg,#ffe082,#ffd54f)',
+  'icon-book-solo': 'linear-gradient(135deg,#c5cae9,#9fa8da)',
+  'icon-pills':  'linear-gradient(135deg,#b2dfdb,#80cbc4)',
+  'icon-sport':     'linear-gradient(135deg,#ffccbc,#ffab91)',
+  'drop-water':    'linear-gradient(135deg,#ce93d8,#ba68c8)',
+  'icon-trophy':    'linear-gradient(135deg,#d7ccc8,#b0bec5)',
 };
 
 const makeIcon = (name) => {
@@ -17,12 +23,24 @@ const makeIcon = (name) => {
 };
 
 function openModal(id) {
+  if (id === 'newRoutineModalOverlay') {
+    document.getElementById('routineIcon').value = 'icon-alarm';
+    document.querySelectorAll('#newRoutineModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
 
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
+}
+
+function pickRoutineIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
 }
 
 function switchTab(btn, tab) {
@@ -123,7 +141,7 @@ async function loadRoutines(childId) {
 
 function renderRoutines(routines) {
   document.getElementById('routinesList').innerHTML = routines.map(r => `
-    <div class="routine-item" data-id="${r.id}">
+    <div class="routine-item" data-id="${r.id}" data-icon="${r.icon || 'icon-alarm'}">
       <div class="routine-icon" style="background:#fff8e1">${makeIcon(r.icon || 'icon-alarm')}</div>
       <div class="routine-body">
         <div class="routine-name">${r.name}</div>
@@ -174,6 +192,7 @@ async function saveRoutine() {
   const body = new FormData();
   body.append('action', 'addRoutine');
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('routineIcon').value);
   body.append('xp_value', xp.value.trim());
   body.append('steps', stepsInput.value.trim());
   body.append('child_id', currentChildId);
@@ -183,6 +202,8 @@ async function saveRoutine() {
     const data = await res.json();
     if (data.success) {
       name.value = ''; xp.value = ''; stepsInput.value = '';
+      document.getElementById('routineIcon').value = 'icon-alarm';
+      document.querySelectorAll('#newRoutineModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
       closeModal('newRoutineModalOverlay');
       await loadRoutines(currentChildId);
       await loadStats(currentChildId);
@@ -199,6 +220,9 @@ function openEdit(card, modalId) {
     document.getElementById('editXpInput').value    = card.querySelector('.ri').textContent.replace(' XP', '');
     const steps = [...card.querySelectorAll('.substep span')].map(s => s.textContent).join('\n');
     document.getElementById('editStepsInput').value = steps;
+    const icon = card.dataset.icon || 'icon-alarm';
+    document.getElementById('editRoutineIcon').value = icon;
+    document.querySelectorAll('#editRoutineIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
   } else if (modalId === 'editRewardModalOverlay') {
     document.getElementById('editRewardNameInput').value = card.querySelector('.reward-name').textContent;
     document.getElementById('editRewardXpInput').value   = card.querySelector('.reward-pts').textContent.replace(' XP', '');
@@ -231,6 +255,7 @@ async function editRoutine() {
   body.append('action', 'editRoutine');
   body.append('routine_id', currentEditCard.dataset.id);
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editRoutineIcon').value);
   body.append('xp_value', xp.value.trim());
   body.append('steps', stepsInput.value.trim());
   body.append('child_id', currentChildId);

@@ -816,6 +816,38 @@ main {
     color: #2a9d85;
 }
 
+.avatar-picker {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.avatar-option {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.avatar-option:hover {
+    transform: scale(1.07);
+}
+
+.avatar-option img {
+  width: 34px;
+  height: 34px;
+}
+
+.avatar-option.selected-avatar {
+    border: 3px solid transparent;
+    border-color: var(--teal);
+}
+
 @media (max-width: 600px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .rewards-grid { grid-template-columns: 1fr; }
