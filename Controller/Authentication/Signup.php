@@ -44,8 +44,8 @@
       $id = ParentModel::createUser($_POST["name"], $_POST["email"], $pass);
 
       $_SESSION["parent"] = [
-        "id"       => $id,
-        "email"    => $_POST["email"],
+        "id" => $id,
+        "email" => $_POST["email"],
         "fullname" => $_POST["name"]
       ];
 

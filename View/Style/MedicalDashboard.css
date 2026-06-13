@@ -61,7 +61,7 @@ nav {
   color: #000 !important;
   text-decoration: none !important;
   display: inline-block;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
 }
 
 .nav-btn-logout:hover {

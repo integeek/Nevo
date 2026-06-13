@@ -7,10 +7,10 @@
     exit;
   }
 
-  $fullname   = trim($_POST['fullname']   ?? '');
+  $fullname = trim($_POST['fullname'] ?? '');
   $speciality = trim($_POST['speciality'] ?? '');
-  $email      = trim($_POST['email']      ?? '');
-  $password   = $_POST['password']        ?? '';
+  $email = trim($_POST['email'] ?? '');
+  $password  = $_POST['password'] ?? '';
 
   if (empty($fullname) || empty($email) || empty($password)) {
     $_SESSION['staff_error'] = 'The form is incomplete';

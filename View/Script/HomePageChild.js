@@ -50,6 +50,7 @@ async function initPage() {
  * @returns {void}
  */
 function renderChild(child) {
+  document.querySelector('.avatar-circle').innerHTML = `<img src="../Assets/img/${child.avatar}.svg"/>`;
   document.querySelector('.hero-name').textContent = `Hey, ${child.fullname} !`;
   document.querySelector('.xp-label').textContent = `${child.xp} XP`;
   document.querySelector('#statXP').textContent = child.xp;

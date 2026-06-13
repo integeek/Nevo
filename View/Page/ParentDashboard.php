@@ -188,7 +188,7 @@
               </div>
               <input type="hidden" id="rewardIcon" value="icon-star" />
               <label for="nameRewardInput">Name</label>
-              <input class="modal-input" id="nameRewardInput" type="text" placeholder="Name" maxlength="12" />
+              <input class="modal-input" id="nameRewardInput" type="text" placeholder="Name" />
               <label for="xpRewardInput">Cost in Xp</label>
               <input class="modal-input" id="xpRewardInput" type="text" placeholder="15" maxlength="4" />
               <label>Type</label>
@@ -216,14 +216,14 @@
                 <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-book-solo" onclick="pickRoutineIcon(this,'editRoutineIcon')">
                   <img src="../Assets/img/icon-book-solo.svg" alt="Book icon" />
                 </div>
-                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-calendar" onclick="pickRoutineIcon(this,'editRoutineIcon')">
-                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-pills" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-pills.svg" alt="Pills icon" />
                 </div>
                 <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-sport" onclick="pickRoutineIcon(this,'editRoutineIcon')">
                   <img src="../Assets/img/icon-sport.svg" alt="Sport icon" />
                 </div>
-                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-rocket" onclick="pickRoutineIcon(this,'editRoutineIcon')">
-                  <img src="../Assets/img/icon-rocket.svg" alt="Rocket icon" />
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-drop-water" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-drop-water.svg" alt="Drop water icon" />
                 </div>
               </div>
               <input type="hidden" id="editRoutineIcon" value="icon-alarm" />

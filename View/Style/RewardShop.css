@@ -1,292 +1,292 @@
 body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: #f5f3ee;
-    position: relative;
-    overflow-x: hidden;
-    position: relative;
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: #f5f3ee;
+  position: relative;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 170px;
-    z-index: 0;
-    background: linear-gradient(
-        135deg,
-        #c8e6c9 0%,
-        #e8f5e9 15%,
-        #fffde7 35%,
-        #fff8e1 55%,
-        #ffe0b2 75%,
-        #ffccbc 100%
-    );
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 170px;
+  z-index: 0;
+  background: linear-gradient(
+      135deg,
+      #c8e6c9 0%,
+      #e8f5e9 15%,
+      #fffde7 35%,
+      #fff8e1 55%,
+      #ffe0b2 75%,
+      #ffccbc 100%
+  );
 }
 
 .page-wrap {
-    position: relative; 
-    z-index: 5;
-    max-width: 520px; 
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: 56px 16px 48px;
+  position: relative; 
+  z-index: 5;
+  max-width: 520px; 
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 56px 16px 48px;
 }
 
 .top-nav {
-    position: absolute;
-    top: 20px;
-    left: 16px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    padding: 0;
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 0;
 }
 
 .back-btn {
-    background: none;
-    border: none;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #555;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 0;
-    transition: color 0.2s;
+  background: none;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  transition: color 0.2s;
 }
 
 .back-btn a {
-    text-decoration: none;
-    color: black;
-    border: none;
-    border-radius: 14px;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  text-decoration: none;
+  color: black;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
 }
 
 .back-btn:hover { 
-    color: #222; 
-    opacity: 0.92; 
-    transform: translateY(-1px); 
+  color: #222; 
+  opacity: 0.92; 
+  transform: translateY(-1px); 
 }
 
 .page-header {
-    text-align: center;
-    padding: 12px 16px 28px;
+  text-align: center;
+  padding: 12px 16px 28px;
 }
 
 .page-title {
-    font-size: 1.9rem;
-    font-weight: 900;
-    color: black;
-    line-height: 1.2;
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: black;
+  line-height: 1.2;
 }
 
 .page-subtitle {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 .xp-banner {
-    background: #fff;
-    border-radius: 20px;
-    padding: 18px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-    margin-bottom: 28px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  margin-bottom: 28px;
 }
 
 .xp-coin img {
-    width: 52px;
-    height: 52px;
+  width: 52px;
+  height: 52px;
 }
 
 .xp-value {
-    font-family: 'Baloo 2', cursive;
-    font-size: 28px;
-    font-weight: 800;
-    color: black;
-    line-height: 1;
+  font-family: 'Baloo 2', cursive;
+  font-size: 28px;
+  font-weight: 800;
+  color: black;
+  line-height: 1;
 }
 
 .xp-value span {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-left: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 4px;
 }
 
 .xp-bar-wrap {
-    flex: 1;
+  flex: 1;
 }
 
 .xp-progress {
-    height: 8px;
-    background: #f0ede8;
-    border-radius: 99px;
-    overflow: hidden;
-    margin-top: 6px;
+  height: 8px;
+  background: #f0ede8;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
 }
 
 .xp-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ffd700, #f5a623);
-    border-radius: 99px;
-    transition: width 0.6s ease;
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700, #f5a623);
+  border-radius: 99px;
+  transition: width 0.6s ease;
 }
 
 .reward-card {
-    background: white;
-    border-radius: 20px;
-    padding: 24px 20px 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 2px solid transparent;
-    height: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 24px 20px 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+  height: 100%;
 }
 
 .reward-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 
 .reward-card.locked {
-    opacity: 0.75;
+  opacity: 0.75;
 }
 
 .reward-emoji img {
-    height: 56px;
-    width: 56px;
+  height: 56px;
+  width: 56px;
 }
 
 .reward-name {
-    font-family: 'Baloo 2', cursive;
-    font-size: 16px;
-    font-weight: 700;
-    color: black;
+  font-family: 'Baloo 2', cursive;
+  font-size: 16px;
+  font-weight: 700;
+  color: black;
 }
 
 .reward-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 99px;
-    padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 3px 10px;
 }
 
 .reward-tag img {
-    height: 18px;
-    width: 18px;
+  height: 18px;
+  width: 18px;
 }
 
 .tag-inapp {
-    background: #f0eafa;
-    color: #7c3aed;
+  background: #f0eafa;
+  color: #7c3aed;
 }
 
 .tag-real {
-    background: #fff3e0;
-    color: #c2410c;
+  background: #fff3e0;
+  color: #c2410c;
 }
 
 .reward-btn {
-    width: 100%;
-    border: none;
-    border-radius: 14px;
-    padding: 12px;
-    font-family: 'Baloo 2', cursive;
-    font-size: 15px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    margin-top: auto;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: auto;
 }
 
 .reward-btn.unlocked {
-    background: linear-gradient(135deg, #ffd700, #f5a623);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(245,166,35,0.35);
+  background: linear-gradient(135deg, #ffd700, #f5a623);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(245,166,35,0.35);
 }
 
 .reward-btn.unlocked:hover {
-    background: linear-gradient(135deg, #f5c400, #e09410);
-    transform: scale(1.02);
+  background: linear-gradient(135deg, #f5c400, #e09410);
+  transform: scale(1.02);
 }
 
 .reward-btn.locked-btn {
-    background: #f5f5f5;
-    color: #aaa;
-    cursor: not-allowed;
+  background: #f5f5f5;
+  color: #aaa;
+  cursor: not-allowed;
 }
 
 .locked-btn img {
-    width: 18px;
-    height: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .add-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 28px 20px;
-    text-align: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 
 .add-card p {
-    color: var(--text-muted);
-    font-size: 13px;
-    margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 6px;
 }
 
 .add-card strong {
-    font-family: 'Baloo 2', cursive;
-    font-size: 16px;
-    color: black;
+  font-family: 'Baloo 2', cursive;
+  font-size: 16px;
+  color: black;
 }
 
 .title-positive { 
-    font-size: .85rem; 
-    font-weight: 800; 
-    color: black; 
+  font-size: .85rem; 
+  font-weight: 800; 
+  color: black; 
 }
 
 .positive-message {
-    background: linear-gradient(
-        135deg,
-        #c8e6c9 0%,
-        #e8f5e9 15%,
-        #fffde7 35%,
-        #fff8e1 55%,
-        #ffe0b2 75%,
-        #ffccbc 100%
-    );
-    backdrop-filter: blur(12px);
-    border: 1.5px solid rgba(0, 0, 0, 0.3); 
-    border-radius: 6px;
-    padding: 18px 20px; 
-    box-shadow: 0 4px 16px rgba(0,0,0,.07);
-    margin: 16px 0; 
-    animation: fadeUp .5s .3s ease both;
-    text-align: center;
+  background: linear-gradient(
+      135deg,
+      #c8e6c9 0%,
+      #e8f5e9 15%,
+      #fffde7 35%,
+      #fff8e1 55%,
+      #ffe0b2 75%,
+      #ffccbc 100%
+  );
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(0, 0, 0, 0.3); 
+  border-radius: 6px;
+  padding: 18px 20px; 
+  box-shadow: 0 4px 16px rgba(0,0,0,.07);
+  margin: 16px 0; 
+  animation: fadeUp .5s .3s ease both;
+  text-align: center;
 }
 
 .reward-card.completed {

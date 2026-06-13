@@ -32,10 +32,10 @@
      * @return {int} child's XP or 0 if child not found
      */
     public static function getXpByChildId($child_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("SELECT xp FROM child WHERE id = :id");
       $stmt->execute([':id' => $child_id]);
-      $row  = $stmt->fetch(PDO::FETCH_ASSOC);
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
       return $row ? (int) $row['xp'] : 0;
     }
     
@@ -45,7 +45,7 @@
      * @return {array|false} associative array of child details or false if child not found
      */
     public static function getChildById($child_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("SELECT * FROM child WHERE id = :id");
       $stmt->execute([':id' => $child_id]);
       return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -94,7 +94,7 @@
      * @return {int} ID of newly created child
      */
     public static function createChild($fullname, $age, $avatar, $pin, $disease, $parent_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("INSERT INTO child (fullname, age, avatar, password, disease, xp, streak, parent_id) VALUES (:fullname, :age, :avatar, :password, :disease, 0, 0, :parent_id) RETURNING id");
       $stmt->execute([
         ':fullname' => $fullname,
@@ -117,7 +117,7 @@
      * @return void
      */
     public static function updateChild($id, $fullname, $age, $disease, $parent_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE child SET fullname = :fullname, age = :age, disease = :disease WHERE id = :id AND parent_id = :parent_id");
       $stmt->execute([
         ':fullname' => $fullname,
@@ -138,7 +138,7 @@
      * @return void
      */
     public static function updateChildWithAvatar($id, $fullname, $age, $avatar, $disease, $parent_id) {
-      $db   = Bdd::getInstance();
+      $db = Bdd::getInstance();
       $stmt = $db->prepare("UPDATE child SET fullname = :fullname, age = :age, avatar = :avatar, disease = :disease WHERE id = :id AND parent_id = :parent_id");
       $stmt->execute([
         ':fullname' => $fullname,

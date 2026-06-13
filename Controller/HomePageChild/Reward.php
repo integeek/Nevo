@@ -38,7 +38,7 @@
     }
 
     $reward_id = (int) $_POST['reward_id'];
-    $child_id  = (int) ($_SESSION["child"]["id"] ?? 1);
+    $child_id = (int) ($_SESSION["child"]["id"] ?? 1);
 
     try {
       $reward = RewardModel::getRewardById($reward_id);

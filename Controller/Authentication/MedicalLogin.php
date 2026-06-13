@@ -28,9 +28,9 @@
   }
 
   $_SESSION['staff'] = [
-    'id'         => $staff['id'],
-    'email'      => $staff['email'],
-    'fullname'   => $staff['fullname'],
+    'id' => $staff['id'],
+    'email' => $staff['email'],
+    'fullname' => $staff['fullname'],
     'speciality' => $staff['speciality'] ?? '',
   ];
 
