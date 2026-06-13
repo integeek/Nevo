@@ -26,6 +26,7 @@
         <div class="logo-icon">✦</div>
         Miro
       </a>
+      <a href="HomeLogin.php" class="nav-btn">← Home</a>
     </nav>
 
     <main>

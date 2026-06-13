@@ -23,6 +23,7 @@
         <div class="logo-icon">✦</div>
         Nevo
       </a>
+      <a href="LoginChild.php" class="nav-btn">← Home</a>
     </nav>
 
     <div class="page-wrap">
