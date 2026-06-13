@@ -79,11 +79,12 @@
      * @param {int} $child_id - ID of child for whom reward is created
      * @return {void}
      */
-    public static function updateReward($id, $name, $xp_cost, $type, $child_id) {
+    public static function updateReward($id, $name, $icon, $xp_cost, $type, $child_id) {
       $db   = Bdd::getInstance();
-      $stmt = $db->prepare("UPDATE reward SET name = :name, xp_cost = :xp_cost, type = :type WHERE id = :id AND child_id = :child_id");
+      $stmt = $db->prepare("UPDATE reward SET name = :name, icon = :icon, xp_cost = :xp_cost, type = :type WHERE id = :id AND child_id = :child_id");
       $stmt->execute([
         ':name' => $name,
+        ':icon' => $icon,
         ':xp_cost' => (int) $xp_cost,
         ':type' => $type,
         ':id' => (int) $id,

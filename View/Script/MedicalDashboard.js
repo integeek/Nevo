@@ -37,12 +37,13 @@ function renderPatients(patients) {
   }
 
   list.innerHTML = patients.map(p => {
+    console.log(p)
     const bg = AVATAR_BG[p.avatar] || 'linear-gradient(135deg,#c084fc,#7c3aed)';
     const disease = p.disease ? `<span class="badge" style="background:#dbeafe;color:#1d4ed8">${p.disease}</span>` : '';
     return `
       <div class="patient-row" onclick="window.location='PatientDetail.php?child_id=${p.id}'">
         <div class="patient-avatar" style="background:${bg}">
-          <img src="../Assets/img/${p.avatar || 'icon-superhero'}.svg" alt="avatar" style="width:26px;height:26px;">
+          <img src="../Assets/img/${p.avatar}.svg" alt="avatar" style="width:26px;height:26px;">
         </div>
         <div class="patient-info">
           <div class="patient-name-line">

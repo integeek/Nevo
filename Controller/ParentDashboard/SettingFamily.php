@@ -51,7 +51,7 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'editChild') {
-    if (!isset($_POST['child_id'], $_POST['fullname'], $_POST['age'])) {
+    if (!isset($_POST['child_id'], $_POST['fullname'], $_POST['age'], $_POST['avatar'])) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
@@ -59,6 +59,7 @@
     $child_id = (int) $_POST['child_id'];
     $fullname = trim($_POST['fullname']);
     $age = (int) $_POST['age'];
+    $avatar = trim($_POST['avatar']);
     $disease = trim($_POST['disease'] ?? '');
     if (empty($fullname) || $age <= 0) {
       http_response_code(400);
@@ -66,7 +67,7 @@
       exit;
     }
     try {
-      ChildModel::updateChild($child_id, $fullname, $age, $disease, $parent_id);
+      ChildModel::updateChildWithAvatar($child_id, $fullname, $age, $avatar, $disease, $parent_id);
       echo json_encode(['success' => true]);
     } catch (PDOException $e) {
       http_response_code(500);

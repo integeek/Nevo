@@ -9,6 +9,12 @@ const AVATAR_BG = {
   'icon-penguin':   'linear-gradient(135deg,#ffb74d,#e65100)',
   'icon-cat':       '#ede9fe',
   'icon-tiger':     '#fce7f3',
+  'icon-alarm':     'linear-gradient(135deg,#ffe082,#ffd54f)',
+  'icon-book-solo': 'linear-gradient(135deg,#c5cae9,#9fa8da)',
+  'icon-pills':  'linear-gradient(135deg,#b2dfdb,#80cbc4)',
+  'icon-sport':     'linear-gradient(135deg,#ffccbc,#ffab91)',
+  'drop-water':    'linear-gradient(135deg,#ce93d8,#ba68c8)',
+  'icon-trophy':    'linear-gradient(135deg,#d7ccc8,#b0bec5)',
 };
 
 const makeIcon = (name) => {
@@ -17,12 +23,40 @@ const makeIcon = (name) => {
 };
 
 function openModal(id) {
+  if (id === 'newRoutineModalOverlay') {
+    document.getElementById('routineIcon').value = 'icon-alarm';
+    document.querySelectorAll('#newRoutineModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
+  if (id === 'newRewardModalOverlay') {
+    document.getElementById('rewardIcon').value = 'icon-star';
+    document.querySelectorAll('#newRewardModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
+  if (id === 'newQuestModalOverlay') {
+    document.getElementById('questIcon').value = 'icon-star';
+    document.querySelectorAll('#newQuestModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
 
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
+}
+
+function pickRoutineIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
+}
+
+function pickRewardIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
 }
 
 function switchTab(btn, tab) {
@@ -84,6 +118,7 @@ async function switchChild(childId) {
     loadStats(childId),
     loadRoutines(childId),
     loadRewards(childId),
+    loadQuests(childId),
     loadFeelings(childId),
     loadAnalytics(childId),
   ]);
@@ -123,7 +158,7 @@ async function loadRoutines(childId) {
 
 function renderRoutines(routines) {
   document.getElementById('routinesList').innerHTML = routines.map(r => `
-    <div class="routine-item" data-id="${r.id}">
+    <div class="routine-item" data-id="${r.id}" data-icon="${r.icon || 'icon-alarm'}">
       <div class="routine-icon" style="background:#fff8e1">${makeIcon(r.icon || 'icon-alarm')}</div>
       <div class="routine-body">
         <div class="routine-name">${r.name}</div>
@@ -174,6 +209,7 @@ async function saveRoutine() {
   const body = new FormData();
   body.append('action', 'addRoutine');
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('routineIcon').value);
   body.append('xp_value', xp.value.trim());
   body.append('steps', stepsInput.value.trim());
   body.append('child_id', currentChildId);
@@ -183,6 +219,8 @@ async function saveRoutine() {
     const data = await res.json();
     if (data.success) {
       name.value = ''; xp.value = ''; stepsInput.value = '';
+      document.getElementById('routineIcon').value = 'icon-alarm';
+      document.querySelectorAll('#newRoutineModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
       closeModal('newRoutineModalOverlay');
       await loadRoutines(currentChildId);
       await loadStats(currentChildId);
@@ -199,12 +237,25 @@ function openEdit(card, modalId) {
     document.getElementById('editXpInput').value    = card.querySelector('.ri').textContent.replace(' XP', '');
     const steps = [...card.querySelectorAll('.substep span')].map(s => s.textContent).join('\n');
     document.getElementById('editStepsInput').value = steps;
+    const icon = card.dataset.icon || 'icon-alarm';
+    document.getElementById('editRoutineIcon').value = icon;
+    document.querySelectorAll('#editRoutineIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
   } else if (modalId === 'editRewardModalOverlay') {
     document.getElementById('editRewardNameInput').value = card.querySelector('.reward-name').textContent;
     document.getElementById('editRewardXpInput').value   = card.querySelector('.reward-pts').textContent.replace(' XP', '');
     const cardType = card.dataset.type || 'out_app';
     document.getElementById('editRewardType').value = cardType;
     document.querySelectorAll('#editRewardModalOverlay .type-btn').forEach(b => b.classList.toggle('active', b.dataset.value === cardType));
+    const icon = card.dataset.icon || 'icon-star';
+    document.getElementById('editRewardIcon').value = icon;
+    document.querySelectorAll('#editRewardIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
+  } else if (modalId === 'editQuestModalOverlay') {
+    document.getElementById('editQuestNameInput').value = card.querySelector('.quest-name').textContent;
+    document.getElementById('editQuestXpInput').value = card.querySelector('.quest-xp').textContent.replace(' XP', '');
+    const meta = card.querySelector('.quest-meta').textContent;
+    const icon = card.dataset.icon || 'icon-star';
+    document.getElementById('editQuestIcon').value = icon;
+    document.querySelectorAll('#editQuestIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
   }
   openModal(modalId);
 }
@@ -231,6 +282,7 @@ async function editRoutine() {
   body.append('action', 'editRoutine');
   body.append('routine_id', currentEditCard.dataset.id);
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editRoutineIcon').value);
   body.append('xp_value', xp.value.trim());
   body.append('steps', stepsInput.value.trim());
   body.append('child_id', currentChildId);
@@ -286,7 +338,7 @@ async function loadRewards(childId) {
 
 function renderRewards(rewards) {
   document.getElementById('rewardsList').innerHTML = rewards.map(r => `
-    <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}">
+    <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}" data-icon="${r.icon || 'icon-star'}">
       <div class="reward-icon">${makeIcon(r.icon || 'icon-star')}</div>
       <div class="reward-info">
         <div class="reward-name">${r.name}</div>
@@ -330,6 +382,7 @@ async function saveReward() {
   const body = new FormData();
   body.append('action', 'addReward');
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('rewardIcon').value);
   body.append('xp_cost', xp.value.trim());
   body.append('type', type);
   body.append('child_id', currentChildId);
@@ -340,6 +393,8 @@ async function saveReward() {
     if (data.success) {
       name.value = ''; xp.value = '';
       document.getElementById('rewardType').value = 'out_app';
+      document.getElementById('rewardIcon').value = 'icon-star';
+      document.querySelectorAll('#newRewardModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
       document.querySelectorAll('#newRewardModalOverlay .type-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
       closeModal('newRewardModalOverlay');
       await loadRewards(currentChildId);
@@ -367,6 +422,7 @@ async function editReward() {
   body.append('action', 'editReward');
   body.append('reward_id', currentEditCard.dataset.id);
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editRewardIcon').value);
   body.append('xp_cost', xp.value.trim());
   body.append('type', type);
   body.append('child_id', currentChildId);
@@ -405,6 +461,139 @@ async function confirmDeleteReward(card) {
   }
 }
 
+async function loadQuests(childId) {
+  try {
+    const res = await fetch(`../../Controller/ParentDashboard/Quest.php?action=getQuests&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) {
+      return;
+    }
+    renderQuests(data.quests);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderQuests(quests) {
+  document.getElementById('questsList').innerHTML = quests.map(q => `
+    <div class="quest-item" data-id="${q.id}" data-icon="${q.icon || 'icon-star'}">
+      <div class="quest-icon">${makeIcon(q.icon || 'icon-star')}</div>
+      <div class="quest-body">
+        <div class="quest-name">${q.name}</div>
+        <div class="quest-meta">
+          <span class="quest-xp">${q.xp_value} XP</span>
+        </div>
+      </div>
+      <div class="quest-actions">
+        <button class="ibt" onclick="openEdit(this.closest('.quest-item'), 'editQuestModalOverlay')">
+          <img src="../Assets/img/icon-edit.svg" alt="Edit" />
+        </button>
+        <button class="ibt del" onclick="confirmDeleteQuest(this.closest('.quest-item'))">
+          <img src="../Assets/img/icon-delete.svg" alt="Delete" />
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function pickQuestIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
+}
+
+async function saveQuest() {
+  const name = document.getElementById('questNameInput');
+  const xp = document.getElementById('questXpInput');
+
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor = '#e57373'; 
+    return; 
+  }
+
+  const body = new FormData();
+  body.append('action', 'addQuest');
+  body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('questIcon').value);
+  body.append('xp_value', xp.value.trim());
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      name.value = ''; xp.value = '';
+      document.getElementById('questIcon').value = 'icon-star';
+      document.querySelectorAll('#newQuestModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+      closeModal('newQuestModalOverlay');
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function editQuest() {
+  const name = document.getElementById('editQuestNameInput');
+  const xp = document.getElementById('editQuestXpInput');
+
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor = '#e57373'; 
+    return; 
+  }
+
+  const body = new FormData();
+  body.append('action', 'editQuest');
+  body.append('quest_id', currentEditCard.dataset.id);
+  body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editQuestIcon').value);
+  body.append('xp_value', xp.value.trim());
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('editQuestModalOverlay');
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function confirmDeleteQuest(card) {
+  const name = card.querySelector('.quest-name').textContent;
+  if (!confirm(`Do you really want to delete the quest "${name}"?`)) {
+    return;
+  }
+
+  const body = new FormData();
+  body.append('action', 'deleteQuest');
+  body.append('quest_id', card.dataset.id);
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 async function loadFeelings(childId) {
   try {
     const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getFeelings&child_id=${childId}`);
@@ -425,8 +614,7 @@ function renderFeelings(feelings) {
     <div class="feeling-row">
       <img src="../Assets/img/${f.emoji}.svg" alt="${f.emoji}" style="width:32px;height:32px;flex-shrink:0;">
       <div class="fbody">
-        <div class="ftag">${f.emoji.replace('icon-', '')}</div>
-        <div class="ftext">${f.text || '—'}</div>
+        <div class="ftext">${f.text || ''}</div>
         <div class="ftime">${formatDate(f.created_at)}</div>
       </div>
     </div>
@@ -519,6 +707,25 @@ function formatDate(dateStr) {
   }
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
+
+window.pickRoutineIcon = pickRoutineIcon;
+window.pickRewardIcon = pickRewardIcon;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.switchTab = switchTab;
+window.toggleSteps = toggleSteps;
+window.openEdit = openEdit;
+window.saveRoutine = saveRoutine;
+window.editRoutine = editRoutine;
+window.confirmDeleteRoutine = confirmDeleteRoutine;
+window.selectRewardType = selectRewardType;
+window.saveReward = saveReward;
+window.editReward = editReward;
+window.confirmDeleteReward = confirmDeleteReward;
+window.pickQuestIcon = pickQuestIcon;
+window.saveQuest = saveQuest;
+window.editQuest = editQuest;
+window.confirmDeleteQuest = confirmDeleteQuest;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-input').forEach(field => {

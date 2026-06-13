@@ -19,7 +19,7 @@
   <body>
     <div class="hero-bg"></div>
     <nav>
-      <a href="#" class="nav-logo">
+      <a href="ParentDashboard.php" class="nav-logo">
         <div class="logo-icon">✦</div>
         Nevo
       </a>
@@ -95,7 +95,6 @@
           </div>
         </div>
 
-        <!-- ── Medical Staff ─────────────────────────────────────── -->
         <div class="section-divider"></div>
 
         <div class="heroes-header" style="margin-top:32px">
@@ -107,7 +106,6 @@
           <div class="heroes-empty" id="staffEmptyState" style="display:none">No medical staff assigned yet.</div>
         </div>
 
-        <!-- Add staff modal -->
         <div class="modal-overlay" id="staffModalOverlay">
           <div class="modal-box">
             <h2>Add medical staff</h2>
@@ -125,7 +123,6 @@
           </div>
         </div>
 
-        <!-- Edit staff modal -->
         <div class="modal-overlay" id="editStaffModalOverlay">
           <div class="modal-box">
             <h2>Edit medical staff</h2>
@@ -145,6 +142,25 @@
           <div class="modal-box">
             <h2>Edit hero</h2>
             <div>
+              <label for="editAvatarPicker">Avatar</label>
+              <div class="avatar-picker" id="editAvatarPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#f4845f,#e8623a)" data-avatar="icon-superhero" onclick="pickEditAvatar(this)">
+                  <img src="../Assets/img/icon-superhero.svg" alt="superhero icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#64b5f6,#1976d2)" data-avatar="icon-butterfly" onclick="pickEditAvatar(this)">
+                  <img src="../Assets/img/icon-butterfly.svg" alt="butterfly icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#81c784,#388e3c)" data-avatar="icon-unicorn" onclick="pickEditAvatar(this)">
+                  <img src="../Assets/img/icon-unicorn.svg" alt="unicorn icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#f06292,#c2185b)" data-avatar="icon-fish" onclick="pickEditAvatar(this)">
+                  <img src="../Assets/img/icon-fish.svg" alt="fish icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffb74d,#e65100)" data-avatar="icon-penguin" onclick="pickEditAvatar(this)">
+                  <img src="../Assets/img/icon-penguin.svg" alt="penguin icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editAvatarInput" value="icon-superhero" />
               <label for="editNameInput">Name</label>
               <input class="modal-input" id="editNameInput" type="text" placeholder="Name" maxlength="12" />
               <label for="editAgeInput">Age</label>

@@ -48,12 +48,33 @@ body::before {
 }
 
 nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 18px 28px;
-    z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 18px 28px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-btn {
+  background: #3dbfa0;
+  border: none;
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff !important;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.nav-btn:hover {
+  opacity: 0.85;
 }
 
 .main-content {

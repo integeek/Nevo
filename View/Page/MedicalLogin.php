@@ -12,7 +12,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Medical Login — Miro</title>
+    <title>Medical Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="../Style/Variables.css">
@@ -26,6 +26,7 @@
         <div class="logo-icon">✦</div>
         Miro
       </a>
+      <a href="HomeLogin.php" class="nav-btn">← Home</a>
     </nav>
 
     <main>

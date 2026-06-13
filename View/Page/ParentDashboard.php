@@ -73,6 +73,10 @@
             <img src="../Assets/img/icon-gift2.svg" alt="Gift icon">
             Rewards
           </button>
+          <button class="tab-btn" onclick="switchTab(this,'quests')">
+            <img src="../Assets/img/icon-target.svg" alt="Quest icon">
+            Quests
+          </button>
           <button class="tab-btn" onclick="switchTab(this,'feelings')">
             <img src="../Assets/img/icon-heart.svg" alt="Heart icon">
             Feelings
@@ -99,6 +103,14 @@
           <div class="rewards-grid" id="rewardsList"></div>
         </div>
 
+        <div class="tab-panel" id="tab-quests">
+          <div class="panel-header">
+            <div class="panel-title">Quests</div>
+            <button class="add-btn" onclick="openModal('newQuestModalOverlay')">+ &nbsp; &nbsp; Add Quest</button>
+          </div>
+          <div id="questsList"></div>
+        </div>
+
         <div class="tab-panel" id="tab-feelings">
           <div class="panel-header"><div class="panel-title">Recent Feelings</div></div>
           <div id="feelingsList"></div>
@@ -120,6 +132,25 @@
           <div class="modal-box">
             <h2>Create routine</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="routineIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#ffe082,#ffd54f)" data-icon="icon-alarm" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-alarm.svg" alt="Alarm icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-book-solo" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-book-solo.svg" alt="Book icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-pills" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-pills.svg" alt="Pills icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-sport" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-sport.svg" alt="Sport icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-drop-water" onclick="pickRoutineIcon(this,'routineIcon')">
+                  <img src="../Assets/img/icon-drop-water.svg" alt="Drop water icon" />
+                </div>
+              </div>
+              <input type="hidden" id="routineIcon" value="icon-alarm" />
               <label for="nameInput">Name</label>
               <input class="modal-input" id="nameInput" type="text" placeholder="Name" maxlength="12" />
               <label for="xpInput">Xp</label>
@@ -137,14 +168,33 @@
           <div class="modal-box">
             <h2>Create reward</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="rewardIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-gift" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-gift.svg" alt="Gift icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-chocolate" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-chocolate.svg" alt="Chocolate icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-movie" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-movie.svg" alt="Movie icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-slide" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-slide.svg" alt="Slide icon" />
+                </div>
+              </div>
+              <input type="hidden" id="rewardIcon" value="icon-star" />
               <label for="nameRewardInput">Name</label>
               <input class="modal-input" id="nameRewardInput" type="text" placeholder="Name" maxlength="12" />
               <label for="xpRewardInput">Cost in Xp</label>
               <input class="modal-input" id="xpRewardInput" type="text" placeholder="15" maxlength="4" />
               <label>Type</label>
               <div class="type-toggle">
-                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'rewardType')">🎁 Real reward</button>
-                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'rewardType')">⭐ In-app</button>
+                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'rewardType')"><img src="../Assets/img/icon-gift.svg" alt=""> Real reward</button>
+                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'rewardType')"><img src="../Assets/img/icon-star.svg" alt=""> In-app</button>
               </div>
               <input type="hidden" id="rewardType" value="out_app" />
             </div>
@@ -158,6 +208,25 @@
           <div class="modal-box">
             <h2>Edit routine</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editRoutineIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#ffe082,#ffd54f)" data-icon="icon-alarm" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-alarm.svg" alt="Alarm icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-book-solo" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-book-solo.svg" alt="Book icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-calendar" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-sport" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-sport.svg" alt="Sport icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-rocket" onclick="pickRoutineIcon(this,'editRoutineIcon')">
+                  <img src="../Assets/img/icon-rocket.svg" alt="Rocket icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editRoutineIcon" value="icon-alarm" />
               <label for="editNameInput">Name</label>
               <input class="modal-input" id="editNameInput" type="text" placeholder="Name"/>
               <label for="editXpInput">Xp</label>
@@ -175,6 +244,25 @@
           <div class="modal-box">
             <h2>Edit reward</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editRewardIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-gift" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-gift.svg" alt="Gift icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-chocolate" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-chocolate.svg" alt="Chocolate icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-movie" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-movie.svg" alt="Movie icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-slide" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-slide.svg" alt="Slide icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editRewardIcon" value="icon-star" />
               <label for="editRewardNameInput">Name</label>
               <input class="modal-input" id="editRewardNameInput" type="text" placeholder="Name" />
               <label for="editRewardXpInput">Cost in Xp</label>
@@ -189,6 +277,69 @@
             <button class="btn-add" onclick="editReward()">Save</button>
             <br />
             <button class="btn-cancel" onclick="closeModal('editRewardModalOverlay')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="modal-overlay" id="newQuestModalOverlay">
+          <div class="modal-box">
+            <h2>Create quest</h2>
+            <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="questIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-calendar" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-fire" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-done" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-done.svg" alt="Done icon" />
+                </div>
+              </div>
+              <input type="hidden" id="questIcon" value="icon-star" />
+              <label for="questNameInput">Name</label>
+              <input class="modal-input" id="questNameInput" type="text" placeholder="Quest name" maxlength="50" />
+              <label for="questXpInput">XP Reward</label>
+              <input class="modal-input" id="questXpInput" type="text" placeholder="100" maxlength="4" />
+    
+            </div>
+            <button class="btn-add" onclick="saveQuest()">Create</button>
+            <br />
+            <button class="btn-cancel" onclick="closeModal('newQuestModalOverlay')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="modal-overlay" id="editQuestModalOverlay">
+          <div class="modal-box">
+            <h2>Edit quest</h2>
+            <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editQuestIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-calendar" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-fire" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-done" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-done.svg" alt="Done icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editQuestIcon" value="icon-star" />
+              <label for="editQuestNameInput">Name</label>
+              <input class="modal-input" id="editQuestNameInput" type="text" placeholder="Quest name" maxlength="50" />
+              <label for="editQuestXpInput">XP Reward</label>
+              <input class="modal-input" id="editQuestXpInput" type="text" placeholder="100" maxlength="4" />
+            </div>
+            <button class="btn-add" onclick="editQuest()">Save</button>
+            <br />
+            <button class="btn-cancel" onclick="closeModal('editQuestModalOverlay')">Cancel</button>
           </div>
         </div>
       </div>

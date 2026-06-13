@@ -127,7 +127,28 @@
         ':parent_id' => (int) $parent_id,
       ]);
     }
-
+    /**
+     * Updates child profile with avatar in database
+     * @param {int} $id - ID of child to update
+     * @param {string} $fullname - Updated name of child
+     * @param {int} $age - Updated age of child
+     * @param {string} $avatar - Updated avatar of child
+     * @param {string|null} $disease - Updated disease information of child
+     * @param {int} $parent_id - ID of parent (used to make sure they can only edit their own child)
+     * @return void
+     */
+    public static function updateChildWithAvatar($id, $fullname, $age, $avatar, $disease, $parent_id) {
+      $db   = Bdd::getInstance();
+      $stmt = $db->prepare("UPDATE child SET fullname = :fullname, age = :age, avatar = :avatar, disease = :disease WHERE id = :id AND parent_id = :parent_id");
+      $stmt->execute([
+        ':fullname' => $fullname,
+        ':age' => (int) $age,
+        ':avatar' => $avatar,
+        ':disease' => $disease ?: null,
+        ':id' => (int) $id,
+        ':parent_id' => (int) $parent_id,
+      ]);
+    }
     /**
      * Deletes child profile from database
      * @param {int} $id - ID of child to delete
