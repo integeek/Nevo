@@ -31,6 +31,10 @@ function openModal(id) {
     document.getElementById('rewardIcon').value = 'icon-star';
     document.querySelectorAll('#newRewardModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
   }
+  if (id === 'newQuestModalOverlay') {
+    document.getElementById('questIcon').value = 'icon-star';
+    document.querySelectorAll('#newQuestModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
@@ -114,6 +118,7 @@ async function switchChild(childId) {
     loadStats(childId),
     loadRoutines(childId),
     loadRewards(childId),
+    loadQuests(childId),
     loadFeelings(childId),
     loadAnalytics(childId),
   ]);
@@ -244,6 +249,13 @@ function openEdit(card, modalId) {
     const icon = card.dataset.icon || 'icon-star';
     document.getElementById('editRewardIcon').value = icon;
     document.querySelectorAll('#editRewardIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
+  } else if (modalId === 'editQuestModalOverlay') {
+    document.getElementById('editQuestNameInput').value = card.querySelector('.quest-name').textContent;
+    document.getElementById('editQuestXpInput').value = card.querySelector('.quest-xp').textContent.replace(' XP', '');
+    const meta = card.querySelector('.quest-meta').textContent;
+    const icon = card.dataset.icon || 'icon-star';
+    document.getElementById('editQuestIcon').value = icon;
+    document.querySelectorAll('#editQuestIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
   }
   openModal(modalId);
 }
@@ -449,6 +461,139 @@ async function confirmDeleteReward(card) {
   }
 }
 
+async function loadQuests(childId) {
+  try {
+    const res = await fetch(`../../Controller/ParentDashboard/Quest.php?action=getQuests&child_id=${childId}`);
+    const data = await res.json();
+    if (!data.success) {
+      return;
+    }
+    renderQuests(data.quests);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderQuests(quests) {
+  document.getElementById('questsList').innerHTML = quests.map(q => `
+    <div class="quest-item" data-id="${q.id}" data-icon="${q.icon || 'icon-star'}">
+      <div class="quest-icon">${makeIcon(q.icon || 'icon-star')}</div>
+      <div class="quest-body">
+        <div class="quest-name">${q.name}</div>
+        <div class="quest-meta">
+          <span class="quest-xp">${q.xp_value} XP</span>
+        </div>
+      </div>
+      <div class="quest-actions">
+        <button class="ibt" onclick="openEdit(this.closest('.quest-item'), 'editQuestModalOverlay')">
+          <img src="../Assets/img/icon-edit.svg" alt="Edit" />
+        </button>
+        <button class="ibt del" onclick="confirmDeleteQuest(this.closest('.quest-item'))">
+          <img src="../Assets/img/icon-delete.svg" alt="Delete" />
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function pickQuestIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
+}
+
+async function saveQuest() {
+  const name = document.getElementById('questNameInput');
+  const xp = document.getElementById('questXpInput');
+
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor = '#e57373'; 
+    return; 
+  }
+
+  const body = new FormData();
+  body.append('action', 'addQuest');
+  body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('questIcon').value);
+  body.append('xp_value', xp.value.trim());
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      name.value = ''; xp.value = '';
+      document.getElementById('questIcon').value = 'icon-star';
+      document.querySelectorAll('#newQuestModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+      closeModal('newQuestModalOverlay');
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function editQuest() {
+  const name = document.getElementById('editQuestNameInput');
+  const xp = document.getElementById('editQuestXpInput');
+
+  if (!name.value.trim()) { 
+    name.style.borderColor = '#e57373'; 
+    return; 
+  }
+  if (!xp.value.trim() || isNaN(xp.value.trim())) { 
+    xp.style.borderColor = '#e57373'; 
+    return; 
+  }
+
+  const body = new FormData();
+  body.append('action', 'editQuest');
+  body.append('quest_id', currentEditCard.dataset.id);
+  body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editQuestIcon').value);
+  body.append('xp_value', xp.value.trim());
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('editQuestModalOverlay');
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function confirmDeleteQuest(card) {
+  const name = card.querySelector('.quest-name').textContent;
+  if (!confirm(`Do you really want to delete the quest "${name}"?`)) {
+    return;
+  }
+
+  const body = new FormData();
+  body.append('action', 'deleteQuest');
+  body.append('quest_id', card.dataset.id);
+  body.append('child_id', currentChildId);
+
+  try {
+    const res = await fetch('../../Controller/ParentDashboard/Quest.php', { method: 'POST', body });
+    const data = await res.json();
+    if (data.success) {
+      await loadQuests(currentChildId);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 async function loadFeelings(childId) {
   try {
     const res  = await fetch(`../../Controller/ParentDashboard/ParentDashboard.php?action=getFeelings&child_id=${childId}`);
@@ -577,6 +722,10 @@ window.selectRewardType = selectRewardType;
 window.saveReward = saveReward;
 window.editReward = editReward;
 window.confirmDeleteReward = confirmDeleteReward;
+window.pickQuestIcon = pickQuestIcon;
+window.saveQuest = saveQuest;
+window.editQuest = editQuest;
+window.confirmDeleteQuest = confirmDeleteQuest;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-input').forEach(field => {

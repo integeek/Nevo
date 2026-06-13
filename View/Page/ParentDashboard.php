@@ -73,6 +73,10 @@
             <img src="../Assets/img/icon-gift2.svg" alt="Gift icon">
             Rewards
           </button>
+          <button class="tab-btn" onclick="switchTab(this,'quests')">
+            <img src="../Assets/img/icon-target.svg" alt="Quest icon">
+            Quests
+          </button>
           <button class="tab-btn" onclick="switchTab(this,'feelings')">
             <img src="../Assets/img/icon-heart.svg" alt="Heart icon">
             Feelings
@@ -97,6 +101,14 @@
             <button class="add-btn" onclick="openModal('newRewardModalOverlay')">+ &nbsp; &nbsp; Add Reward</button>
           </div>
           <div class="rewards-grid" id="rewardsList"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-quests">
+          <div class="panel-header">
+            <div class="panel-title">Quests</div>
+            <button class="add-btn" onclick="openModal('newQuestModalOverlay')">+ &nbsp; &nbsp; Add Quest</button>
+          </div>
+          <div id="questsList"></div>
         </div>
 
         <div class="tab-panel" id="tab-feelings">
@@ -265,6 +277,69 @@
             <button class="btn-add" onclick="editReward()">Save</button>
             <br />
             <button class="btn-cancel" onclick="closeModal('editRewardModalOverlay')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="modal-overlay" id="newQuestModalOverlay">
+          <div class="modal-box">
+            <h2>Create quest</h2>
+            <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="questIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-calendar" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-fire" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-done" onclick="pickQuestIcon(this,'questIcon')">
+                  <img src="../Assets/img/icon-done.svg" alt="Done icon" />
+                </div>
+              </div>
+              <input type="hidden" id="questIcon" value="icon-star" />
+              <label for="questNameInput">Name</label>
+              <input class="modal-input" id="questNameInput" type="text" placeholder="Quest name" maxlength="50" />
+              <label for="questXpInput">XP Reward</label>
+              <input class="modal-input" id="questXpInput" type="text" placeholder="100" maxlength="4" />
+    
+            </div>
+            <button class="btn-add" onclick="saveQuest()">Create</button>
+            <br />
+            <button class="btn-cancel" onclick="closeModal('newQuestModalOverlay')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="modal-overlay" id="editQuestModalOverlay">
+          <div class="modal-box">
+            <h2>Edit quest</h2>
+            <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editQuestIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-calendar" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-calendar.svg" alt="Calendar icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-fire" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-fire.svg" alt="Fire icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-done" onclick="pickQuestIcon(this,'editQuestIcon')">
+                  <img src="../Assets/img/icon-done.svg" alt="Done icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editQuestIcon" value="icon-star" />
+              <label for="editQuestNameInput">Name</label>
+              <input class="modal-input" id="editQuestNameInput" type="text" placeholder="Quest name" maxlength="50" />
+              <label for="editQuestXpInput">XP Reward</label>
+              <input class="modal-input" id="editQuestXpInput" type="text" placeholder="100" maxlength="4" />
+            </div>
+            <button class="btn-add" onclick="editQuest()">Save</button>
+            <br />
+            <button class="btn-cancel" onclick="closeModal('editQuestModalOverlay')">Cancel</button>
           </div>
         </div>
       </div>
