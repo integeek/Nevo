@@ -32,7 +32,7 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'addReward') {
-    if (!isset($_POST['name'], $_POST['xp_cost'], $_POST['child_id'])) {
+    if (!isset($_POST['name'], $_POST['icon'], $_POST['xp_cost'], $_POST['child_id'])) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
@@ -46,9 +46,10 @@
         exit;
       }
       $name = trim($_POST['name']);
+      $icon = trim($_POST['icon']) ?: 'icon-star';
       $xp = (int) $_POST['xp_cost'];
       $type = in_array($_POST['type'] ?? '', ['in_app', 'out_app']) ? $_POST['type'] : 'out_app';
-      $id = RewardModel::createReward($name, 'icon-star', $xp, $type, $child_id, $parent_id);
+      $id = RewardModel::createReward($name, $icon, $xp, $type, $child_id, $parent_id);
       echo json_encode(['success' => true, 'id' => $id]);
     } catch (PDOException $e) {
       http_response_code(500);
@@ -58,7 +59,7 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'editReward') {
-    if (!isset($_POST['reward_id'], $_POST['name'], $_POST['xp_cost'], $_POST['child_id'])) {
+    if (!isset($_POST['reward_id'], $_POST['name'], $_POST['icon'], $_POST['xp_cost'], $_POST['child_id'])) {
       http_response_code(400);
       echo json_encode(['success' => false, 'message' => 'Missing data']);
       exit;
@@ -73,9 +74,10 @@
         exit;
       }
       $name = trim($_POST['name']);
+      $icon = trim($_POST['icon']) ?: 'icon-star';
       $xp = (int) $_POST['xp_cost'];
       $type = in_array($_POST['type'] ?? '', ['in_app', 'out_app']) ? $_POST['type'] : 'out_app';
-      RewardModel::updateReward($reward_id, $name, $xp, $type, $child_id);
+      RewardModel::updateReward($reward_id, $name, $icon, $xp, $type, $child_id);
       echo json_encode(['success' => true]);
     } catch (PDOException $e) {
       http_response_code(500);

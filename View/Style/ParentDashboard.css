@@ -555,13 +555,6 @@ main {
     flex: 1; 
 }
 
-.ftag  { 
-    font-size: 0.7rem; 
-    color: var(--teal); 
-    font-weight: 700; 
-    margin-bottom: 2px; 
-}
-
 .ftext { 
     font-size: 0.85rem; 
     font-weight: 600; 
@@ -808,6 +801,16 @@ main {
     cursor: pointer;
     transition: all 0.15s;
     color: var(--text-muted);
+}
+
+.type-btn img {
+  height: 18px;
+  width: 18px;
+}
+
+.type-btn.active img {
+  height: 18px;
+  width: 18px;
 }
 
 .type-btn.active {

@@ -156,14 +156,33 @@
           <div class="modal-box">
             <h2>Create reward</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="rewardIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-gift" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-gift.svg" alt="Gift icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-chocolate" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-chocolate.svg" alt="Chocolate icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-movie" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-movie.svg" alt="Movie icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-slide" onclick="pickRewardIcon(this,'rewardIcon')">
+                  <img src="../Assets/img/icon-slide.svg" alt="Slide icon" />
+                </div>
+              </div>
+              <input type="hidden" id="rewardIcon" value="icon-star" />
               <label for="nameRewardInput">Name</label>
               <input class="modal-input" id="nameRewardInput" type="text" placeholder="Name" maxlength="12" />
               <label for="xpRewardInput">Cost in Xp</label>
               <input class="modal-input" id="xpRewardInput" type="text" placeholder="15" maxlength="4" />
               <label>Type</label>
               <div class="type-toggle">
-                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'rewardType')">🎁 Real reward</button>
-                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'rewardType')">⭐ In-app</button>
+                <button type="button" class="type-btn active" data-value="out_app" onclick="selectRewardType(this,'rewardType')"><img src="../Assets/img/icon-gift.svg" alt=""> Real reward</button>
+                <button type="button" class="type-btn" data-value="in_app" onclick="selectRewardType(this,'rewardType')"><img src="../Assets/img/icon-star.svg" alt=""> In-app</button>
               </div>
               <input type="hidden" id="rewardType" value="out_app" />
             </div>
@@ -213,6 +232,25 @@
           <div class="modal-box">
             <h2>Edit reward</h2>
             <div>
+              <label>Icon</label>
+              <div class="avatar-picker" id="editRewardIconPicker">
+                <div class="avatar-option selected-avatar" style="background:linear-gradient(135deg,#fff9c4,#fff176)" data-icon="icon-star" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-star.svg" alt="Star icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#c5cae9,#9fa8da)" data-icon="icon-gift" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-gift.svg" alt="Gift icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#b2dfdb,#80cbc4)" data-icon="icon-chocolate" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-chocolate.svg" alt="Chocolate icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ffccbc,#ffab91)" data-icon="icon-movie" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-movie.svg" alt="Movie icon" />
+                </div>
+                <div class="avatar-option" style="background:linear-gradient(135deg,#ce93d8,#ba68c8)" data-icon="icon-slide" onclick="pickRewardIcon(this,'editRewardIcon')">
+                  <img src="../Assets/img/icon-slide.svg" alt="Slide icon" />
+                </div>
+              </div>
+              <input type="hidden" id="editRewardIcon" value="icon-star" />
               <label for="editRewardNameInput">Name</label>
               <input class="modal-input" id="editRewardNameInput" type="text" placeholder="Name" />
               <label for="editRewardXpInput">Cost in Xp</label>

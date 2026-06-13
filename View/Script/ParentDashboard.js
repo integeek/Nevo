@@ -27,6 +27,10 @@ function openModal(id) {
     document.getElementById('routineIcon').value = 'icon-alarm';
     document.querySelectorAll('#newRoutineModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
   }
+  if (id === 'newRewardModalOverlay') {
+    document.getElementById('rewardIcon').value = 'icon-star';
+    document.querySelectorAll('#newRewardModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
+  }
   document.getElementById(id).classList.add('active');
   setTimeout(() => document.getElementById(id).focus(), 100);
 }
@@ -36,6 +40,14 @@ function closeModal(id) {
 }
 
 function pickRoutineIcon(el, hiddenId) {
+  const picker = el.closest('.avatar-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  document.getElementById(hiddenId).value = el.dataset.icon;
+}
+
+function pickRewardIcon(el, hiddenId) {
   const picker = el.closest('.avatar-picker');
   if (!picker) return;
   picker.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
@@ -229,6 +241,9 @@ function openEdit(card, modalId) {
     const cardType = card.dataset.type || 'out_app';
     document.getElementById('editRewardType').value = cardType;
     document.querySelectorAll('#editRewardModalOverlay .type-btn').forEach(b => b.classList.toggle('active', b.dataset.value === cardType));
+    const icon = card.dataset.icon || 'icon-star';
+    document.getElementById('editRewardIcon').value = icon;
+    document.querySelectorAll('#editRewardIconPicker .avatar-option').forEach(b => b.classList.toggle('selected-avatar', b.dataset.icon === icon));
   }
   openModal(modalId);
 }
@@ -311,7 +326,7 @@ async function loadRewards(childId) {
 
 function renderRewards(rewards) {
   document.getElementById('rewardsList').innerHTML = rewards.map(r => `
-    <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}">
+    <div class="reward-card" data-id="${r.id}" data-type="${r.type || 'out_app'}" data-icon="${r.icon || 'icon-star'}">
       <div class="reward-icon">${makeIcon(r.icon || 'icon-star')}</div>
       <div class="reward-info">
         <div class="reward-name">${r.name}</div>
@@ -355,6 +370,7 @@ async function saveReward() {
   const body = new FormData();
   body.append('action', 'addReward');
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('rewardIcon').value);
   body.append('xp_cost', xp.value.trim());
   body.append('type', type);
   body.append('child_id', currentChildId);
@@ -365,6 +381,8 @@ async function saveReward() {
     if (data.success) {
       name.value = ''; xp.value = '';
       document.getElementById('rewardType').value = 'out_app';
+      document.getElementById('rewardIcon').value = 'icon-star';
+      document.querySelectorAll('#newRewardModalOverlay .avatar-option').forEach((b, i) => b.classList.toggle('selected-avatar', i === 0));
       document.querySelectorAll('#newRewardModalOverlay .type-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
       closeModal('newRewardModalOverlay');
       await loadRewards(currentChildId);
@@ -392,6 +410,7 @@ async function editReward() {
   body.append('action', 'editReward');
   body.append('reward_id', currentEditCard.dataset.id);
   body.append('name', name.value.trim());
+  body.append('icon', document.getElementById('editRewardIcon').value);
   body.append('xp_cost', xp.value.trim());
   body.append('type', type);
   body.append('child_id', currentChildId);
@@ -450,8 +469,7 @@ function renderFeelings(feelings) {
     <div class="feeling-row">
       <img src="../Assets/img/${f.emoji}.svg" alt="${f.emoji}" style="width:32px;height:32px;flex-shrink:0;">
       <div class="fbody">
-        <div class="ftag">${f.emoji.replace('icon-', '')}</div>
-        <div class="ftext">${f.text || '—'}</div>
+        <div class="ftext">${f.text || ''}</div>
         <div class="ftime">${formatDate(f.created_at)}</div>
       </div>
     </div>
@@ -544,6 +562,21 @@ function formatDate(dateStr) {
   }
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
+
+window.pickRoutineIcon = pickRoutineIcon;
+window.pickRewardIcon = pickRewardIcon;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.switchTab = switchTab;
+window.toggleSteps = toggleSteps;
+window.openEdit = openEdit;
+window.saveRoutine = saveRoutine;
+window.editRoutine = editRoutine;
+window.confirmDeleteRoutine = confirmDeleteRoutine;
+window.selectRewardType = selectRewardType;
+window.saveReward = saveReward;
+window.editReward = editReward;
+window.confirmDeleteReward = confirmDeleteReward;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-input').forEach(field => {
