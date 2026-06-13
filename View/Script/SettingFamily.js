@@ -11,6 +11,11 @@ let selectedAvatar = {
   bg: 'linear-gradient(135deg,#f4845f,#e8623a)',
 };
 
+let selectedEditAvatar = {
+  avatar: 'icon-superhero',
+  bg: 'linear-gradient(135deg,#f4845f,#e8623a)',
+};
+
 let currentEditCard = null;
 
 async function loadChildren() {
@@ -91,12 +96,22 @@ function closeModal(id) {
 }
 
 function pickAvatar(el) {
-  document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  document.querySelectorAll('#avatarPicker .avatar-option').forEach(a => a.classList.remove('selected-avatar'));
   el.classList.add('selected-avatar');
   selectedAvatar = {
     avatar: el.dataset.avatar,
     bg: el.style.background,
   };
+}
+
+function pickEditAvatar(el) {
+  document.querySelectorAll('#editAvatarPicker .avatar-option').forEach(a => a.classList.remove('selected-avatar'));
+  el.classList.add('selected-avatar');
+  selectedEditAvatar = {
+    avatar: el.dataset.avatar,
+    bg: el.style.background,
+  };
+  document.getElementById('editAvatarInput').value = el.dataset.avatar;
 }
 
 async function addProfile() {
@@ -150,6 +165,19 @@ function openEdit(card) {
   document.getElementById('editNameInput').value = card.querySelector('.hero-name').textContent;
   document.getElementById('editAgeInput').value = card.querySelector('.hero-sub').textContent.replace(' y/o', '');
   document.getElementById('editDiseaseInput').value = card.dataset.disease || '';
+  
+  // Set avatar
+  const avatarImg = card.querySelector('.hero-avatar img');
+  const avatarName = avatarImg ? avatarImg.src.split('/').pop().replace('.svg', '') : 'icon-superhero';
+  selectedEditAvatar = {
+    avatar: avatarName,
+    bg: card.querySelector('.hero-avatar').style.background,
+  };
+  document.getElementById('editAvatarInput').value = avatarName;
+  document.querySelectorAll('#editAvatarPicker .avatar-option').forEach(a => {
+    a.classList.toggle('selected-avatar', a.dataset.avatar === avatarName);
+  });
+  
   openModalEdit();
 }
 
@@ -175,6 +203,7 @@ async function saveEdit() {
   body.append('child_id', currentEditCard.dataset.id);
   body.append('fullname', name);
   body.append('age', age);
+  body.append('avatar', selectedEditAvatar.avatar);
   body.append('disease', disease);
 
   try {
@@ -183,6 +212,8 @@ async function saveEdit() {
     if (data.success) {
       currentEditCard.querySelector('.hero-name').textContent = name;
       currentEditCard.querySelector('.hero-sub').textContent = `${age} y/o`;
+      currentEditCard.querySelector('.hero-avatar').style.background = selectedEditAvatar.bg;
+      currentEditCard.querySelector('.hero-avatar img').src = `../Assets/img/${selectedEditAvatar.avatar}.svg`;
       currentEditCard.dataset.disease = disease;
       currentEditCard = null;
       closeModal('editModalOverlay');
@@ -446,6 +477,24 @@ async function deleteStaff(staffId) {
     console.error(e);
   }
 }
+
+// Expose functions used by inline onclick attributes to the global scope
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.pickAvatar = pickAvatar;
+window.pickEditAvatar = pickEditAvatar;
+window.addProfile = addProfile;
+window.openEdit = openEdit;
+window.saveEdit = saveEdit;
+window.openDelete = openDelete;
+window.openStaffModal = openStaffModal;
+window.openEditStaff = openEditStaff;
+window.removeStaffLink = removeStaffLink;
+window.selectStaff = selectStaff;
+window.clearSelectedStaff = clearSelectedStaff;
+window.addStaff = addStaff;
+window.deleteStaff = deleteStaff;
+window.saveEditStaff = saveEditStaff;
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('staffSearchInput');
